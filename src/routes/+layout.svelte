@@ -5,7 +5,7 @@
 
 <svelte:head>
   <title>Foxbyte</title>
-  <link rel="icon" type="image/png" href="/fox-logo-sf.png" />
+  <link rel="icon" type="image/png" href="/fox-logo.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <!-- SOLUCIÓN DEFINITIVA: Usamos el valor de texto "anonymous" que es lo que TypeScript espera.

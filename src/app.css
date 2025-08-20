@@ -1,10 +1,11 @@
-/* --- Paleta de Colores FOXBYTE como Variables Globales --- */
+/* --- Paleta de Colores FOXBYTE 2.0 como Variables Globales --- */
 :root {
-  --terracota-suave: #D26A3A;
-  --ciruela-profunda: #5E3A6B;
+  --terracota-suave: #E67E22;  /* ANTES: #D26A3A */
+  --ciruela-profunda: #8E44AD; /* ANTES: #5E3A6B */
   --azul-petroleo: #2C3E50;
   --marfil-claro: #F8F6F3;
-  --gris-grafito: #4A4A4A;
+  --gris-grafito: #34495E;    /* ANTES: #4A4A4A */
+  --ambar-luminoso: #F1C40F;  /* NUEVO */
 
   --font-principal: 'Montserrat', sans-serif;
   --font-secundaria: 'Open Sans', sans-serif;
@@ -18,9 +19,8 @@
 }
 
 html {
-  /* Habilita el scroll suave al hacer clic en los enlaces del navbar */
   scroll-behavior: smooth;
-  scroll-padding-top: 100px; /* Evita que el navbar tape el título de la sección */
+  scroll-padding-top: 100px;
 }
 
 body {

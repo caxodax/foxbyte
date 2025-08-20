@@ -151,4 +151,19 @@
   .success-message, .error-message { text-align: center; font-weight: 600; }
   .success-message { color: #4ade80; } .error-message { color: #f87171; }
   .spinner { width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
+
+   .input-group input:focus, .input-group textarea:focus { 
+    /* El borde inferior que aparece al escribir ya no será naranja, sino el nuevo ámbar */
+    border-color: var(--ambar-luminoso); 
+    outline: none; 
+  }
+
+  /* La etiqueta flotante también usará el nuevo color de acento */
+  .input-group input:focus ~ label, .input-group input:not(:placeholder-shown) ~ label,
+  .input-group textarea:focus ~ label, .input-group textarea:not(:placeholder-shown) ~ label {
+    transform: translateY(-1.25rem); 
+    font-size: 0.75rem; 
+    color: var(--ambar-luminoso);
+  }
+
 </style>

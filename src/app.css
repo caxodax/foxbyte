@@ -1,0 +1,37 @@
+/* --- Paleta de Colores FOXBYTE como Variables Globales --- */
+:root {
+  --terracota-suave: #D26A3A;
+  --ciruela-profunda: #5E3A6B;
+  --azul-petroleo: #2C3E50;
+  --marfil-claro: #F8F6F3;
+  --gris-grafito: #4A4A4A;
+
+  --font-principal: 'Montserrat', sans-serif;
+  --font-secundaria: 'Open Sans', sans-serif;
+}
+
+/* --- Reseteo Básico y Estilos Globales --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Habilita el scroll suave al hacer clic en los enlaces del navbar */
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; /* Evita que el navbar tape el título de la sección */
+}
+
+body {
+  background-color: var(--marfil-claro);
+  color: var(--azul-petroleo);
+  font-family: var(--font-secundaria);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-principal);
+  color: var(--azul-petroleo);
+}

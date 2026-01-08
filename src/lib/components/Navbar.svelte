@@ -1,4 +1,5 @@
 <script>
+  //Navbar.svelte
   import { onMount, createEventDispatcher } from 'svelte';
   // SOLUCIÓN: Importar la transición 'fade'
   import { fade } from 'svelte/transition';

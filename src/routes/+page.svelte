@@ -1,4 +1,5 @@
 <script>
+  //+page.svelte
   import Navbar from '$lib/components/Navbar.svelte';
   import Hero from '$lib/components/Hero.svelte';
   import Servicios from '$lib/components/Servicios.svelte';

@@ -1,6 +1,7 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { getAnalytics } from "firebase/analytics";
 
 // Tu configuración de Firebase, leída de forma segura desde las variables de entorno.
 const firebaseConfig = {
@@ -9,7 +10,8 @@ const firebaseConfig = {
   projectId: import.meta.env.VITE_PUBLIC_FIREBASE_PROJECT_ID,
   storageBucket: import.meta.env.VITE_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_PUBLIC_FIREBASE_APP_ID
+  appId: import.meta.env.VITE_PUBLIC_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 // Inicializa Firebase, pero evita reinicializar si ya existe (importante para HMR en desarrollo)
@@ -23,3 +25,4 @@ if (!getApps().length) {
 // Exporta el servicio de Firestore para que podamos usarlo en nuestros componentes
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+export const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;

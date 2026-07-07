@@ -1,127 +1,191 @@
 <script lang="ts">
-  //Hero.svelte
   import { fade, fly } from 'svelte/transition';
-  import HeroBackground from './HeroBackground.svelte';
 </script>
 
 <section class="hero-section">
-  <HeroBackground />
-  
-  <div class="hero-content">
-    <h1 in:fly={{ y: 20, duration: 800, delay: 300 }}>
-      Transformamos negocios con precisión técnica e instinto innovador
-    </h1>
-    <p in:fly={{ y: 20, duration: 800, delay: 500 }}>
-      Construido con precisión. Impulsado por instinto.
-    </p>
-    <div class="cta-group" in:fade={{ duration: 800, delay: 700 }}>
-      <a href="#contacto" class="hero-button primary">Hablemos de tu Proyecto</a>
-      <a href="#servicios" class="hero-button secondary">Ver Nuestros Servicios</a>
+  <!-- Text Column -->
+  <div class="hero-text-column">
+    <div class="text-wrapper">
+      <h1 in:fly={{ y: 30, duration: 800, delay: 300 }}>
+        Transformamos<br/>negocios con<br/>Precisión
+      </h1>
+      
+      <p class="hero-description" in:fade={{ duration: 800, delay: 600 }}>
+        "Construido con precisión. Impulsado por instinto. Creemos en llevar tu negocio al futuro, diseñando experiencias únicas que combinan tecnología avanzada y creatividad. No hay nada más emocionante que materializar tu visión en el universo digital."
+      </p>
+
+      <div class="cta-group" in:fade={{ duration: 800, delay: 800 }}>
+        <a href="#contacto" class="hero-button primary">Comenzar</a>
+        <a href="#video" class="hero-button secondary">
+          Ver el video 
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </a>
+      </div>
     </div>
+  </div>
+
+  <!-- Video Column -->
+  <div class="hero-video-column">
+    <video src="/hero.mp4" autoplay loop muted playsinline class="hero-video"></video>
   </div>
 </section>
 
 <style>
   .hero-section {
     position: relative;
+    width: 100%;
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    /* SOLUCIÓN 1: Añadimos padding en la parte superior para dejar espacio al Navbar en TODAS las pantallas */
-    /* Este valor (aprox. 100px) debe ser un poco mayor que la altura de tu Navbar */
-    padding: 100px 1.5rem 2rem 1.5rem; 
-    background-color: var(--marfil-claro);
+    flex-direction: column-reverse; /* Móvil: Video arriba, Texto abajo */
+    background-color: var(--azul-petroleo, #0d1b2a); /* Fallback */
     overflow: hidden;
-    box-sizing: border-box; /* Asegura que el padding se incluya en la altura total */
+    font-family: var(--font-principal, system-ui, sans-serif);
   }
 
-  .hero-content {
+  .hero-text-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 5% 4rem 5%;
+    z-index: 2;
     position: relative;
+    background-image: url('/hero-text-bg.png');
+    background-size: cover;
+    background-position: center;
+  }
+
+  /* Capa superpuesta para oscurecer el fondo y asegurar legibilidad */
+  .hero-text-column::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(13, 27, 42, 0.7); /* Azul oscuro semitransparente */
+    z-index: -1; /* Para que quede detrás del texto */
+  }
+
+  .text-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hero-video-column {
+    position: relative;
+    width: 100%;
+    min-height: 45vh; /* Altura del video en móvil */
     z-index: 1;
-    max-width: 800px;
   }
 
-  /* SOLUCIÓN 2: Hacemos el título un poco más pequeño en móvil para mejor ajuste */
+  .hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
   h1 {
-    font-size: 2.5rem; 
-    line-height: 1.2;
-    margin-bottom: 1rem;
-    color: var(--azul-petroleo);
+    font-size: 2.8rem;
+    line-height: 1.1;
+    color: white;
+    font-weight: 800;
+    margin: 0 0 1.5rem 0;
   }
 
-  p {
+  .hero-description {
     font-size: 1.1rem;
-    color: var(--gris-grafito);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
     margin-bottom: 2.5rem;
+    font-weight: 400;
   }
 
   .cta-group {
     display: flex;
-    flex-direction: column; /* Apilamos los botones por defecto (Mobile-First) */
+    gap: 1.2rem;
     align-items: center;
-    gap: 1rem;
+    flex-wrap: wrap;
   }
 
   .hero-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     padding: 1rem 2rem;
     border-radius: 50px;
-    text-decoration: none;
     font-weight: 700;
-    font-family: var(--font-principal);
-    border: 2px solid transparent;
+    text-decoration: none;
     transition: all 0.3s ease;
-    width: 100%; /* Hacemos que los botones ocupen el ancho disponible */
-    max-width: 350px; /* Pero con un máximo para que no se vean enormes */
+    font-size: 1rem;
+    width: 100%; /* Botones ancho completo en móvil */
   }
 
   .hero-button.primary {
-    background-color: var(--terracota-suave);
+    background-color: var(--terracota-suave, #F39C12);
     color: white;
-    box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3);
   }
 
   .hero-button.primary:hover {
-    background-color: var(--ciruela-profunda);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(142, 68, 173, 0.3);
+    background-color: #E67E22;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(243, 156, 18, 0.3);
   }
-  
+
   .hero-button.secondary {
     background-color: transparent;
-    color: var(--azul-petroleo);
-    border-color: var(--azul-petroleo);
+    color: white;
+    border: 2px solid white;
   }
-
+  
   .hero-button.secondary:hover {
-    background-color: var(--azul-petroleo);
-    color: var(--marfil-claro);
-    transform: translateY(-3px);
+    background-color: white;
+    color: black;
+    transform: translateY(-2px);
   }
 
-  /* --- MEDIA QUERY PARA ESCRITORIOS --- */
-  /* Ajustes para pantallas más grandes que las de un móvil típico */
-  @media (min-width: 768px) {
+  /* Desktop Layout */
+  @media (min-width: 1024px) {
     .hero-section {
-        padding: 0 2rem; /* Eliminamos el padding superior e inferior extra */
+      flex-direction: row; /* Lado a lado en PC */
+    }
+
+    .hero-text-column {
+      flex: 0 0 50%;
+      padding: 0 5% 0 8%;
+      /* Offset visual for navbar */
+      padding-top: 80px; 
+    }
+
+    .text-wrapper {
+      margin: 0 0 0 auto;
+      max-width: 550px;
+    }
+
+    .hero-video-column {
+      flex: 0 0 50%;
+      min-height: 100vh;
     }
 
     h1 {
-      font-size: 3.5rem; /* Devolvemos el tamaño grande al título */
+      font-size: 4.5rem;
     }
 
-    p {
-      font-size: 1.25rem; /* Devolvemos el tamaño grande al párrafo */
-    }
-    
-    .cta-group {
-      flex-direction: row; /* Ponemos los botones en fila */
-      justify-content: center;
+    .hero-description {
+      font-size: 1.2rem;
     }
 
     .hero-button {
-      width: auto; /* Dejamos que el ancho se ajuste al contenido */
+      width: auto; /* Restaurar ancho automático en PC */
+      padding: 1rem 2.5rem;
     }
   }
 </style>

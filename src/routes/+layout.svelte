@@ -1,6 +1,8 @@
 <script>
+  //Layout.svelte
   // Esta línea importa todos nuestros estilos globales para que se apliquen en toda la app.
   import '../app.css';
+  
 </script>
 
 <svelte:head>

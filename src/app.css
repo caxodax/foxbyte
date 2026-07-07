@@ -1,11 +1,17 @@
-/* --- Paleta de Colores FOXBYTE 2.0 como Variables Globales --- */
+/* --- Paleta de Colores FOXBYTE 2.0 (Premium & Viva) --- */
 :root {
-  --terracota-suave: #E67E22;  /* ANTES: #D26A3A */
-  --ciruela-profunda: #8E44AD; /* ANTES: #5E3A6B */
-  --azul-petroleo: #2C3E50;
-  --marfil-claro: #F8F6F3;
-  --gris-grafito: #34495E;    /* ANTES: #4A4A4A */
-  --ambar-luminoso: #F1C40F;  /* NUEVO */
+  /* Naranja tecnológico intenso y vibrante */
+  --terracota-suave: #FF6B00;  
+  /* Violeta moderno estilo SaaS/Web3 */
+  --ciruela-profunda: #7C3AED; 
+  /* Azul medianoche profundo (Slate 900) para máxima elegancia */
+  --azul-petroleo: #0F172A;
+  /* Blanco hueso muy sutil para que destaquen los colores */
+  --marfil-claro: #F8FAFC;
+  /* Gris frío y legible (Slate 600) */
+  --gris-grafito: #475569;    
+  /* Ámbar puro y eléctrico */
+  --ambar-luminoso: #F59E0B;  
 
   --font-principal: 'Montserrat', sans-serif;
   --font-secundaria: 'Open Sans', sans-serif;

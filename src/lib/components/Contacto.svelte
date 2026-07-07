@@ -1,4 +1,5 @@
 <script lang="ts">
+  //Contacto.svelte
   import { createEventDispatcher, onMount } from 'svelte';
   import { db } from '$lib/firebase';
   import { collection, addDoc, serverTimestamp } from "firebase/firestore"; 

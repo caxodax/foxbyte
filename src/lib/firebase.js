@@ -1,5 +1,6 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 // Tu configuración de Firebase, leída de forma segura desde las variables de entorno.
 const firebaseConfig = {
@@ -21,3 +22,4 @@ if (!getApps().length) {
 
 // Exporta el servicio de Firestore para que podamos usarlo en nuestros componentes
 export const db = getFirestore(app);
+export const auth = getAuth(app);

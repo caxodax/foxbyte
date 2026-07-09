@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy, tick } from 'svelte';
+  import { fade, fly } from 'svelte/transition';
   import { db } from '$lib/firebase';
   import { collection, getDocs } from 'firebase/firestore';
 
@@ -29,6 +30,27 @@
 
   // Cleanup listeners arrays
   let cleanupFns = [];
+
+  // Modal de detalles
+  let selectedProject = null;
+  let lightboxImage = null;
+
+  function openModal(item) {
+    selectedProject = item;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    selectedProject = null;
+    document.body.style.overflow = '';
+  }
+
+  function handleModalKeydown(e) {
+    if (e.key === 'Escape') {
+      if (lightboxImage) lightboxImage = null;
+      else if (selectedProject) closeModal();
+    }
+  }
 
   onMount(async () => {
     try {
@@ -288,7 +310,7 @@
                 {/if}
                 
                 <div class="fx-portfolio__cta">
-                  <a class="cta-ghost" href="#" aria-label={`Ver caso de estudio ${item.title}`}>Ver caso</a>
+                  <a class="cta-ghost" href="#" on:click|preventDefault={() => openModal(item)} aria-label={`Ver caso de estudio ${item.title}`}>Ver caso</a>
                   <button class="cta-primary" type="button" aria-label={`Abrir contacto para ${item.title}`}>Cotizar</button>
                 </div>
               </div>
@@ -307,6 +329,74 @@
     {/if}
   </div>
 </section>
+
+<!-- MODAL PREMIUM -->
+{#if selectedProject}
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div class="fx-modal-backdrop" transition:fade={{duration: 200}} on:click={closeModal} on:keydown={handleModalKeydown} tabindex="0">
+    <div class="fx-modal-content" transition:fly={{y: 50, duration: 300}} on:click|stopPropagation>
+      <button class="fx-modal-close" on:click={closeModal} aria-label="Cerrar modal">×</button>
+      
+      <div class="fx-modal-grid">
+        <div class="fx-modal-image" role="button" tabindex="0" on:click={() => lightboxImage = selectedProject.image_url} on:keydown={(e) => e.key === 'Enter' && (lightboxImage = selectedProject.image_url)} aria-label="Ampliar imagen">
+          <img src={selectedProject.image_url || 'https://placehold.co/960x640'} alt={selectedProject.title} />
+          <div class="fx-modal-image-overlay">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 4l4 0l0 4" /><path d="M14 10l6 -6" /><path d="M8 20l-4 0l0 -4" /><path d="M4 20l6 -6" /><path d="M16 20l4 0l0 -4" /><path d="M14 14l6 6" /><path d="M8 4l-4 0l0 4" /><path d="M4 4l6 6" /></svg>
+          </div>
+        </div>
+        
+        <div class="fx-modal-body">
+          <span class="fx-portfolio__category">{selectedProject.category}</span>
+          <h2>{selectedProject.title}</h2>
+          
+          <div class="fx-modal-desc">
+            <p>{selectedProject.description}</p>
+          </div>
+          
+          {#if selectedProject.kpis && selectedProject.kpis.length > 0}
+            <div class="fx-modal-kpis">
+              {#each selectedProject.kpis as kpi}
+                <div class="modal-kpi-item">
+                  <span class="val">{kpi.value}</span>
+                  <span class="lbl">{kpi.label}</span>
+                </div>
+              {/each}
+            </div>
+          {/if}
+          
+          {#if selectedProject.stack && selectedProject.stack.length > 0}
+            <div class="fx-modal-stack">
+              <strong>Stack Tecnológico:</strong>
+              <div class="tags">
+                {#each selectedProject.stack as stackItem}
+                  <span class="tag">{stackItem}</span>
+                {/each}
+              </div>
+            </div>
+          {/if}
+          
+          <div class="fx-modal-actions">
+            <button class="cta-back" on:click={closeModal} aria-label="Volver">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
+              <span>Volver a los proyectos</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{/if}
+
+<!-- LIGHTBOX PARA IMÁGENES -->
+{#if lightboxImage}
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div class="fx-lightbox" transition:fade={{duration: 200}} on:click={() => lightboxImage = null} on:keydown={handleModalKeydown} tabindex="0">
+    <button class="fx-lightbox-close" aria-label="Cerrar imagen" title="Cerrar (Esc)">×</button>
+    <img src={lightboxImage} alt="Vista ampliada" transition:fly={{y: 20, duration: 300}} on:click|stopPropagation />
+  </div>
+{/if}
 
 <style>
   /* NAMESPACE: .fx-portfolio para evitar colisiones globales */
@@ -329,8 +419,9 @@
   }
   .fx-portfolio__card{
     position: relative; scroll-snap-align: center; background:#fff; border-radius:16px; overflow: clip;
-    box-shadow: 0 6px 18px rgba(0,0,0,.06); transform: translateY(6px) scale(var(--fx-scale,1));
+    box-shadow: 0 8px 24px rgba(0,0,0,.04), 0 2px 8px rgba(0,0,0,.04); transform: translateY(6px) scale(var(--fx-scale,1));
     transition: transform .5s ease, box-shadow .5s ease, opacity .4s ease; opacity: var(--fx-opacity,1);
+    display: flex; flex-direction: column;
   }
   .fx-portfolio__card.in-view{ transform: translateY(0) scale(var(--fx-scale,1)); box-shadow: 0 12px 28px rgba(0,0,0,.08); }
   .fx-portfolio__accent{
@@ -348,16 +439,28 @@
   .fx-portfolio__kpis .kpi{ background: rgba(255,255,255,.9); backdrop-filter: blur(6px); border:1px solid rgba(0,0,0,.06); border-radius:999px; padding:.35rem .6rem; font-weight:800; font-size:.9rem; color: var(--azul-petroleo, #2C3E50); box-shadow:0 4px 12px rgba(0,0,0,.08); }
   .fx-portfolio__kpis .kpi small{ font-weight:600; opacity:.7; margin-left:.25rem; }
 
-  .fx-portfolio__content{ padding: 1.1rem .9rem 1.2rem; }
-  .fx-portfolio__category{ display:block; font-size:.78rem; font-weight:700; color: var(--ciruela-profunda, #5E3A6B); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.35rem; }
+  .fx-portfolio__content{ padding: 1.2rem 1.2rem 1.4rem; display: flex; flex-direction: column; flex-grow: 1; }
+  .fx-portfolio__category{ display:block; font-size:.75rem; font-weight:700; color: var(--ciruela-profunda, #5E3A6B); text-transform:uppercase; letter-spacing:.08em; margin-bottom:.4rem; }
   .fx-portfolio__h3{ font-size:1.15rem; line-height:1.25; margin:0 0 .6rem; color: var(--azul-petroleo, #2C3E50); }
-  .fx-portfolio__content p{ color: var(--gris-grafito, #4A4A4A); margin:0 0 .9rem; }
+  .fx-portfolio__content p{ 
+    color: var(--gris-grafito, #4A4A4A); 
+    margin:0 0 1.2rem; 
+    font-size: 0.92rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .fx-portfolio__stack{ display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:.9rem; }
   .fx-portfolio__stack span{ background:#eef1f3; color: var(--azul-petroleo, #2C3E50); padding:.25rem .6rem; border-radius:999px; font-size:.78rem; font-weight:700; }
 
-  .fx-portfolio__cta{ display:flex; gap:.6rem; }
-  .fx-portfolio .cta-primary{ appearance:none; border:0; border-radius:12px; padding:.6rem .9rem; font-weight:800; background: var(--azul-petroleo, #2C3E50); color:#fff; box-shadow:0 6px 12px rgba(44,62,80,.2); cursor:pointer; }
-  .fx-portfolio .cta-ghost{ display:inline-flex; align-items:center; border:1px solid var(--azul-petroleo, #2C3E50); border-radius:12px; padding:.53rem .85rem; font-weight:800; color: var(--azul-petroleo, #2C3E50); text-decoration:none; }
+  .fx-portfolio__cta{ display:flex; gap:.6rem; margin-top: auto; padding-top: 1rem; }
+  .fx-portfolio .cta-primary{ appearance:none; border:0; border-radius:10px; padding:.65rem 1rem; font-weight:700; font-size: 0.9rem; background: var(--azul-petroleo, #2C3E50); color:#fff; box-shadow:0 4px 12px rgba(44,62,80,.15); cursor:pointer; transition: all 0.2s ease; flex-grow: 1; justify-content: center; display: flex; }
+  .fx-portfolio .cta-primary:hover { transform: translateY(-2px); box-shadow:0 6px 16px rgba(44,62,80,.25); }
+  .fx-portfolio .cta-ghost{ display:inline-flex; align-items:center; justify-content: center; border:1.5px solid var(--azul-petroleo, #2C3E50); border-radius:10px; padding:.55rem 1rem; font-weight:700; font-size: 0.9rem; color: var(--azul-petroleo, #2C3E50); text-decoration:none; transition: all 0.2s ease; flex-grow: 1; }
+  .fx-portfolio .cta-ghost:hover { background: var(--azul-petroleo, #2C3E50); color: white; }
 
   .fx-portfolio__nav{
     position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; border-radius:50%; border:0; cursor:pointer;
@@ -384,4 +487,57 @@
   }
   .fx-portfolio__scroller:focus-visible{ outline:3px solid var(--ambar, #F1C40F); outline-offset:4px; border-radius:12px; }
   .fx-portfolio__card:focus-within{ outline:2px solid var(--terracota-suave, #E67E22); outline-offset:2px; }
+
+  /* MODAL */
+  .fx-modal-backdrop {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem;
+  }
+  .fx-modal-content {
+    background: #fff; border-radius: 20px; width: 100%; max-width: 900px; max-height: 90vh;
+    overflow-y: auto; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+    display: flex; flex-direction: column; cursor: default;
+  }
+  .fx-modal-close {
+    position: absolute; top: 1rem; right: 1rem; width: 36px; height: 36px; border-radius: 50%;
+    border: none; background: #f1f5f9; color: #475569; font-size: 1.5rem; display: grid;
+    place-items: center; cursor: pointer; z-index: 10; transition: all 0.2s; line-height: 1; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .fx-modal-close:hover { background: var(--terracota-suave, #E67E22); color: #fff; transform: scale(1.05); }
+  
+  .fx-modal-grid { display: grid; grid-template-columns: 1fr; }
+  @media (min-width: 768px) { .fx-modal-grid { grid-template-columns: 1.1fr 1.4fr; } }
+  
+  .fx-modal-image { background: #f8fafc; position: relative; cursor: zoom-in; overflow: hidden; }
+  .fx-modal-image img { width: 100%; height: 100%; object-fit: cover; max-height: 300px; display: block; transition: transform 0.4s ease; }
+  .fx-modal-image:hover img { transform: scale(1.04); }
+  .fx-modal-image-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; color: white; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+  .fx-modal-image:hover .fx-modal-image-overlay { opacity: 1; }
+  @media (min-width: 768px) { .fx-modal-image img { max-height: none; min-height: 100%; } }
+  
+  .fx-modal-body { padding: 2rem 2.5rem; display: flex; flex-direction: column; }
+  .fx-modal-body h2 { font-size: 1.7rem; color: var(--azul-petroleo, #2C3E50); margin: 0 0 1.2rem; line-height: 1.2; font-weight: 800; }
+  .fx-modal-desc { margin-bottom: 2rem; }
+  .fx-modal-desc p { color: var(--gris-grafito, #4A4A4A); line-height: 1.7; font-size: 1rem; white-space: pre-wrap; margin: 0; }
+  
+  .fx-modal-kpis { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; padding: 1.2rem; background: #f8fafc; border-radius: 14px; border: 1px solid #e2e8f0; }
+  .modal-kpi-item { display: flex; flex-direction: column; }
+  .modal-kpi-item .val { font-size: 1.4rem; font-weight: 800; color: var(--terracota-suave, #E67E22); }
+  .modal-kpi-item .lbl { font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+  
+  .fx-modal-stack strong { display: block; font-size: 0.85rem; font-weight: 800; color: var(--azul-petroleo, #2C3E50); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .fx-modal-stack .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .fx-modal-stack .tag { background: #eef1f3; color: var(--azul-petroleo, #2C3E50); padding: 0.35rem 0.8rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; }
+  
+  .fx-modal-actions { margin-top: 2.5rem; display: flex; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; }
+  
+  /* BOTÓN VOLVER */
+  .cta-back { display: inline-flex; align-items: center; gap: 0.6rem; background: transparent; border: none; color: var(--azul-petroleo, #2C3E50); font-weight: 800; font-size: 1.05rem; cursor: pointer; padding: 0.5rem 0; transition: color 0.2s, transform 0.2s; }
+  .cta-back:hover { color: var(--terracota-suave, #E67E22); transform: translateX(-6px); }
+
+  /* LIGHTBOX */
+  .fx-lightbox { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(8px); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
+  .fx-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 40px rgba(0,0,0,0.5); border-radius: 8px; cursor: default; }
+  .fx-lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; width: 44px; height: 44px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; color: white; font-size: 2rem; display: grid; place-items: center; cursor: pointer; transition: background 0.2s; }
+  .fx-lightbox-close:hover { background: rgba(255,255,255,0.25); }
 </style>

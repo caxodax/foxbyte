@@ -403,16 +403,15 @@
   }
   /* Rediseño Minimalista Tarjeta */
   .fx-portfolio__card.fx-card-minimal {
-    position: relative; scroll-snap-align: center; background: transparent; border: none; box-shadow: none; border-radius: 0;
-    cursor: pointer; padding-bottom: 1.5rem; text-align: left;
-    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative; scroll-snap-align: center; background: #ffffff; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 8px 24px rgba(0,0,0,0.03); border-radius: 20px;
+    cursor: pointer; padding: 0.75rem 0.75rem 1.75rem; text-align: left;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
   }
-  .fx-portfolio__card.fx-card-minimal:hover { transform: translateY(-10px); }
+  .fx-portfolio__card.fx-card-minimal:hover { transform: translateY(-8px); box-shadow: 0 16px 32px rgba(0,0,0,0.08); }
   
   .fx-portfolio__card.fx-card-minimal .fx-portfolio__media {
-    position: relative; border-radius: 20px; aspect-ratio: 4/3; box-shadow: 0 12px 30px rgba(0,0,0,0.06); overflow: hidden; margin-bottom: 1.5rem; transition: box-shadow 0.5s ease;
+    position: relative; border-radius: 14px; aspect-ratio: 4/3; overflow: hidden; margin-bottom: 1.5rem;
   }
-  .fx-portfolio__card.fx-card-minimal:hover .fx-portfolio__media { box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
   .fx-portfolio__card.fx-card-minimal .fx-portfolio__media img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(1.05) contrast(1.05); transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
   .fx-portfolio__card.fx-card-minimal:hover .fx-portfolio__media img { transform: scale(1.06); }
 

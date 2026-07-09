@@ -283,35 +283,18 @@
         <div class="fx-portfolio__scroller" bind:this={scroller} role="region" aria-label="Proyectos destacables" tabindex="0">
           
           {#each portfolioItems as item}
-            <article class="fx-portfolio__card" aria-label={item.title}>
-              <div class="fx-portfolio__accent" aria-hidden="true"></div>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+            <article class="fx-portfolio__card fx-card-minimal" aria-label={item.title} on:click={() => openModal(item)} role="button" tabindex="0">
               <figure class="fx-portfolio__media">
                 <img loading="lazy" decoding="async" src={item.image_url || 'https://placehold.co/960x640'} alt={item.title} />
-                
-                {#if item.kpis && item.kpis.length > 0}
-                  <figcaption class="fx-portfolio__kpis">
-                    {#each item.kpis as kpi}
-                      <span class="kpi">{kpi.value} <small>{kpi.label}</small></span>
-                    {/each}
-                  </figcaption>
-                {/if}
               </figure>
               <div class="fx-portfolio__content">
                 <span class="fx-portfolio__category">{item.category}</span>
                 <h3 class="fx-portfolio__h3">{item.title}</h3>
-                <p>{item.description}</p>
                 
-                {#if item.stack && item.stack.length > 0}
-                  <div class="fx-portfolio__stack" aria-label="Tecnologías usadas">
-                    {#each item.stack as stackItem}
-                      <span>{stackItem}</span>
-                    {/each}
-                  </div>
-                {/if}
-                
-                <div class="fx-portfolio__cta">
-                  <a class="cta-ghost" href="#" on:click|preventDefault={() => openModal(item)} aria-label={`Ver caso de estudio ${item.title}`}>Ver caso</a>
-                  <button class="cta-primary" type="button" aria-label={`Abrir contacto para ${item.title}`}>Cotizar</button>
+                <div class="fx-portfolio__minimal-cta">
+                  <span class="minimal-link">Ver proyecto <span class="arrow">→</span></span>
                 </div>
               </div>
             </article>
@@ -377,6 +360,7 @@
           {/if}
           
           <div class="fx-modal-actions">
+            <button class="cta-primary" aria-label={`Cotizar ${selectedProject.title}`}>Cotizar Proyecto</button>
             <button class="cta-back" on:click={closeModal} aria-label="Volver">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
               <span>Volver a los proyectos</span>
@@ -417,51 +401,41 @@
     overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
     padding: .25rem 2.5rem 2.4rem; -webkit-overflow-scrolling: touch;
   }
-  .fx-portfolio__card{
-    position: relative; scroll-snap-align: center; background:#fff; border-radius:18px; overflow: clip;
-    border: 1px solid rgba(0,0,0,0.04);
-    box-shadow: 0 12px 36px rgba(44,62,80,0.06), 0 2px 12px rgba(44,62,80,0.04); transform: translateY(6px) scale(var(--fx-scale,1));
-    transition: transform .5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow .5s ease, opacity .4s ease; opacity: var(--fx-opacity,1);
-    display: flex; flex-direction: column;
+  /* Rediseño Minimalista Tarjeta */
+  .fx-portfolio__card.fx-card-minimal {
+    position: relative; scroll-snap-align: center; background: transparent; border: none; box-shadow: none; border-radius: 0;
+    cursor: pointer; padding-bottom: 1.5rem; text-align: left;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-  .fx-portfolio__card.in-view{ transform: translateY(0) scale(var(--fx-scale,1)); box-shadow: 0 12px 28px rgba(0,0,0,.08); }
-  .fx-portfolio__accent{
-    position:absolute; inset:-1px; border-radius:20px; padding:1px;
-    background:conic-gradient(from 180deg at 50% 50%, #ffd166, #06d6a0, #118ab2, #ef476f, #ffd166);
-    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none; opacity:.0; transition:opacity .6s ease;
+  .fx-portfolio__card.fx-card-minimal:hover { transform: translateY(-10px); }
+  
+  .fx-portfolio__card.fx-card-minimal .fx-portfolio__media {
+    position: relative; border-radius: 20px; aspect-ratio: 4/3; box-shadow: 0 12px 30px rgba(0,0,0,0.06); overflow: hidden; margin-bottom: 1.5rem; transition: box-shadow 0.5s ease;
   }
-  .fx-portfolio__card.in-view .fx-portfolio__accent{ opacity:.35; }
+  .fx-portfolio__card.fx-card-minimal:hover .fx-portfolio__media { box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+  .fx-portfolio__card.fx-card-minimal .fx-portfolio__media img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(1.05) contrast(1.05); transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .fx-portfolio__card.fx-card-minimal:hover .fx-portfolio__media img { transform: scale(1.06); }
 
-  .fx-portfolio__media{ position: relative; background: #e9edf2; aspect-ratio: 3 / 2; overflow: hidden; }
-  .fx-portfolio__media img{ width:100%; height:120%; object-fit:cover; display:block; filter:saturate(1.02) contrast(1.02); transform: translateY(var(--fx-parallax,0)) scale(1.05); transition: transform .6s ease; will-change: transform; }
-
-  .fx-portfolio__kpis{ position:absolute; inset:auto .75rem .75rem auto; display:flex; gap:.5rem; }
-  .fx-portfolio__kpis .kpi{ background: rgba(255,255,255,.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.5); border-radius:12px; padding:.4rem .7rem; font-weight:800; font-size:.95rem; color: var(--terracota-suave, #E67E22); box-shadow:0 8px 16px rgba(0,0,0,.08); display: flex; align-items: center; gap: 0.25rem; }
-  .fx-portfolio__kpis .kpi small{ font-weight:700; opacity:.8; color: var(--azul-petroleo, #2C3E50); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-
-  .fx-portfolio__content{ padding: 1.5rem 1.4rem 1.6rem; display: flex; flex-direction: column; flex-grow: 1; }
-  .fx-portfolio__category{ display:block; font-size:.7rem; font-weight:800; color: var(--terracota-suave, #E67E22); text-transform:uppercase; letter-spacing:.1em; margin-bottom:.5rem; }
-  .fx-portfolio__h3{ font-size:1.25rem; line-height:1.3; margin:0 0 .75rem; color: var(--azul-petroleo, #2C3E50); font-weight: 800; }
-  .fx-portfolio__content p{ 
-    color: var(--gris-grafito, #4A4A4A); 
-    margin:0 0 1.2rem; 
-    font-size: 0.92rem;
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .fx-portfolio__card.fx-card-minimal .fx-portfolio__content { padding: 0 0.5rem; display: flex; flex-direction: column; }
+  
+  .fx-portfolio__card.fx-card-minimal .fx-portfolio__category {
+    font-size: 0.75rem; font-weight: 800; letter-spacing: 0.12em; color: var(--terracota-suave, #E67E22); margin-bottom: 0.6rem; text-transform: uppercase;
   }
-  .fx-portfolio__stack{ display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:1rem; }
-  .fx-portfolio__stack span{ background: rgba(44,62,80,0.04); color: var(--azul-petroleo, #2C3E50); border: 1px solid rgba(44,62,80,0.08); padding:.3rem .7rem; border-radius:8px; font-size:.72rem; font-weight:700; letter-spacing: 0.03em; }
+  .fx-portfolio__card.fx-card-minimal .fx-portfolio__h3 {
+    font-size: 1.4rem; font-weight: 800; color: var(--azul-petroleo, #2C3E50); margin-bottom: 0; line-height: 1.25; letter-spacing: -0.02em;
+  }
+  
+  .fx-portfolio__minimal-cta { margin-top: 1.2rem; }
+  .fx-portfolio__minimal-cta .minimal-link {
+    font-size: 0.95rem; font-weight: 800; color: var(--ciruela-profunda, #5E3A6B); display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.3s;
+  }
+  .fx-portfolio__card.fx-card-minimal:hover .minimal-link { color: var(--terracota-suave, #E67E22); }
+  .fx-portfolio__minimal-cta .arrow { transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .fx-portfolio__card.fx-card-minimal:hover .arrow { transform: translateX(8px); }
 
-  .fx-portfolio__cta{ display:flex; gap:.7rem; margin-top: auto; padding-top: 1.2rem; border-top: 1px solid rgba(0,0,0,0.04); }
-  .fx-portfolio .cta-primary{ appearance:none; border:0; border-radius:10px; padding:.7rem 1rem; font-weight:800; font-size: 0.9rem; letter-spacing: 0.03em; background: var(--azul-petroleo, #2C3E50); color:#fff; box-shadow:0 4px 14px rgba(44,62,80,.2); cursor:pointer; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); flex-grow: 1; justify-content: center; display: flex; }
+  /* Estilos para los botones del modal */
+  .fx-portfolio .cta-primary{ appearance:none; border:0; border-radius:10px; padding:.7rem 1.2rem; font-weight:800; font-size: 0.95rem; letter-spacing: 0.03em; background: var(--azul-petroleo, #2C3E50); color:#fff; box-shadow:0 4px 14px rgba(44,62,80,.2); cursor:pointer; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
   .fx-portfolio .cta-primary:hover { transform: translateY(-3px); box-shadow:0 8px 20px rgba(44,62,80,.3); background: #1a2530; }
-  .fx-portfolio .cta-ghost{ display:inline-flex; align-items:center; justify-content: center; border:1.5px solid var(--azul-petroleo, #2C3E50); border-radius:10px; padding:.65rem 1rem; font-weight:800; font-size: 0.9rem; letter-spacing: 0.03em; color: var(--azul-petroleo, #2C3E50); text-decoration:none; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); flex-grow: 1; }
-  .fx-portfolio .cta-ghost:hover { background: var(--azul-petroleo, #2C3E50); color: white; transform: translateY(-3px); box-shadow:0 8px 20px rgba(44,62,80,.15); }
 
   .fx-portfolio__nav{
     position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; border-radius:50%; border:0; cursor:pointer;
@@ -530,7 +504,7 @@
   .fx-modal-stack .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .fx-modal-stack .tag { background: #eef1f3; color: var(--azul-petroleo, #2C3E50); padding: 0.35rem 0.8rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; }
   
-  .fx-modal-actions { margin-top: 2.5rem; display: flex; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; }
+  .fx-modal-actions { margin-top: 2.5rem; display: flex; align-items: center; gap: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; }
   
   /* BOTÓN VOLVER */
   .cta-back { display: inline-flex; align-items: center; gap: 0.6rem; background: transparent; border: none; color: var(--azul-petroleo, #2C3E50); font-weight: 800; font-size: 1.05rem; cursor: pointer; padding: 0.5rem 0; transition: color 0.2s, transform 0.2s; }

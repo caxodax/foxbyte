@@ -13,6 +13,7 @@
   let category = '';
   let description = '';
   let imageUrl = '';
+  let isUploadingImage = false;
   let stackStr = ''; // Separado por comas
   
   // KPIs
@@ -42,8 +43,38 @@
     }
   }
 
+  async function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    isUploadingImage = true;
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Error subiendo la imagen');
+      imageUrl = data.url;
+    } catch (error) {
+      console.error("Error subiendo imagen:", error);
+      alert("Error al subir la imagen: " + error.message);
+    } finally {
+      isUploadingImage = false;
+      event.target.value = ''; // limpiar input
+    }
+  }
+
   async function handleSubmit() {
     loading = true;
+    if (!imageUrl) {
+      alert('Por favor sube una imagen para el proyecto.');
+      loading = false;
+      return;
+    }
     const stackArray = stackStr.split(',').map(s => s.trim()).filter(s => s);
     
     const kpis = [];
@@ -151,8 +182,20 @@
       </div>
       
       <div class="form-group">
-        <label for="imageUrl">URL de la Imagen (Cover)</label>
-        <input type="url" id="imageUrl" bind:value={imageUrl} required placeholder="https://ejemplo.com/imagen.jpg" disabled={loading} />
+        <label for="imageUpload">Imagen del Proyecto (Cover)</label>
+        {#if imageUrl}
+          <div style="max-height: 150px; border-radius: 8px; overflow: hidden; margin-bottom: 0.5rem; border: 1px solid #cbd5e1;">
+            <img src={imageUrl} alt="Cover preview" style="width: 100%; height: 150px; object-fit: cover;" />
+          </div>
+          <button type="button" class="btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;" on:click={() => imageUrl = ''} disabled={loading}>
+            Cambiar imagen
+          </button>
+        {:else}
+          <input type="file" id="imageUpload" accept="image/*" on:change={handleImageUpload} disabled={loading || isUploadingImage} />
+          {#if isUploadingImage}
+            <small style="color: #64748b; display: block; margin-top: 0.25rem;">Subiendo imagen a R2...</small>
+          {/if}
+        {/if}
       </div>
       
       <div class="form-group">
@@ -190,7 +233,7 @@
         {#if isEditing}
           <button type="button" class="btn-secondary" on:click={resetForm} disabled={loading}>Cancelar</button>
         {/if}
-        <button type="submit" class="btn-primary" disabled={loading}>
+        <button type="submit" class="btn-primary" disabled={loading || isUploadingImage}>
           {loading ? 'Guardando...' : (isEditing ? 'Actualizar Proyecto' : 'Añadir Proyecto')}
         </button>
       </div>

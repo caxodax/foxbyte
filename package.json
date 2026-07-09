@@ -33,6 +33,7 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
+		"@aws-sdk/client-s3": "^3.1084.0",
 		"firebase": "^12.1.0"
 	}
 }

@@ -418,9 +418,10 @@
     padding: .25rem 2.5rem 2.4rem; -webkit-overflow-scrolling: touch;
   }
   .fx-portfolio__card{
-    position: relative; scroll-snap-align: center; background:#fff; border-radius:16px; overflow: clip;
-    box-shadow: 0 8px 24px rgba(0,0,0,.04), 0 2px 8px rgba(0,0,0,.04); transform: translateY(6px) scale(var(--fx-scale,1));
-    transition: transform .5s ease, box-shadow .5s ease, opacity .4s ease; opacity: var(--fx-opacity,1);
+    position: relative; scroll-snap-align: center; background:#fff; border-radius:18px; overflow: clip;
+    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: 0 12px 36px rgba(44,62,80,0.06), 0 2px 12px rgba(44,62,80,0.04); transform: translateY(6px) scale(var(--fx-scale,1));
+    transition: transform .5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow .5s ease, opacity .4s ease; opacity: var(--fx-opacity,1);
     display: flex; flex-direction: column;
   }
   .fx-portfolio__card.in-view{ transform: translateY(0) scale(var(--fx-scale,1)); box-shadow: 0 12px 28px rgba(0,0,0,.08); }
@@ -436,12 +437,12 @@
   .fx-portfolio__media img{ width:100%; height:120%; object-fit:cover; display:block; filter:saturate(1.02) contrast(1.02); transform: translateY(var(--fx-parallax,0)) scale(1.05); transition: transform .6s ease; will-change: transform; }
 
   .fx-portfolio__kpis{ position:absolute; inset:auto .75rem .75rem auto; display:flex; gap:.5rem; }
-  .fx-portfolio__kpis .kpi{ background: rgba(255,255,255,.9); backdrop-filter: blur(6px); border:1px solid rgba(0,0,0,.06); border-radius:999px; padding:.35rem .6rem; font-weight:800; font-size:.9rem; color: var(--azul-petroleo, #2C3E50); box-shadow:0 4px 12px rgba(0,0,0,.08); }
-  .fx-portfolio__kpis .kpi small{ font-weight:600; opacity:.7; margin-left:.25rem; }
+  .fx-portfolio__kpis .kpi{ background: rgba(255,255,255,.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.5); border-radius:12px; padding:.4rem .7rem; font-weight:800; font-size:.95rem; color: var(--terracota-suave, #E67E22); box-shadow:0 8px 16px rgba(0,0,0,.08); display: flex; align-items: center; gap: 0.25rem; }
+  .fx-portfolio__kpis .kpi small{ font-weight:700; opacity:.8; color: var(--azul-petroleo, #2C3E50); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
-  .fx-portfolio__content{ padding: 1.2rem 1.2rem 1.4rem; display: flex; flex-direction: column; flex-grow: 1; }
-  .fx-portfolio__category{ display:block; font-size:.75rem; font-weight:700; color: var(--ciruela-profunda, #5E3A6B); text-transform:uppercase; letter-spacing:.08em; margin-bottom:.4rem; }
-  .fx-portfolio__h3{ font-size:1.15rem; line-height:1.25; margin:0 0 .6rem; color: var(--azul-petroleo, #2C3E50); }
+  .fx-portfolio__content{ padding: 1.5rem 1.4rem 1.6rem; display: flex; flex-direction: column; flex-grow: 1; }
+  .fx-portfolio__category{ display:block; font-size:.7rem; font-weight:800; color: var(--terracota-suave, #E67E22); text-transform:uppercase; letter-spacing:.1em; margin-bottom:.5rem; }
+  .fx-portfolio__h3{ font-size:1.25rem; line-height:1.3; margin:0 0 .75rem; color: var(--azul-petroleo, #2C3E50); font-weight: 800; }
   .fx-portfolio__content p{ 
     color: var(--gris-grafito, #4A4A4A); 
     margin:0 0 1.2rem; 
@@ -453,14 +454,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .fx-portfolio__stack{ display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:.9rem; }
-  .fx-portfolio__stack span{ background:#eef1f3; color: var(--azul-petroleo, #2C3E50); padding:.25rem .6rem; border-radius:999px; font-size:.78rem; font-weight:700; }
+  .fx-portfolio__stack{ display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:1rem; }
+  .fx-portfolio__stack span{ background: rgba(44,62,80,0.04); color: var(--azul-petroleo, #2C3E50); border: 1px solid rgba(44,62,80,0.08); padding:.3rem .7rem; border-radius:8px; font-size:.72rem; font-weight:700; letter-spacing: 0.03em; }
 
-  .fx-portfolio__cta{ display:flex; gap:.6rem; margin-top: auto; padding-top: 1rem; }
-  .fx-portfolio .cta-primary{ appearance:none; border:0; border-radius:10px; padding:.65rem 1rem; font-weight:700; font-size: 0.9rem; background: var(--azul-petroleo, #2C3E50); color:#fff; box-shadow:0 4px 12px rgba(44,62,80,.15); cursor:pointer; transition: all 0.2s ease; flex-grow: 1; justify-content: center; display: flex; }
-  .fx-portfolio .cta-primary:hover { transform: translateY(-2px); box-shadow:0 6px 16px rgba(44,62,80,.25); }
-  .fx-portfolio .cta-ghost{ display:inline-flex; align-items:center; justify-content: center; border:1.5px solid var(--azul-petroleo, #2C3E50); border-radius:10px; padding:.55rem 1rem; font-weight:700; font-size: 0.9rem; color: var(--azul-petroleo, #2C3E50); text-decoration:none; transition: all 0.2s ease; flex-grow: 1; }
-  .fx-portfolio .cta-ghost:hover { background: var(--azul-petroleo, #2C3E50); color: white; }
+  .fx-portfolio__cta{ display:flex; gap:.7rem; margin-top: auto; padding-top: 1.2rem; border-top: 1px solid rgba(0,0,0,0.04); }
+  .fx-portfolio .cta-primary{ appearance:none; border:0; border-radius:10px; padding:.7rem 1rem; font-weight:800; font-size: 0.9rem; letter-spacing: 0.03em; background: var(--azul-petroleo, #2C3E50); color:#fff; box-shadow:0 4px 14px rgba(44,62,80,.2); cursor:pointer; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); flex-grow: 1; justify-content: center; display: flex; }
+  .fx-portfolio .cta-primary:hover { transform: translateY(-3px); box-shadow:0 8px 20px rgba(44,62,80,.3); background: #1a2530; }
+  .fx-portfolio .cta-ghost{ display:inline-flex; align-items:center; justify-content: center; border:1.5px solid var(--azul-petroleo, #2C3E50); border-radius:10px; padding:.65rem 1rem; font-weight:800; font-size: 0.9rem; letter-spacing: 0.03em; color: var(--azul-petroleo, #2C3E50); text-decoration:none; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); flex-grow: 1; }
+  .fx-portfolio .cta-ghost:hover { background: var(--azul-petroleo, #2C3E50); color: white; transform: translateY(-3px); box-shadow:0 8px 20px rgba(44,62,80,.15); }
 
   .fx-portfolio__nav{
     position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; border-radius:50%; border:0; cursor:pointer;

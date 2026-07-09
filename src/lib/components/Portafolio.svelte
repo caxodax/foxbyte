@@ -11,7 +11,7 @@
   let dotsWrap: HTMLDivElement | null = null;
 
   // Estado interno
-  let portfolioItems = [];
+  let portfolioItems: any[] = [];
   let loading = true;
   let cards: HTMLElement[] = [];
   let dots: HTMLSpanElement[] = [];
@@ -29,13 +29,13 @@
   let userHolding = false;
 
   // Cleanup listeners arrays
-  let cleanupFns = [];
+  let cleanupFns: Function[] = [];
 
   // Modal de detalles
-  let selectedProject = null;
-  let lightboxImage = null;
+  let selectedProject: any = null;
+  let lightboxImage: string | null = null;
 
-  function openModal(item) {
+  function openModal(item: any) {
     selectedProject = item;
     document.body.style.overflow = 'hidden';
   }
@@ -45,7 +45,7 @@
     document.body.style.overflow = '';
   }
 
-  function handleModalKeydown(e) {
+  function handleModalKeydown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       if (lightboxImage) lightboxImage = null;
       else if (selectedProject) closeModal();
@@ -285,7 +285,9 @@
           {#each portfolioItems as item}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-            <article class="fx-portfolio__card fx-card-minimal" aria-label={item.title} on:click={() => openModal(item)} role="button" tabindex="0">
+            <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+            <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+            <article class="fx-portfolio__card fx-card-minimal" aria-label={item.title} on:click={() => openModal(item)} on:keydown={(e) => e.key === 'Enter' && openModal(item)} role="button" tabindex="0">
               <figure class="fx-portfolio__media">
                 <img loading="lazy" decoding="async" src={item.image_url || 'https://placehold.co/960x640'} alt={item.title} />
               </figure>
@@ -376,7 +378,8 @@
 {#if lightboxImage}
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div class="fx-lightbox" transition:fade={{duration: 200}} on:click={() => lightboxImage = null} on:keydown={handleModalKeydown} tabindex="0">
+  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+  <div class="fx-lightbox" transition:fade={{duration: 200}} on:click={() => lightboxImage = null} on:keydown={handleModalKeydown} tabindex="0" role="dialog" aria-modal="true">
     <button class="fx-lightbox-close" aria-label="Cerrar imagen" title="Cerrar (Esc)">×</button>
     <img src={lightboxImage} alt="Vista ampliada" transition:fly={{y: 20, duration: 300}} on:click|stopPropagation />
   </div>
@@ -433,8 +436,8 @@
   .fx-portfolio__card.fx-card-minimal:hover .arrow { transform: translateX(8px); }
 
   /* Estilos para los botones del modal */
-  .fx-portfolio .cta-primary{ appearance:none; border:0; border-radius:10px; padding:.7rem 1.2rem; font-weight:800; font-size: 0.95rem; letter-spacing: 0.03em; background: var(--azul-petroleo, #2C3E50); color:#fff; box-shadow:0 4px 14px rgba(44,62,80,.2); cursor:pointer; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
-  .fx-portfolio .cta-primary:hover { transform: translateY(-3px); box-shadow:0 8px 20px rgba(44,62,80,.3); background: #1a2530; }
+  .cta-primary{ appearance:none; border:0; border-radius:10px; padding:.7rem 1.2rem; font-weight:800; font-size: 0.95rem; letter-spacing: 0.03em; background: var(--azul-petroleo, #2C3E50); color:#fff; box-shadow:0 4px 14px rgba(44,62,80,.2); cursor:pointer; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .cta-primary:hover { transform: translateY(-3px); box-shadow:0 8px 20px rgba(44,62,80,.3); background: #1a2530; }
 
   .fx-portfolio__nav{
     position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; border-radius:50%; border:0; cursor:pointer;
@@ -447,8 +450,8 @@
   .fx-portfolio__progress-bar{ position: absolute; inset: 0 auto 0 0; width: 0%; background: var(--terracota-suave, #E67E22); border-radius: 999px; transition: width .12s linear; }
 
   .fx-portfolio__dots{ position:relative; display:flex; justify-content:center; gap:.45rem; margin-top:.5rem; }
-  .fx-portfolio__dots .dot{ width:8px; height:8px; border-radius:999px; background: rgba(0,0,0,.18); }
-  .fx-portfolio__dots .dot.is-active{ background: var(--terracota-suave, #E67E22); transform: scale(1.2); }
+  :global(.fx-portfolio__dots .dot){ width:8px; height:8px; border-radius:999px; background: rgba(0,0,0,.18); transition: transform 0.2s, background 0.2s; }
+  :global(.fx-portfolio__dots .dot.is-active){ background: var(--terracota-suave, #E67E22); transform: scale(1.2); }
 
   /* Breakpoints */
   @media (min-width: 640px){ .fx-portfolio__scroller{ grid-auto-columns: 70%; } }

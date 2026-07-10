@@ -1,5 +1,16 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';
+  import { onMount } from 'svelte';
+
+  let videoEl: HTMLVideoElement;
+
+  onMount(() => {
+    if (videoEl) {
+      // Forzar explícitamente el mute y play para Safari (iOS)
+      videoEl.muted = true;
+      videoEl.play().catch((err) => console.log("Autoplay evitado por el navegador:", err));
+    }
+  });
 </script>
 
 <section class="hero-section">
@@ -28,7 +39,17 @@
 
   <!-- Video Column -->
   <div class="hero-video-column">
-    <video src="/hero.mp4" autoplay loop muted playsinline class="hero-video"></video>
+    <video 
+      bind:this={videoEl}
+      src="/hero.mp4" 
+      autoplay 
+      loop 
+      muted 
+      playsinline 
+      webkit-playsinline
+      preload="auto"
+      class="hero-video">
+    </video>
   </div>
 </section>
 

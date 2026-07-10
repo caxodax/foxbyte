@@ -11,13 +11,15 @@
   import ContactoPortal from '$lib/components/Contacto.svelte';
   
   let isContactModalVisible = false;
+  
+  export let data;
 </script>
 
 <!-- CORRECCIÓN: Añadido el listener on:openContact -->
 <Navbar on:openContact={() => isContactModalVisible = true} />
 <Hero />
 <Servicios />
-<Portafolio />
+<Portafolio initialPortfolioItems={data.portfolioItems} />
 <PropuestaValor />
 
 <CtaFinal on:openContact={() => isContactModalVisible = true} />

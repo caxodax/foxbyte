@@ -10,9 +10,12 @@
   let nextBtn: HTMLButtonElement | null = null;
   let dotsWrap: HTMLDivElement | null = null;
 
+  // Props de SSR
+  export let initialPortfolioItems: any[] | null = null;
+
   // Estado interno
-  let portfolioItems: any[] = [];
-  let loading = true;
+  let portfolioItems: any[] = initialPortfolioItems || [];
+  let loading = initialPortfolioItems === null;
   let error = false;
   let cards: HTMLElement[] = [];
   let dots: HTMLSpanElement[] = [];
@@ -54,8 +57,16 @@
   }
 
   onMount(async () => {
+    // Si ya tenemos los datos de SSR, inicializamos el carrusel y terminamos
+    if (initialPortfolioItems !== null) {
+      loading = false;
+      await tick();
+      if (portfolioItems.length > 0) initCarousel();
+      return;
+    }
+
     try {
-      // Promise.race con timeout de 8 segundos para evitar carga infinita
+      // Fallback a client-side fetch si el SSR falló
       const fetchPromise = getDocs(collection(db, 'portfolio'));
       const timeoutPromise = new Promise((_, reject) => 
         setTimeout(() => reject(new Error('TIMEOUT')), 8000)

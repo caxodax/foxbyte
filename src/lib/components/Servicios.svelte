@@ -4,7 +4,15 @@
   import { db } from '$lib/firebase';
   import { collection, getDocs } from 'firebase/firestore';
 
-  let services = [];
+  type Service = {
+    id: string;
+    title?: string;
+    description?: string;
+    icon_svg?: string;
+    sub_services?: string[];
+    [key: string]: any;
+  };
+  let services: Service[] = [];
   let loading = true;
 
   onMount(async () => {

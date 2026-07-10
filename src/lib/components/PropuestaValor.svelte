@@ -52,7 +52,7 @@
     <div class="fx-vp-premium__header">
       <span class="fx-vp-premium__subtitle">Nuestra propuesta de valor</span>
       <h2 id="vp-title" class="fx-vp-premium__title">
-        Transformamos complejidad en <br/><span class="text-highlight">ventaja competitiva</span>
+        Ingeniería que <br/><span class="text-highlight">escala tu negocio</span>
       </h2>
     </div>
 

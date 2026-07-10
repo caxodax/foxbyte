@@ -50,9 +50,20 @@
     <!-- Columna Derecha: El "Widget" de Servicios -->
     <div class="fx-right-column">
       {#if loading}
-        <div class="fx-loading-state">
-          <div class="fx-spinner"></div>
-          <p>Cargando innovación...</p>
+        <div class="fx-services-grid">
+          {#each Array(4) as _}
+            <article class="fx-service-card fx-skeleton-card">
+              <div class="fx-card-inner">
+                <div class="fx-card-header-inline">
+                  <div class="fx-icon-container fx-skeleton-pulse"></div>
+                  <div class="fx-skeleton-text fx-skeleton-title fx-skeleton-pulse"></div>
+                </div>
+                <div class="fx-skeleton-text fx-skeleton-desc fx-skeleton-pulse" style="width: 100%"></div>
+                <div class="fx-skeleton-text fx-skeleton-desc fx-skeleton-pulse" style="width: 85%"></div>
+                <div class="fx-skeleton-text fx-skeleton-desc fx-skeleton-pulse" style="width: 60%"></div>
+              </div>
+            </article>
+          {/each}
         </div>
       {:else if services.length === 0}
         <div class="fx-loading-state">
@@ -401,9 +412,20 @@
     color: var(--terracota-suave);
   }
 
-  /* --- Loading State --- */
-  .fx-loading-state { text-align: center; padding: 3rem; color: var(--gris-grafito); }
-  .fx-spinner { width: 30px; height: 30px; margin: 0 auto 1rem; border: 2px solid rgba(230,126,34,0.2); border-top-color: var(--terracota-suave); border-radius: 50%; animation: fx-spin 1s linear infinite; }
-  @keyframes fx-spin { to { transform: rotate(360deg); } }
+  /* --- Skeleton Loading --- */
+  .fx-skeleton-card { pointer-events: none; border-color: transparent !important; }
+  .fx-skeleton-pulse {
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: fx-pulse 1.5s infinite linear;
+    border-radius: 8px;
+  }
+  @keyframes fx-pulse {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .fx-icon-container.fx-skeleton-pulse { border-radius: 12px; background-color: #f1f5f9; box-shadow: none; border: none; }
+  .fx-skeleton-title { height: 24px; width: 60%; margin-left: 0; }
+  .fx-skeleton-desc { height: 14px; margin-bottom: 12px; }
 
 </style>

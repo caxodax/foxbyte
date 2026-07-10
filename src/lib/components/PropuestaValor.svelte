@@ -119,6 +119,7 @@
   </div>
 </section>
 
+<style>
   /* Estilos ultra-limpios y corporativos (Minimalismo Premium) */
   .fx-vp-premium { 
     position: relative; padding: 6rem 1.25rem; background: #f8fafc; color: #1e293b;

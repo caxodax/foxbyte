@@ -2,8 +2,6 @@
   import { onMount, onDestroy } from "svelte";
 
   // --- Estado ---
-  let activeMode: "problema" | "solucion" = "solucion";
-
   type KPI = { target: number; suffix?: string; decimals?: number };
   const kpis: KPI[] = [
     { target: 40, suffix: "%", decimals: 0 },   // -40% tiempo admin
@@ -69,60 +67,55 @@
           Transformamos complejidad en ventaja competitiva
         </h2>
 
-        <!-- Tabs -->
-        <div class="fx-vp__tabs" role="tablist" aria-label="Mensaje">
-          <button
-            class="fx-vp__tab"
-            aria-selected={activeMode === "problema"}
-            on:click={() => (activeMode = "problema")}
-          >
-            Problema
-          </button>
-          <button
-            class="fx-vp__tab"
-            aria-selected={activeMode === "solucion"}
-            on:click={() => (activeMode = "solucion")}
-          >
-            Solución
-          </button>
+        <ul class="fx-vp__bullets">
+          <li>
+            <div class="icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" /><path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+            </div>
+            <div>
+              <strong>Diseño Premium UI/UX.</strong> Interfaces que proyectan autoridad y enamoran a tus usuarios.
+            </div>
+          </li>
+          <li>
+            <div class="icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" /><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" /><path d="M12 9l0 3" /><path d="M12 15l.01 0" /></svg>
+            </div>
+            <div>
+              <strong>Arquitectura Escalable.</strong> Código robusto y seguro preparado para alto tráfico.
+            </div>
+          </li>
+          <li>
+            <div class="icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3v18h18" /><path d="M20 18v3" /><path d="M16 16v5" /><path d="M12 13v8" /><path d="M8 16v5" /><path d="M3 11c6 0 5 -5 9 -5s3 5 9 5" /></svg>
+            </div>
+            <div>
+              <strong>Impacto en el Negocio.</strong> Soluciones tecnológicas diseñadas para aumentar tus KPIs.
+            </div>
+          </li>
+        </ul>
+
+        <!-- KPIs -->
+        <div class="fx-vp__kpi-row">
+          <div class="fx-vp__kpi" data-index="0">
+            <span class="fx-vp__kpi-num">{fmt(kpiValues[0], kpis[0])}</span>
+            <span class="fx-vp__kpi-sub">menos tiempo<br/>administrativo</span>
+          </div>
+          <div class="fx-vp__kpi" data-index="1">
+            <span class="fx-vp__kpi-num">{fmt(kpiValues[1], kpis[1])}</span>
+            <span class="fx-vp__kpi-sub">más conversión</span>
+          </div>
+          <div class="fx-vp__kpi" data-index="2">
+            <span class="fx-vp__kpi-num">{fmt(kpiValues[2], kpis[2])}</span>
+            <span class="fx-vp__kpi-sub">NPS promedio</span>
+          </div>
         </div>
 
-        {#if activeMode === "problema"}
-          <ul class="fx-vp__bullets">
-            <li><span class="dot"></span> Procesos manuales y desalineación entre equipos.</li>
-            <li><span class="dot"></span> Datos dispersos, reportes tardíos y decisiones a ciegas.</li>
-            <li><span class="dot"></span> Integraciones frágiles que frenan el crecimiento.</li>
-          </ul>
-        {:else}
-          <ul class="fx-vp__bullets">
-            <li><span class="dot"></span> <strong>Software a medida</strong> alineado a KPIs de operaciones y ventas.</li>
-            <li><span class="dot"></span> <strong>Infraestructura segura</strong> y mantenible con SLOs claros.</li>
-            <li><span class="dot"></span> <strong>BI accionable</strong>: métricas en tiempo real y alertas por umbrales.</li>
-          </ul>
-
-          <!-- KPIs -->
-          <div class="fx-vp__kpi-row">
-            <div class="fx-vp__kpi" data-index="0">
-              <span class="fx-vp__kpi-num">{fmt(kpiValues[0], kpis[0])}</span>
-              <span class="fx-vp__kpi-sub">menos tiempo<br/>administrativo</span>
-            </div>
-            <div class="fx-vp__kpi" data-index="1">
-              <span class="fx-vp__kpi-num">{fmt(kpiValues[1], kpis[1])}</span>
-              <span class="fx-vp__kpi-sub">más conversión</span>
-            </div>
-            <div class="fx-vp__kpi" data-index="2">
-              <span class="fx-vp__kpi-num">{fmt(kpiValues[2], kpis[2])}</span>
-              <span class="fx-vp__kpi-sub">NPS promedio</span>
-            </div>
-          </div>
-
-          <!-- Proof pills -->
-          <div class="fx-vp__pills">
-            <span class="pill">+5 años</span>
-            <span class="pill">30+ proyectos</span>
-            <span class="pill">SLA 99.9%</span>
-          </div>
-        {/if}
+        <!-- Proof pills -->
+        <div class="fx-vp__pills">
+          <span class="pill">+5 años de exp.</span>
+          <span class="pill">+30 proyectos</span>
+          <span class="pill">SLA 99.9%</span>
+        </div>
 
         <!-- CTAs -->
         <div class="fx-vp__ctas">
@@ -169,43 +162,37 @@
     border-radius: .25rem; z-index:-1;
   }
 
-  /* Tabs tipo píldora con sombra */
-  .fx-vp__tabs{
-    display:inline-flex; gap:.4rem; padding:.3rem; border-radius:999px;
-    background:#f2f4f6; box-shadow: inset 0 1px 0 rgba(0,0,0,.03);
-    margin: .4rem 0 1rem;
+  /* Bullets de alto valor */
+  .fx-vp__bullets{ list-style:none; padding:0; margin:0 0 1.5rem; display:grid; gap:.8rem; }
+  .fx-vp__bullets li{ display:flex; align-items:flex-start; gap:1rem; color:#2d3748; line-height: 1.5; font-size: 0.95rem; }
+  .fx-vp__bullets .icon-wrap{ 
+    display:flex; align-items:center; justify-content:center; flex-shrink: 0;
+    width: 32px; height: 32px; border-radius: 8px; 
+    background: rgba(44,62,80,0.05); color: var(--azul-petroleo, #2C3E50); 
   }
-  .fx-vp__tab{
-    appearance:none; border:0; cursor:pointer;
-    padding:.55rem 1rem; border-radius:999px; font-weight:800;
-    color: var(--azul-petroleo, #2C3E50); background: transparent;
-    box-shadow: 0 0 0 rgba(0,0,0,0);
-  }
-  .fx-vp__tab[aria-selected="true"]{
-    background:#fff; box-shadow: 0 4px 12px rgba(0,0,0,.08);
-  }
-
-  /* Bullets con dot sutil */
-  .fx-vp__bullets{ list-style:none; padding:0; margin:0 0 1rem; display:grid; gap:.6rem; }
-  .fx-vp__bullets li{ display:flex; align-items:flex-start; gap:.6rem; color:#2d3748; }
-  .fx-vp .dot{ width:12px; height:12px; border-radius:50%; background:#e9edf2; position:relative; top:.45rem; }
-  .fx-vp__bullets strong{ color: var(--azul-petroleo, #2C3E50); }
+  .fx-vp__bullets strong{ color: var(--azul-petroleo, #2C3E50); display: block; margin-bottom: 0.1rem; }
 
   /* KPI cards como en la imagen */
   .fx-vp__kpi-row{
-    display:grid; grid-template-columns: repeat(3,1fr); gap:1rem;
-    margin: .8rem 0 0;
+    display:grid; grid-template-columns: 1fr; gap:1rem;
+    margin: 1.5rem 0 0;
+  }
+  @media (min-width: 480px) {
+    .fx-vp__kpi-row{ grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 640px) {
+    .fx-vp__kpi-row{ grid-template-columns: repeat(3, 1fr); }
   }
   .fx-vp__kpi{
     background:#fbfcfd; border:1px solid #eef1f3; border-radius:18px;
     padding:1.2rem; text-align:center;
-    box-shadow: 0 6px 18px rgba(0,0,0,.04);
+    box-shadow: 0 4px 12px rgba(0,0,0,.02);
   }
   .fx-vp__kpi-num{
-    display:block; font-size: clamp(1.4rem, 2.2vw, 2rem);
-    font-weight:900; color: var(--azul-petroleo, #2C3E50);
+    display:block; font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight:900; color: var(--terracota-suave, #E67E22);
   }
-  .fx-vp__kpi-sub{ display:block; color:#586174; margin-top:.35rem; }
+  .fx-vp__kpi-sub{ display:block; color:#586174; margin-top:.35rem; font-size: 0.85rem; font-weight: 500; }
 
   .fx-vp__pills{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.9rem 0 0; }
   .fx-vp .pill{

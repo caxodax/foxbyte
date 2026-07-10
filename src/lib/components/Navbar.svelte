@@ -25,7 +25,7 @@
       <div class="nav-links">
         <a href="#servicios">Servicios</a>
         <a href="#portafolio">Proyectos</a>
-        <a href="#nosotros">Nosotros</a>
+        <a href="#propuesta-valor">Propuesta de Valor</a>
       </div>
       <button class="cta-button" on:click={() => dispatch('openContact')}>
         Hablemos
@@ -48,8 +48,8 @@
         <a href="#portafolio" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 150 }}>
           Proyectos
         </a>
-        <a href="#nosotros" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 200 }}>
-          Nosotros
+        <a href="#propuesta-valor" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 200 }}>
+          Propuesta de Valor
         </a>
       </nav>
       <div class="mobile-menu-footer" in:fly={{ y: 20, duration: 400, delay: 300 }}>

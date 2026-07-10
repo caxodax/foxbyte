@@ -16,10 +16,10 @@
 
       <div class="cta-group" in:fade={{ duration: 800, delay: 800 }}>
         <a href="#contacto" class="hero-button primary">Comenzar</a>
-        <a href="#video" class="hero-button secondary">
-          Ver el video 
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z"/>
+        <a href="#servicios" class="hero-button secondary">
+          Explorar servicios 
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </a>
       </div>

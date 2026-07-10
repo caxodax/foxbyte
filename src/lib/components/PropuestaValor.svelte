@@ -47,7 +47,7 @@
   });
 </script>
 
-<section class="fx-vp-premium" aria-labelledby="vp-title">
+<section id="propuesta-valor" class="fx-vp-premium" aria-labelledby="vp-title">
   <div class="fx-vp-premium__wrap">
     <div class="fx-vp-premium__header">
       <span class="fx-vp-premium__subtitle">Nuestra propuesta de valor</span>
@@ -64,8 +64,8 @@
           <div class="fx-vp-card__icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" /><path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
           </div>
-          <h3 class="fx-vp-card__h3">Diseño Premium UI/UX</h3>
-          <p class="fx-vp-card__p">Interfaces que proyectan absoluta autoridad y enamoran a tus usuarios, diseñadas para destacar en un mercado saturado.</p>
+          <h3 class="fx-vp-card__h3">Experiencias Digitales Premium</h3>
+          <p class="fx-vp-card__p">Diseñamos interfaces intuitivas que capturan la esencia de tu marca y transforman cada interacción en lealtad, elevando tu autoridad en el mercado.</p>
           <div class="fx-vp-card__kpi fx-vp__kpi" data-index="0">
             <span class="kpi-num">{fmt(kpiValues[0], kpis[0])}</span>
             <span class="kpi-label">Menos tiempo admin.</span>
@@ -79,8 +79,8 @@
           <div class="fx-vp-card__icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" /><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" /><path d="M12 9l0 3" /><path d="M12 15l.01 0" /></svg>
           </div>
-          <h3 class="fx-vp-card__h3">Arquitectura Escalable</h3>
-          <p class="fx-vp-card__p">Código robusto, seguro y diseñado a medida. Infraestructura preparada para soportar el crecimiento y alto tráfico sin fricción.</p>
+          <h3 class="fx-vp-card__h3">Ingeniería Robusta y Escalable</h3>
+          <p class="fx-vp-card__p">Construimos sobre bases sólidas. Tu plataforma estará preparada para crecer exponencialmente, absorbiendo altos volúmenes de tráfico sin comprometer el rendimiento.</p>
           <div class="fx-vp-card__kpi fx-vp__kpi" data-index="1">
             <span class="kpi-num">+{fmt(kpiValues[1], kpis[1])}</span>
             <span class="kpi-label">Conversión generada</span>
@@ -94,8 +94,8 @@
           <div class="fx-vp-card__icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3v18h18" /><path d="M20 18v3" /><path d="M16 16v5" /><path d="M12 13v8" /><path d="M8 16v5" /><path d="M3 11c6 0 5 -5 9 -5s3 5 9 5" /></svg>
           </div>
-          <h3 class="fx-vp-card__h3">Impacto en el Negocio</h3>
-          <p class="fx-vp-card__p">No solo escribimos software, construimos soluciones tecnológicas enfocadas en dominar tus métricas clave de éxito.</p>
+          <h3 class="fx-vp-card__h3">Desarrollo Orientado a Resultados</h3>
+          <p class="fx-vp-card__p">Alineamos la tecnología con tus objetivos comerciales. Más que código, entregamos ecosistemas digitales diseñados específicamente para multiplicar tus ventas.</p>
           <div class="fx-vp-card__kpi fx-vp__kpi" data-index="2">
             <span class="kpi-num">{fmt(kpiValues[2], kpis[2])}</span>
             <span class="kpi-label">NPS Promedio</span>
@@ -156,7 +156,7 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
     border: 1px solid #e2e8f0;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex; flex-direction: column;
+    display: flex; flex-direction: column; text-align: center;
   }
   
   .fx-vp-card:hover {
@@ -165,10 +165,12 @@
   }
 
   /* Contenido interno de la tarjeta */
+  .fx-vp-card__content { display: flex; flex-direction: column; height: 100%; }
+
   .fx-vp-card__icon {
     width: 56px; height: 56px; border-radius: 12px; background: #f1f5f9;
-    display: flex; align-items: center; justify-content: center;
-    color: #334155; margin-bottom: 1.5rem; transition: background 0.3s ease, color 0.3s ease;
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;
+    color: #334155; transition: background 0.3s ease, color 0.3s ease;
   }
   .fx-vp-card:hover .fx-vp-card__icon { 
     background: var(--terracota-suave, #E67E22); color: #fff; 

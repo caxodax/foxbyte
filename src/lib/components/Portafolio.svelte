@@ -13,6 +13,7 @@
   // Estado interno
   let portfolioItems: any[] = [];
   let loading = true;
+  let error = false;
   let cards: HTMLElement[] = [];
   let dots: HTMLSpanElement[] = [];
   let io: IntersectionObserver | null = null;
@@ -54,13 +55,21 @@
 
   onMount(async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'portfolio'));
-      portfolioItems = querySnapshot.docs.map(doc => ({
+      // Promise.race con timeout de 8 segundos para evitar carga infinita
+      const fetchPromise = getDocs(collection(db, 'portfolio'));
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('TIMEOUT')), 8000)
+      );
+      
+      const querySnapshot = await Promise.race([fetchPromise, timeoutPromise]) as any;
+      
+      portfolioItems = querySnapshot.docs.map((doc: any) => ({
         id: doc.id,
         ...doc.data()
       }));
-    } catch (error) {
-      console.error("Error cargando portafolio:", error);
+    } catch (err) {
+      console.error("Error cargando portafolio:", err);
+      error = true;
     } finally {
       loading = false;
       await tick(); // Wait for DOM to update with the loaded items
@@ -271,6 +280,11 @@
     {#if loading}
       <div class="fx-portfolio__loading">
         <p>Cargando portafolio...</p>
+      </div>
+    {:else if error}
+      <div class="fx-portfolio__loading fx-portfolio__error">
+        <p>No pudimos cargar los proyectos en este momento. Por favor, revisa tu conexión.</p>
+        <button class="cta-primary" style="margin-top: 1.5rem;" on:click={() => window.location.reload()}>Reintentar</button>
       </div>
     {:else if portfolioItems.length === 0}
       <div class="fx-portfolio__loading">

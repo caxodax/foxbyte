@@ -47,23 +47,17 @@
   });
 </script>
 
-<section class="fx-vp-wow" aria-labelledby="vp-title">
-          <!-- Fondo animado sutil -->
-  <div class="fx-vp-wow__bg-glow fx-glow-1"></div>
-  <div class="fx-vp-wow__bg-glow fx-glow-2"></div>
-  <!-- Nuevo Grid 3D de fondo -->
-  <div class="fx-vp-wow__bg-grid"></div>
-
-  <div class="fx-vp-wow__wrap">
-    <div class="fx-vp-wow__header">
-      <span class="fx-vp-wow__subtitle">Nuestra propuesta de valor</span>
-      <h2 id="vp-title" class="fx-vp-wow__title">
-        Transformamos complejidad en <br/><span class="text-gradient">ventaja competitiva</span>
+<section class="fx-vp-premium" aria-labelledby="vp-title">
+  <div class="fx-vp-premium__wrap">
+    <div class="fx-vp-premium__header">
+      <span class="fx-vp-premium__subtitle">Nuestra propuesta de valor</span>
+      <h2 id="vp-title" class="fx-vp-premium__title">
+        Transformamos complejidad en <br/><span class="text-highlight">ventaja competitiva</span>
       </h2>
     </div>
 
     <!-- 3 Pillars Grid -->
-    <div class="fx-vp-wow__grid">
+    <div class="fx-vp-premium__grid">
       <!-- Tarjeta 1: Diseño -->
       <article class="fx-vp-card" data-index="0">
         <div class="fx-vp-card__content">
@@ -111,13 +105,13 @@
     </div>
 
     <!-- CTA & Pills Footer -->
-    <div class="fx-vp-wow__footer">
-      <div class="fx-vp-wow__pills">
+    <div class="fx-vp-premium__footer">
+      <div class="fx-vp-premium__pills">
         <span class="pill">+5 años de exp.</span>
         <span class="pill">+30 proyectos exitosos</span>
         <span class="pill">SLA 99.9% garantizado</span>
       </div>
-      <div class="fx-vp-wow__ctas">
+      <div class="fx-vp-premium__ctas">
         <a href="#contacto" class="btn btn--primary">Agendar diagnóstico</a>
         <a href="#portafolio" class="btn btn--ghost">Ver casos reales</a>
       </div>
@@ -125,124 +119,84 @@
   </div>
 </section>
 
-<style>
-  /* Base de la sección con posicionamiento relativo para brillos de fondo */
-  .fx-vp-wow { 
-    position: relative; padding: 6rem 1.25rem; overflow: hidden; background: #fafcff; 
+  /* Estilos ultra-limpios y corporativos (Minimalismo Premium) */
+  .fx-vp-premium { 
+    position: relative; padding: 6rem 1.25rem; background: #f8fafc; color: #1e293b;
   }
-  .fx-vp-wow__wrap { 
-    max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; 
-  }
-
-  /* Grid 3D de fondo arquitectónico */
-  .fx-vp-wow__bg-grid {
-    position: absolute; inset: 0; z-index: 0;
-    background-image: 
-      linear-gradient(rgba(44, 62, 80, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(44, 62, 80, 0.04) 1px, transparent 1px);
-    background-size: 50px 50px;
-    background-position: center top;
-    transform: perspective(1000px) rotateX(60deg) scale(2) translateY(-10%);
-    transform-origin: top center;
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
-    pointer-events: none;
-  }
-
-  /* Brillos de fondo animados (WOW effect) */
-  .fx-vp-wow__bg-glow {
-    position: absolute; width: 60vw; height: 60vw; border-radius: 50%;
-    filter: blur(100px); opacity: 0.15; z-index: 0; animation: float 15s ease-in-out infinite alternate;
-  }
-  .fx-glow-1 {
-    top: -20%; left: -10%; background: var(--terracota-suave, #E67E22);
-  }
-  .fx-glow-2 {
-    bottom: -20%; right: -10%; background: var(--ciruela-profunda, #5E3A6B); animation-delay: -5s;
-  }
-  @keyframes float {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(10%, 15%) scale(1.1); }
+  .fx-vp-premium__wrap { 
+    max-width: 1200px; margin: 0 auto; 
   }
 
   /* Encabezado centrado */
-  .fx-vp-wow__header { text-align: center; max-width: 800px; margin: 0 auto 4rem; }
-  .fx-vp-wow__subtitle {
-    display: inline-block; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.15em;
-    text-transform: uppercase; color: var(--terracota-suave, #E67E22); margin-bottom: 1rem;
-    background: rgba(230, 126, 34, 0.1); padding: 0.4rem 1rem; border-radius: 999px;
+  .fx-vp-premium__header { text-align: center; max-width: 800px; margin: 0 auto 4rem; }
+  .fx-vp-premium__subtitle {
+    display: inline-block; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: #64748b; margin-bottom: 1.2rem;
   }
-  .fx-vp-wow__title {
-    font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 900; line-height: 1.1;
-    color: var(--azul-petroleo, #2C3E50); margin: 0; letter-spacing: -0.02em;
+  .fx-vp-premium__title {
+    font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 900; line-height: 1.15;
+    color: #0f172a; margin: 0; letter-spacing: -0.02em;
   }
-  .text-gradient {
-    background: linear-gradient(135deg, var(--terracota-suave, #E67E22), var(--ciruela-profunda, #5E3A6B));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent;
+  .text-highlight {
+    color: var(--terracota-suave, #E67E22); /* Solo el color de marca, sin gradientes extravagantes */
   }
 
-  /* Grid simétrico (Bento Box) */
-  .fx-vp-wow__grid {
+  /* Grid limpio */
+  .fx-vp-premium__grid {
     display: grid; grid-template-columns: 1fr; gap: 2rem;
   }
   @media (min-width: 768px) {
-    .fx-vp-wow__grid { grid-template-columns: repeat(3, 1fr); }
+    .fx-vp-premium__grid { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
   }
 
-  /* Tarjetas "Glassmorphism" Premium */
+  /* Tarjetas minimalistas */
   .fx-vp-card {
-    position: relative; background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-    border-radius: 24px; padding: 2.5rem 2rem;
-    box-shadow: 0 10px 40px rgba(44, 62, 80, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.8);
-    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease;
-    display: flex; flex-direction: column; overflow: hidden;
-  }
-  /* Borde de gradiente dinámico en hover */
-  .fx-vp-card::before {
-    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 24px; padding: 2px;
-    background: linear-gradient(135deg, var(--terracota-suave, #E67E22), transparent, var(--ciruela-profunda, #5E3A6B));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor; mask-composite: exclude;
-    opacity: 0; transition: opacity 0.5s ease;
+    background: #ffffff; border-radius: 16px; padding: 2.5rem 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex; flex-direction: column;
   }
   
   .fx-vp-card:hover {
-    transform: translateY(-10px); box-shadow: 0 20px 50px rgba(44, 62, 80, 0.1), inset 0 0 0 1px rgba(255,255,255,1);
+    transform: translateY(-6px); 
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
   }
-  .fx-vp-card:hover::before { opacity: 1; }
 
   /* Contenido interno de la tarjeta */
   .fx-vp-card__icon {
-    width: 64px; height: 64px; border-radius: 18px; background: #fff;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center;
-    color: var(--azul-petroleo, #2C3E50); margin-bottom: 1.5rem; transition: transform 0.5s ease;
+    width: 56px; height: 56px; border-radius: 12px; background: #f1f5f9;
+    display: flex; align-items: center; justify-content: center;
+    color: #334155; margin-bottom: 1.5rem; transition: background 0.3s ease, color 0.3s ease;
   }
-  .fx-vp-card:hover .fx-vp-card__icon { transform: scale(1.1) rotate(-5deg); color: var(--terracota-suave, #E67E22); }
+  .fx-vp-card:hover .fx-vp-card__icon { 
+    background: var(--terracota-suave, #E67E22); color: #fff; 
+  }
   
-  .fx-vp-card__h3 { font-size: 1.35rem; font-weight: 900; color: var(--azul-petroleo, #2C3E50); margin: 0 0 1rem; line-height: 1.2; }
-  .fx-vp-card__p { font-size: 0.95rem; color: #586174; line-height: 1.6; margin: 0 0 2rem; flex-grow: 1; }
+  .fx-vp-card__h3 { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 1rem; line-height: 1.3; }
+  .fx-vp-card__p { font-size: 0.95rem; color: #475569; line-height: 1.6; margin: 0 0 2rem; flex-grow: 1; }
 
-  /* Integración fluida del KPI */
+  /* Integración limpia del KPI */
   .fx-vp-card__kpi {
-    padding-top: 1.5rem; border-top: 1px solid rgba(0,0,0,0.06);
+    padding-top: 1.5rem; border-top: 1px solid #e2e8f0;
   }
-  .kpi-num { display: block; font-size: 2.8rem; font-weight: 900; color: var(--azul-petroleo, #2C3E50); line-height: 1; margin-bottom: 0.5rem; letter-spacing: -0.03em; }
-  .kpi-label { display: block; font-size: 0.85rem; font-weight: 700; color: #7a849c; text-transform: uppercase; letter-spacing: 0.05em; }
+  .kpi-num { display: block; font-size: 2.5rem; font-weight: 900; color: #0f172a; line-height: 1; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+  .kpi-label { display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
 
   /* Footer: CTAs y Pills */
-  .fx-vp-wow__footer {
+  .fx-vp-premium__footer {
     display: flex; flex-direction: column; align-items: center; gap: 2.5rem; margin-top: 4rem;
   }
-  .fx-vp-wow__pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; }
-  .fx-vp-wow__pills .pill {
-    background: #fff; border: 1px solid rgba(44, 62, 80, 0.08); color: var(--azul-petroleo, #2C3E50);
-    padding: 0.5rem 1rem; border-radius: 999px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  .fx-vp-premium__pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; }
+  .fx-vp-premium__pills .pill {
+    background: #ffffff; border: 1px solid #cbd5e1; color: #475569;
+    padding: 0.4rem 1rem; border-radius: 999px; font-weight: 600; font-size: 0.85rem;
   }
 
-  .fx-vp-wow__ctas { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-  .btn { text-decoration: none; border-radius: 999px; font-weight: 800; padding: 0.9rem 1.8rem; font-size: 1.05rem; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-  .btn--primary { background: var(--azul-petroleo, #2C3E50); color: #fff; box-shadow: 0 10px 24px rgba(44,62,80,0.25); }
-  .btn--primary:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(44,62,80,0.35); background: #1a2530; }
-  .btn--ghost { color: var(--azul-petroleo, #2C3E50); background: #fff; box-shadow: 0 4px 14px rgba(0,0,0,0.05); }
-  .btn--ghost:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); color: var(--terracota-suave, #E67E22); }
+  .fx-vp-premium__ctas { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  .btn { text-decoration: none; border-radius: 8px; font-weight: 700; padding: 0.8rem 1.8rem; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+  .btn--primary { background: #0f172a; color: #fff; }
+  .btn--primary:hover { background: #1e293b; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+  .btn--ghost { color: #0f172a; background: transparent; border: 1px solid #cbd5e1; }
+  .btn--ghost:hover { border-color: #94a3b8; background: #f8fafc; transform: translateY(-2px); }
 </style>

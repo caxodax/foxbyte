@@ -48,9 +48,11 @@
 </script>
 
 <section class="fx-vp-wow" aria-labelledby="vp-title">
-  <!-- Fondo animado sutil -->
+          <!-- Fondo animado sutil -->
   <div class="fx-vp-wow__bg-glow fx-glow-1"></div>
   <div class="fx-vp-wow__bg-glow fx-glow-2"></div>
+  <!-- Nuevo Grid 3D de fondo -->
+  <div class="fx-vp-wow__bg-grid"></div>
 
   <div class="fx-vp-wow__wrap">
     <div class="fx-vp-wow__header">
@@ -70,7 +72,7 @@
           </div>
           <h3 class="fx-vp-card__h3">Diseño Premium UI/UX</h3>
           <p class="fx-vp-card__p">Interfaces que proyectan absoluta autoridad y enamoran a tus usuarios, diseñadas para destacar en un mercado saturado.</p>
-          <div class="fx-vp-card__kpi fx-vp__kpi">
+          <div class="fx-vp-card__kpi fx-vp__kpi" data-index="0">
             <span class="kpi-num">{fmt(kpiValues[0], kpis[0])}</span>
             <span class="kpi-label">Menos tiempo admin.</span>
           </div>
@@ -85,7 +87,7 @@
           </div>
           <h3 class="fx-vp-card__h3">Arquitectura Escalable</h3>
           <p class="fx-vp-card__p">Código robusto, seguro y diseñado a medida. Infraestructura preparada para soportar el crecimiento y alto tráfico sin fricción.</p>
-          <div class="fx-vp-card__kpi fx-vp__kpi">
+          <div class="fx-vp-card__kpi fx-vp__kpi" data-index="1">
             <span class="kpi-num">+{fmt(kpiValues[1], kpis[1])}</span>
             <span class="kpi-label">Conversión generada</span>
           </div>
@@ -100,7 +102,7 @@
           </div>
           <h3 class="fx-vp-card__h3">Impacto en el Negocio</h3>
           <p class="fx-vp-card__p">No solo escribimos software, construimos soluciones tecnológicas enfocadas en dominar tus métricas clave de éxito.</p>
-          <div class="fx-vp-card__kpi fx-vp__kpi">
+          <div class="fx-vp-card__kpi fx-vp__kpi" data-index="2">
             <span class="kpi-num">{fmt(kpiValues[2], kpis[2])}</span>
             <span class="kpi-label">NPS Promedio</span>
           </div>
@@ -130,6 +132,21 @@
   }
   .fx-vp-wow__wrap { 
     max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; 
+  }
+
+  /* Grid 3D de fondo arquitectónico */
+  .fx-vp-wow__bg-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image: 
+      linear-gradient(rgba(44, 62, 80, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(44, 62, 80, 0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center top;
+    transform: perspective(1000px) rotateX(60deg) scale(2) translateY(-10%);
+    transform-origin: top center;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+    pointer-events: none;
   }
 
   /* Brillos de fondo animados (WOW effect) */

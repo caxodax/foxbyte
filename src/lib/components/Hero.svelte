@@ -1,6 +1,7 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';
   import { onMount } from 'svelte';
+  import { isContactModalOpen } from '$lib/contactStore';
 
   let videoEl: HTMLVideoElement;
 
@@ -30,8 +31,8 @@
       </p>
 
       <div class="cta-group" in:fade={{ duration: 800, delay: 800 }}>
-        <a href="#contacto" class="hero-button primary">Solicitar diagnóstico</a>
-        <a href="#portafolio" class="hero-button secondary">Ver proyectos</a>
+        <a href="#contacto" on:click|preventDefault={() => isContactModalOpen.set(true)} class="hero-button primary">Solicitar diagnóstico</a>
+        <a href="/#portafolio" class="hero-button secondary">Ver proyectos</a>
       </div>
 
       <p class="hero-trust-text" in:fade={{ duration: 800, delay: 1000 }}>

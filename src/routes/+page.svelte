@@ -1,28 +1,18 @@
-<script>
+<script lang="ts">
   //+page.svelte
-  import Navbar from '$lib/components/Navbar.svelte';
   import Hero from '$lib/components/Hero.svelte';
+  import Clientes from '$lib/components/Clientes.svelte';
   import Servicios from '$lib/components/Servicios.svelte';
-  import PropuestaValor from '$lib/components/PropuestaValor.svelte';
   import Portafolio from '$lib/components/Portafolio.svelte';
-  import Footer from '$lib/components/Footer.svelte';
-  
-  import CtaFinal from '$lib/components/CtaFinal.svelte';
-  import ContactoPortal from '$lib/components/Contacto.svelte';
-  
-  let isContactModalVisible = false;
+  import PropuestaValor from '$lib/components/PropuestaValor.svelte';
+  import Testimonios from '$lib/components/Testimonios.svelte';
   
   export let data;
 </script>
 
-<!-- CORRECCIÓN: Añadido el listener on:openContact -->
-<Navbar on:openContact={() => isContactModalVisible = true} />
 <Hero />
+<Clientes />
 <Servicios />
 <Portafolio initialPortfolioItems={data.portfolioItems} />
 <PropuestaValor />
-
-<CtaFinal on:openContact={() => isContactModalVisible = true} />
-<Footer />
-
-<ContactoPortal bind:isVisible={isContactModalVisible} on:close={() => isContactModalVisible = false} />
+<Testimonios />

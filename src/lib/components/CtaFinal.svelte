@@ -1,15 +1,14 @@
-<script>
+<script lang="ts">
     //Ctafinal.svelte
-    import { createEventDispatcher } from "svelte";
-    const dispatch = createEventDispatcher();
+    import { isContactModalOpen } from "$lib/contactStore";
 </script>
 
 <section id="contacto" class="cta-final-section">
     <div class="cta-container">
         <h2>¿Tienes un proyecto en mente?</h2>
         <p>No esperes más. Entra a nuestro taller de ideas y comencemos a construir el futuro de tu negocio, juntos.</p>
-        <button on:click={() => dispatch('openContact')}>
-            Iniciar Colaboración
+        <button on:click={() => isContactModalOpen.set(true)}>
+            Solicitar diagnóstico
         </button>
     </div>
 </section>

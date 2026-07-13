@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import { db } from '$lib/firebase';
   import { collection, getDocs } from 'firebase/firestore';
+  import { isContactModalOpen } from '$lib/contactStore';
 
   type Service = {
     id: string;
@@ -47,8 +48,8 @@
         <p class="fx-subtitle">Transformamos ideas complejas en productos digitales escalables y de alto rendimiento.</p>
         
         <div class="fx-cta-wrapper">
-          <a href="#contacto" class="fx-cta-btn">
-            Inicia tu evolución digital
+          <a href="#contacto" on:click|preventDefault={() => isContactModalOpen.set(true)} class="fx-cta-btn">
+            Solicitar diagnóstico
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 7l-10 10" /><path d="M8 7l9 0l0 9" /></svg>
           </a>
         </div>

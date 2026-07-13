@@ -1,8 +1,15 @@
-<script>
+<script lang="ts">
   //Layout.svelte
-  // Esta línea importa todos nuestros estilos globales para que se apliquen en toda la app.
   import '../app.css';
-  
+  import { page } from '$app/stores';
+  import Navbar from '$lib/components/Navbar.svelte';
+  import CtaFinal from '$lib/components/CtaFinal.svelte';
+  import Footer from '$lib/components/Footer.svelte';
+  import ContactoPortal from '$lib/components/Contacto.svelte';
+  import { isContactModalOpen } from '$lib/contactStore';
+
+  $: isAdmin = $page.url.pathname.startsWith('/admin');
+  $: isContacto = $page.url.pathname === '/contacto';
 </script>
 
 <svelte:head>
@@ -16,4 +23,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 </svelte:head>
 
-<slot />
+{#if isAdmin}
+  <slot />
+{:else}
+  <Navbar on:openContact={() => isContactModalOpen.set(true)} />
+  <slot />
+  {#if !isContacto}
+    <CtaFinal on:openContact={() => isContactModalOpen.set(true)} />
+  {/if}
+  <Footer />
+  <ContactoPortal bind:isVisible={$isContactModalOpen} on:close={() => isContactModalOpen.set(false)} />
+{/if}

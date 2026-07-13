@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
+  import { isContactModalOpen } from "$lib/contactStore";
 
   // --- Estado ---
   type KPI = { target: number; suffix?: string; decimals?: number };
@@ -112,8 +113,8 @@
         <span class="pill">SLA 99.9% garantizado</span>
       </div>
       <div class="fx-vp-premium__ctas">
-        <a href="#contacto" class="btn btn--primary">Agendar diagnóstico</a>
-        <a href="#portafolio" class="btn btn--ghost">Ver casos reales</a>
+        <a href="#contacto" on:click|preventDefault={() => isContactModalOpen.set(true)} class="btn btn--primary">Solicitar diagnóstico</a>
+        <a href="/#portafolio" class="btn btn--ghost">Ver casos reales</a>
       </div>
     </div>
   </div>

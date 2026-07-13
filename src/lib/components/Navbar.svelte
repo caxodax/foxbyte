@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
   //Navbar.svelte
   import { onMount, createEventDispatcher } from 'svelte';
   import { fade, fly } from 'svelte/transition';
+  import { isContactModalOpen } from '$lib/contactStore';
   
   const dispatch = createEventDispatcher();
 
@@ -23,12 +24,12 @@
     
     <div class="desktop-nav">
       <div class="nav-links">
-        <a href="#servicios">Servicios</a>
-        <a href="#portafolio">Proyectos</a>
-        <a href="#propuesta-valor">Propuesta de Valor</a>
+        <a href="/#servicios">Servicios</a>
+        <a href="/#portafolio">Proyectos</a>
+        <a href="/#propuesta-valor">Propuesta de Valor</a>
       </div>
-      <button class="cta-button" on:click={() => dispatch('openContact')}>
-        Hablemos
+      <button class="cta-button" on:click={() => isContactModalOpen.set(true)}>
+        Solicitar diagnóstico
       </button>
     </div>
     
@@ -37,27 +38,27 @@
     </button>
   </div>
 </nav>
-
+ 
 {#if isMenuOpen}
   <div class="mobile-menu" transition:fade={{ duration: 300 }}>
     <div class="mobile-menu-content">
       <nav class="mobile-nav-links">
-        <a href="#servicios" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 100 }}>
+        <a href="/#servicios" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 100 }}>
           Servicios
         </a>
-        <a href="#portafolio" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 150 }}>
+        <a href="/#portafolio" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 150 }}>
           Proyectos
         </a>
-        <a href="#propuesta-valor" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 200 }}>
+        <a href="/#propuesta-valor" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 200 }}>
           Propuesta de Valor
         </a>
       </nav>
       <div class="mobile-menu-footer" in:fly={{ y: 20, duration: 400, delay: 300 }}>
-        <button class="mobile-cta-button" on:click={() => { toggleMenu(); dispatch('openContact'); }}>
-          Hablemos de tu Proyecto
+        <button class="mobile-cta-button" on:click={() => { toggleMenu(); isContactModalOpen.set(true); }}>
+          Solicitar diagnóstico
         </button>
         <div class="mobile-contact-info">
-          <a href="mailto:info@foxbyte.nz">info@foxbyte.nz</a>
+          <a href="mailto:luismontesg145@gmail.com">luismontesg145@gmail.com</a>
         </div>
       </div>
     </div>

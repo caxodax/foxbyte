@@ -17,23 +17,26 @@
   <!-- Text Column -->
   <div class="hero-text-column">
     <div class="text-wrapper">
+      <span class="hero-tagline" in:fly={{ y: 20, duration: 800, delay: 100 }}>
+        Software · Automatización · Productos digitales
+      </span>
+
       <h1 in:fly={{ y: 30, duration: 800, delay: 300 }}>
-        Transformamos<br/>negocios con<br/>Precisión
+        Construimos tecnología que convierte procesos complejos en crecimiento.
       </h1>
       
       <p class="hero-description" in:fade={{ duration: 800, delay: 600 }}>
-        "Construido con precisión. Impulsado por instinto. Creemos en llevar tu negocio al futuro, diseñando experiencias únicas que combinan tecnología avanzada y creatividad. No hay nada más emocionante que materializar tu visión en el universo digital."
+        Diseñamos plataformas web, sistemas internos y automatizaciones para empresas que buscan reducir tareas manuales, mejorar su operación y escalar con una base tecnológica sólida.
       </p>
 
       <div class="cta-group" in:fade={{ duration: 800, delay: 800 }}>
-        <a href="#contacto" class="hero-button primary">Comenzar</a>
-        <a href="#servicios" class="hero-button secondary">
-          Explorar servicios 
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </a>
+        <a href="#contacto" class="hero-button primary">Solicitar diagnóstico</a>
+        <a href="#portafolio" class="hero-button secondary">Ver proyectos</a>
       </div>
+
+      <p class="hero-trust-text" in:fade={{ duration: 800, delay: 1000 }}>
+        Analizamos tu necesidad y te mostramos una ruta clara antes de comenzar.
+      </p>
     </div>
   </div>
 
@@ -46,7 +49,6 @@
       loop 
       muted 
       playsinline 
-      webkit-playsinline
       preload="auto"
       class="hero-video">
     </video>
@@ -113,19 +115,29 @@
     object-position: center;
   }
 
+  .hero-tagline {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--terracota-suave, #FF6B00);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.2rem;
+  }
+
   h1 {
-    font-size: 2.8rem;
-    line-height: 1.1;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.15;
     color: white;
     font-weight: 800;
     margin: 0 0 1.5rem 0;
   }
 
   .hero-description {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 2vw, 1.15rem);
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.85);
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.2rem;
     font-weight: 400;
   }
 
@@ -173,6 +185,15 @@
     transform: translateY(-2px);
   }
 
+  .hero-trust-text {
+    display: block;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 1.2rem;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
   /* Desktop Layout */
   @media (min-width: 1024px) {
     .hero-section {
@@ -188,20 +209,12 @@
 
     .text-wrapper {
       margin: 0 0 0 auto;
-      max-width: 550px;
+      max-width: 650px;
     }
 
     .hero-video-column {
       flex: 0 0 50%;
       min-height: 100vh;
-    }
-
-    h1 {
-      font-size: 4.5rem;
-    }
-
-    .hero-description {
-      font-size: 1.2rem;
     }
 
     .hero-button {

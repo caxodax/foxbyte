@@ -1,16 +1,23 @@
 <script lang="ts">
   //Layout.svelte
   import '../app.css';
+  import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { afterNavigate } from '$app/navigation';
+  import { initTheme } from '$lib/themeStore';
   import Navbar from '$lib/components/Navbar.svelte';
   import CtaFinal from '$lib/components/CtaFinal.svelte';
   import Footer from '$lib/components/Footer.svelte';
   import ContactoPortal from '$lib/components/Contacto.svelte';
+  import ThemeToggle from '$lib/components/ThemeToggle.svelte';
   import { isContactModalOpen } from '$lib/contactStore';
 
   $: isAdmin = $page.url.pathname.startsWith('/admin');
   $: isContacto = $page.url.pathname === '/contacto';
+
+  onMount(() => {
+    initTheme();
+  });
 
   afterNavigate((nav) => {
     // Si la ruta cambia y no es un ancla hash, asegurar que inicie siempre desde el header arriba
@@ -44,6 +51,7 @@
     {/if}
     <Footer />
     <ContactoPortal bind:isVisible={$isContactModalOpen} on:close={() => isContactModalOpen.set(false)} />
+    <ThemeToggle />
   </div>
 {/if}
 

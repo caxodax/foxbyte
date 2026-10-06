@@ -177,19 +177,20 @@
     will-change: transform;
   }
 
-  /* Cinematic Feather Overlay - Preserva visibilidad viva y transiciona limpiamente a Marfil */
+  /* Cinematic Feather Overlay - Preserva visibilidad viva y transiciona limpiamente a la sección siguiente */
   .hero-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       to bottom,
-      rgba(15, 23, 42, 0.45) 0%,
-      rgba(15, 23, 42, 0.12) 25%,
-      rgba(15, 23, 42, 0.2) 60%,
-      rgba(248, 250, 252, 0.78) 85%,
-      var(--color-background, #F8FAFC) 100%
+      rgba(11, 15, 25, 0.55) 0%,
+      rgba(11, 15, 25, 0.15) 25%,
+      rgba(11, 15, 25, 0.35) 60%,
+      rgba(11, 15, 25, 0.75) 88%,
+      var(--color-background) 100%
     );
     pointer-events: none;
+    transition: background 0.3s ease;
   }
 
   /* Foreground Content */
@@ -363,11 +364,11 @@
   .pillar-item {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.88rem;
+    gap: 0.55rem;
+    font-size: 0.9rem;
     color: #FFFFFF;
-    font-weight: 500;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+    font-weight: 600;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.85);
   }
 
   .pillar-dot {

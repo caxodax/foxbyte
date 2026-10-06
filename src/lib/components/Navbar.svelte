@@ -7,7 +7,8 @@
   let y = 0;
   let isMenuOpen = false;
 
-  $: scrolled = y > 25;
+  $: isSubpage = $page.url.pathname !== '/';
+  $: scrolled = y > 25 || isSubpage;
 
   const toggleMenu = () => {
     isMenuOpen = !isMenuOpen;
@@ -122,11 +123,17 @@
   }
   
   .navbar.scrolled { 
-    background-color: rgba(255, 255, 255, 0.92); 
+    background-color: rgba(241, 245, 249, 0.94); 
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08); 
-    border-bottom: 1px solid var(--color-border, #E2E8F0);
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  :global([data-theme="dark"]) .navbar.scrolled {
+    background-color: rgba(11, 11, 15, 0.92);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
   
   .navbar-container { 

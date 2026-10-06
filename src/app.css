@@ -1,27 +1,28 @@
-/* --- Sistema de Diseño Foxbyte Studio - Editorial Clean Marfil & Warm Ember --- */
-:root {
-  /* --- Tokens Semánticos Principales --- */
-  --color-primary: #FF6600;                        /* Naranja Foxbyte Ember: cálido, energizante, firma de marca */
-  --color-primary-hover: #EA580C;                  /* Naranja hover accesible */
-  --color-primary-subtle: rgba(255, 102, 0, 0.08); /* Para badges y halos sutiles */
-  --color-primary-glow: rgba(255, 102, 0, 0.22);   /* Resplandor cálido */
+/* --- Sistema de Diseño Foxbyte Studio - Dual Theme (Light Editorial & Dark Luxury) --- */
+:root, [data-theme="light"] {
+  /* --- Tokens Modo Claro (Opción B: Titanio Nórdico & Terracota Editorial) --- */
+  --color-primary: #EA580C;                        /* Terracota Foxbyte: cálido, sin saturación chillona */
+  --color-primary-hover: #C2410C;                  /* Terracota intenso en hover */
+  --color-primary-subtle: rgba(234, 88, 12, 0.08); /* Para badges e indicadores sutiles */
+  --color-primary-glow: rgba(234, 88, 12, 0.18);   /* Resplandor cálido suave */
   
-  --color-background: #F8FAFC;                    /* Marfil suave / Slate 50: amplio, limpio, descansado */
-  --color-background-alt: #F1F5F9;                /* Alternancia sutil para contraste */
-  --color-background-dark: #0B0F19;               /* Para bloques oscuros deliberados (Hero / Footer técnico) */
-  --color-surface: #FFFFFF;                       /* Superficie blanca pura elevada */
+  --color-background: #F1F5F9;                    /* Gris Titanio / Slate 100: absorbe brillo, descanso visual */
+  --color-background-alt: #E2E8F0;                /* Alternancia sutil para contraste */
+  --color-background-dark: #0B0F19;               /* Para bloques oscuros deliberados (Footer técnico) */
+  --color-surface: #FFFFFF;                       /* Superficie blanca satinada para tarjetas elevadas */
   --color-surface-elevated: #FFFFFF;              /* Superficie hover */
-  --color-border: #E2E8F0;                        /* Micro-bordes hairline Slate 200 */
-  --color-border-subtle: #F1F5F9;
-  --color-border-hover: #CBD5E1;
+  --color-border: #CBD5E1;                        /* Bordes definidos Slate 300 con presencia táctil */
+  --color-border-subtle: #E2E8F0;
+  --color-border-hover: #94A3B8;
   
-  --color-text-primary: #0F172A;                  /* Slate 900 para titulares, máxima nitidez */
-  --color-text-secondary: #475569;                /* Slate 600 para párrafos: lectura suave, cero fatiga */
-  --color-text-muted: #64748B;                    /* Slate 500 para metadatos y categorías */
-  --color-text-light: #F8FAFC;                    /* Para elementos sobre fondo oscuro deliberado */
+  --color-text: #090D16;                          /* Negro Grafito: máxima nitidez y legibilidad */
+  --color-text-primary: #090D16;                  /* Slate 950 para titulares */
+  --color-text-secondary: #334155;                /* Slate 700 para párrafos: alto contraste, cero fatiga */
+  --color-text-muted: #64748B;                    /* Slate 500 para metadatos */
+  --color-text-light: #F8FAFC;                    /* Para textos sobre fondos oscuros deliberados */
   
   --color-accent-tech: #4F46E5;                   /* Indigo técnico armónico */
-  --color-ring: #FF6600;                          /* Anillo de foco accesible */
+  --color-ring: #EA580C;                          /* Anillo de foco accesible */
 
   /* --- Tokens Tipográficos --- */
   --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
@@ -33,10 +34,10 @@
   --radius-md: 14px;
   --radius-lg: 20px;
   --radius-full: 9999px;
-  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px 0 rgba(15, 23, 42, 0.03);
-  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
-  --shadow-glow: 0 0 25px rgba(255, 102, 0, 0.18);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.09), 0 2px 6px -1px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+  --shadow-glow: 0 0 25px rgba(234, 88, 12, 0.16);
 
   /* --- Mapeo de Compatibilidad Retroactiva --- */
   --terracota-suave: var(--color-primary);  
@@ -49,6 +50,37 @@
   --font-secundaria: var(--font-body);
 }
 
+[data-theme="dark"] {
+  /* --- Tokens Modo Oscuro (Opción A: Foxbyte NZ Luxury Dark & Warm Amber) --- */
+  --color-primary: #FF6B1A;                        /* Ámbar Cobrizo cálido */
+  --color-primary-hover: #EA580C;                  /* Ámbar profundo en hover */
+  --color-primary-subtle: rgba(255, 107, 26, 0.12);/* Halo cálido translúcido */
+  --color-primary-glow: rgba(255, 107, 26, 0.28);  /* Resplandor ámbar cinemático */
+  
+  --color-background: #0B0B0F;                    /* Grafito nocturno de lujo estilo foxbyte.nz */
+  --color-background-alt: #111624;                /* Capa secundaria oscura */
+  --color-background-dark: #070A10;               /* Base profunda */
+  --color-surface: #111726;                       /* Superficie carbón elegante */
+  --color-surface-elevated: #182033;              /* Superficie carbón elevada */
+  --color-border: rgba(255, 255, 255, 0.09);       /* Micro-borde hairline lúcido */
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  --color-border-hover: rgba(255, 107, 26, 0.35);
+  
+  --color-text: #F8FAFC;                          /* Slate 50 níveo */
+  --color-text-primary: #F8FAFC;                  /* Titulares claros de alto contraste */
+  --color-text-secondary: #CBD5E1;                /* Slate 300 para párrafos: lectura cómoda */
+  --color-text-muted: #94A3B8;                    /* Slate 400 para metadatos */
+  --color-text-light: #F8FAFC;
+  
+  --color-accent-tech: #6366F1;                   /* Indigo vibrante */
+  --color-ring: #FF6B1A;
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 30px rgba(255, 107, 26, 0.25);
+}
+
 /* --- Reseteo Básico y Estilos Globales --- */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -59,10 +91,11 @@
 html {
   scroll-padding-top: 90px;
   background-color: var(--color-background);
-  color-scheme: light;
+  color-scheme: light dark;
   overflow-x: hidden;
   max-width: 100%;
   width: 100%;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
@@ -77,6 +110,7 @@ body {
   max-width: 100%;
   width: 100%;
   position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -110,10 +144,10 @@ input, textarea, [contenteditable="true"] {
   caret-color: var(--color-primary);
 }
 
-/* Scrollbar Editorial Clean */
+/* Scrollbar Adaptativa */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(15, 23, 42, 0.2) transparent;
+  scrollbar-color: rgba(100, 116, 139, 0.35) transparent;
 }
 
 ::-webkit-scrollbar {
@@ -126,8 +160,12 @@ input, textarea, [contenteditable="true"] {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(15, 23, 42, 0.18);
+  background: rgba(100, 116, 139, 0.35);
   border-radius: 9999px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {

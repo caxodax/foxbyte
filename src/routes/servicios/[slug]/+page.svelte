@@ -128,8 +128,8 @@
 <style>
   .service-detail-page {
     position: relative;
-    background-color: var(--azul-petroleo, #0F172A);
-    color: var(--marfil-claro, #F8FAFC);
+    background-color: var(--color-background, #F8FAFC);
+    color: var(--color-text, #0F172A);
     padding: 10rem 1.5rem 6rem;
     overflow: hidden;
     min-height: 100vh;
@@ -141,7 +141,7 @@
     right: 5%;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(255, 107, 0, 0.06) 0%, rgba(15, 23, 42, 0) 70%);
+    background: radial-gradient(circle, rgba(255, 102, 0, 0.05) 0%, rgba(248, 250, 252, 0) 70%);
     z-index: 0;
     pointer-events: none;
   }
@@ -157,7 +157,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: rgba(248, 250, 252, 0.6);
+    color: var(--color-text-secondary, #475569);
     text-decoration: none;
     font-family: var(--font-principal, 'Montserrat', sans-serif);
     font-weight: 700;
@@ -167,7 +167,7 @@
   }
 
   .back-link:hover {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
   }
 
   .service-header {
@@ -178,20 +178,21 @@
   .service-icon {
     width: 64px;
     height: 64px;
-    background: rgba(255, 90, 0, 0.08);
-    border-radius: 12px;
+    background: #FFF7ED;
+    border: 1px solid #FFEDD5;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     margin-bottom: 2rem;
   }
 
   h1 {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
+    font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
     font-size: clamp(2.2rem, 5vw, 3.5rem);
     font-weight: 900;
-    color: white;
+    color: var(--color-text, #0F172A);
     margin-bottom: 1.5rem;
     line-height: 1.15;
     letter-spacing: -0.02em;
@@ -201,7 +202,7 @@
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
     font-size: 1.2rem;
     line-height: 1.7;
-    color: rgba(248, 250, 252, 0.75);
+    color: var(--color-text-secondary, #475569);
     margin-bottom: 2.5rem;
   }
 
@@ -212,7 +213,7 @@
   }
 
   .primary-btn {
-    background-color: var(--color-primary, #FF5A00);
+    background-color: var(--color-primary, #FF6600);
     color: white;
     border: none;
     padding: 1rem 2.5rem;
@@ -222,33 +223,36 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    box-shadow: 0 10px 20px rgba(255, 90, 0, 0.2);
+    box-shadow: 0 10px 20px rgba(255, 102, 0, 0.2);
   }
 
   .primary-btn:hover {
-    background-color: var(--ciruela-profunda, #E67E22);
+    background-color: var(--color-primary-hover, #EA580C);
     transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(255, 107, 0, 0.3);
+    box-shadow: 0 15px 30px rgba(255, 102, 0, 0.3);
   }
 
   .secondary-btn {
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: white;
+    border: 1px solid var(--color-border, #CBD5E1);
+    color: var(--color-text, #0F172A);
     text-decoration: none;
     padding: 1rem 2.5rem;
     border-radius: 50px;
     font-weight: 700;
     font-size: 1rem;
     transition: all 0.3s ease;
+    background: #FFFFFF;
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    box-shadow: var(--shadow-sm);
   }
 
   .secondary-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: #F8FAFC;
+    border-color: var(--color-primary, #FF6600);
+    color: var(--color-primary, #FF6600);
     transform: translateY(-2px);
   }
 
@@ -256,7 +260,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 4rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid var(--color-border, #E2E8F0);
     padding-top: 4rem;
     margin-bottom: 5rem;
   }
@@ -276,7 +280,7 @@
     font-family: var(--font-display, inherit);
     font-size: 1.5rem;
     font-weight: 700;
-    color: white;
+    color: var(--color-text, #0F172A);
     margin-bottom: 1.5rem;
     letter-spacing: -0.02em;
   }
@@ -293,7 +297,7 @@
   .styled-list li {
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
     font-size: 1rem;
-    color: rgba(248, 250, 252, 0.85);
+    color: var(--color-text-secondary, #475569);
     line-height: 1.6;
     position: relative;
     padding-left: 2rem;
@@ -304,7 +308,7 @@
     content: '✓';
     position: absolute;
     left: 0;
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     font-weight: 700;
     font-size: 1.1rem;
     top: 0;
@@ -315,7 +319,7 @@
     content: '→';
     position: absolute;
     left: 0;
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     font-weight: 700;
     font-size: 1.1rem;
     top: -1px;
@@ -330,7 +334,7 @@
     position: absolute;
     left: 0;
     top: 2px;
-    color: rgba(248, 113, 113, 0.8);
+    color: #EF4444;
   }
 
   /* Timeline process styling */
@@ -344,35 +348,37 @@
     display: flex;
     gap: 1.5rem;
     align-items: flex-start;
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    padding: 1.25rem;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow-sm);
     transition: all 0.3s ease;
   }
 
   .timeline-step:hover {
-    border-color: rgba(255, 90, 0, 0.2);
-    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 102, 0, 0.3);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
   }
 
   .step-num {
     font-family: var(--font-principal, 'Montserrat', sans-serif);
     font-size: 1.2rem;
     font-weight: 800;
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
   }
 
   .step-desc {
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    color: rgba(248, 250, 252, 0.9);
+    color: var(--color-text, #0F172A);
     line-height: 1.5;
     font-size: 0.98rem;
   }
 
   /* Related projects section */
   .related-projects-section {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid var(--color-border, #E2E8F0);
     padding-top: 4rem;
   }
 
@@ -380,7 +386,7 @@
     font-family: var(--font-principal, 'Montserrat', sans-serif);
     font-size: 1.8rem;
     font-weight: 700;
-    color: white;
+    color: var(--color-text, #0F172A);
     margin-bottom: 2.5rem;
     text-align: center;
   }
@@ -399,30 +405,29 @@
 
   .project-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 16px;
     overflow: hidden;
     text-decoration: none;
-    color: white;
+    color: var(--color-text, #0F172A);
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-sm);
   }
 
   .project-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(255, 90, 0, 0.45);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 20px rgba(255, 90, 0, 0.15);
+    border-color: rgba(255, 102, 0, 0.35);
+    box-shadow: var(--shadow-lg);
   }
 
   .image-wrapper {
     height: 200px;
     width: 100%;
     overflow: hidden;
+    background: #F1F5F9;
   }
 
   .image-wrapper img {
@@ -447,14 +452,14 @@
     font-family: var(--font-principal, 'Montserrat', sans-serif);
     font-size: 1.35rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--color-text, #0F172A);
     margin-bottom: 0.75rem;
     line-height: 1.3;
   }
 
   .project-info p {
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    color: rgba(248, 250, 252, 0.85);
+    color: var(--color-text-secondary, #475569);
     font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 1.5rem;
@@ -465,7 +470,7 @@
     font-family: var(--font-principal, 'Montserrat', sans-serif);
     font-weight: 700;
     font-size: 0.9rem;
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;

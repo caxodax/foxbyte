@@ -88,8 +88,8 @@
 <style>
   .projects-list-page {
     position: relative;
-    background-color: var(--azul-petroleo, #0F172A);
-    color: var(--marfil-claro, #F8FAFC);
+    background-color: var(--color-background, #F8FAFC);
+    color: var(--color-text-primary, #0F172A);
     padding: 10rem 1.5rem 6rem;
     overflow: hidden;
     min-height: 100vh;
@@ -101,7 +101,7 @@
     left: 20%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(255, 107, 0, 0.07) 0%, rgba(15, 23, 42, 0) 70%);
+    background: radial-gradient(circle, rgba(255, 102, 0, 0.05) 0%, transparent 70%);
     z-index: 0;
     pointer-events: none;
   }
@@ -127,25 +127,25 @@
     font-size: clamp(2.4rem, 5.2vw, 4rem);
     font-weight: 900;
     line-height: 1.12;
-    color: white;
+    color: var(--color-text-primary, #0F172A);
     margin-bottom: 1.5rem;
     letter-spacing: -0.035em;
   }
 
   .text-highlight {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
   }
 
   .intro-text {
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
+    font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 1.15rem;
     line-height: 1.7;
-    color: rgba(248, 250, 252, 0.7);
+    color: var(--color-text-secondary, #475569);
     margin-bottom: 2.5rem;
   }
 
   .primary-cta {
-    background-color: var(--color-primary, #FF5A00);
+    background-color: var(--color-primary, #FF6600);
     color: white;
     border: none;
     padding: 1rem 2.5rem;
@@ -154,41 +154,42 @@
     font-size: 1.05rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    box-shadow: 0 10px 20px rgba(255, 107, 0, 0.2);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
   }
 
   .primary-cta:hover {
-    background-color: var(--ciruela-profunda, #E67E22);
+    background-color: var(--color-primary-hover, #EA580C);
     transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(255, 107, 0, 0.3);
+    box-shadow: 0 8px 25px rgba(255, 102, 0, 0.45);
   }
 
   .status-msg {
     text-align: center;
     padding: 4rem 2rem;
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px dashed rgba(255, 255, 255, 0.08);
+    background: #FFFFFF;
+    border: 1px dashed #CBD5E1;
     border-radius: 20px;
     max-width: 600px;
     margin: 0 auto;
-    color: rgba(248, 250, 252, 0.6);
+    color: var(--color-text-muted, #64748B);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    box-shadow: var(--shadow-sm);
   }
 
   .status-msg svg {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
   }
 
   .status-msg.error svg {
-    color: rgba(248, 113, 113, 0.8);
+    color: rgba(239, 68, 68, 0.8);
   }
 
   .status-msg p {
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
+    font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 1.05rem;
     margin: 0;
   }
@@ -207,20 +208,22 @@
 
   .project-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 24px;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
     height: 100%;
+    box-shadow: var(--shadow-sm);
   }
 
   .project-card:hover {
     transform: translateY(-8px);
-    border-color: rgba(255, 107, 0, 0.3);
-    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 102, 0, 0.35);
+    background: #FFFFFF;
+    box-shadow: var(--shadow-lg), 0 0 24px rgba(255, 102, 0, 0.1);
   }
 
   .card-glow {
@@ -229,7 +232,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at top right, rgba(255, 107, 0, 0.05) 0%, rgba(255, 107, 0, 0) 50%);
+    background: radial-gradient(circle at top right, rgba(255, 102, 0, 0.05) 0%, transparent 50%);
     z-index: 0;
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -244,7 +247,7 @@
     width: 100%;
     overflow: hidden;
     position: relative;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-border, #E2E8F0);
   }
 
   .image-container img {
@@ -268,27 +271,27 @@
   }
 
   .project-category {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
+    font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
     font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     margin-bottom: 0.75rem;
   }
 
   h2 {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
+    font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
     font-size: 1.6rem;
     font-weight: 700;
-    color: white;
+    color: var(--color-text-primary, #0F172A);
     margin-bottom: 1rem;
     line-height: 1.3;
   }
 
   .project-description {
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    color: rgba(248, 250, 252, 0.75);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    color: var(--color-text-secondary, #475569);
     line-height: 1.6;
     margin-bottom: 1.5rem;
     font-size: 0.95rem;
@@ -303,11 +306,11 @@
   }
 
   .tech-tag {
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
+    font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.8rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: rgba(248, 250, 252, 0.8);
+    background: #F8FAFC;
+    border: 1px solid var(--color-border, #E2E8F0);
+    color: var(--color-text-secondary, #475569);
     padding: 0.25rem 0.75rem;
     border-radius: 50px;
     font-weight: 600;
@@ -318,27 +321,27 @@
     flex-wrap: wrap;
     gap: 0.75rem;
     margin-bottom: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--color-border, #E2E8F0);
     padding-top: 1.25rem;
   }
 
   .kpi-item {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
+    font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
     font-size: 0.85rem;
     font-weight: 700;
-    background: rgba(255, 90, 0, 0.06);
-    border: 1px solid rgba(255, 90, 0, 0.2);
-    color: var(--color-primary, #FF5A00);
+    background: #FFF7ED;
+    border: 1px solid #FFEDD5;
+    color: var(--color-primary, #FF6600);
     padding: 0.4rem 1rem;
     border-radius: 8px;
   }
 
   .view-project-link {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
+    font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: white;
+    color: var(--color-text-primary, #0F172A);
     text-decoration: none;
     font-weight: 700;
     font-size: 0.95rem;
@@ -347,11 +350,12 @@
   }
 
   .view-project-link svg {
+    color: var(--color-primary, #FF6600);
     transition: transform 0.2s ease;
   }
 
   .view-project-link:hover {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
   }
 
   .view-project-link:hover svg {

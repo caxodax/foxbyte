@@ -217,11 +217,11 @@
     max-width: 100%;
     box-sizing: border-box;
     padding: 6.5rem 1.5rem;
-    background-color: var(--color-background, #090D16);
+    background-color: var(--color-background, #F8FAFC);
     overflow: hidden;
     font-family: var(--font-body, system-ui, sans-serif);
     scroll-margin-top: 80px;
-    border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    border-top: 1px solid var(--color-border, #E2E8F0);
   }
 
   /* --- Ambient Static Vignette --- */
@@ -231,7 +231,7 @@
     overflow: hidden;
     z-index: 0;
     pointer-events: none;
-    background: radial-gradient(circle at 90% 15%, rgba(255, 102, 0, 0.035) 0%, transparent 60%);
+    background: radial-gradient(circle at 90% 15%, rgba(255, 102, 0, 0.04) 0%, transparent 60%);
   }
 
   .fx-container {
@@ -273,7 +273,7 @@
   .fx-title {
     font-family: var(--font-display, inherit);
     font-size: clamp(2.3rem, 4.2vw, 3.4rem);
-    color: #FFFFFF;
+    color: var(--color-text-primary, #0F172A);
     font-weight: 800;
     line-height: 1.12;
     letter-spacing: -0.035em;
@@ -287,7 +287,7 @@
 
   .fx-subtitle {
     font-size: 1.05rem;
-    color: var(--color-text-secondary, #CBD5E1);
+    color: var(--color-text-secondary, #475569);
     line-height: 1.65;
     margin-bottom: 2rem;
   }
@@ -306,7 +306,7 @@
     align-items: center;
     gap: 0.75rem;
     font-size: 0.95rem;
-    color: var(--color-text-secondary, #CBD5E1);
+    color: var(--color-text-secondary, #475569);
     font-weight: 500;
   }
 
@@ -372,20 +372,18 @@
     }
   }
 
-  /* --- Bento Card Dark Glassmorphism Container --- */
+  /* --- Bento Card White Elevated Container --- */
   .fx-bento-card {
     position: relative;
     display: flex;
     flex-direction: column;
     text-decoration: none;
     color: inherit;
-    background: var(--color-surface, rgba(17, 24, 39, 0.65));
+    background: var(--color-surface, #FFFFFF);
     border-radius: 20px;
     padding: 2rem 1.6rem;
-    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border, #E2E8F0);
+    box-shadow: var(--shadow-sm);
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
     z-index: 1;
@@ -393,8 +391,8 @@
 
   .fx-bento-card:hover {
     transform: translateY(-5px);
-    background: var(--color-surface-elevated, rgba(23, 32, 51, 0.82));
-    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 24px var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
+    background: #FFFFFF;
+    box-shadow: var(--shadow-lg), 0 0 24px var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
     border-color: rgba(255, 102, 0, 0.35);
   }
 
@@ -432,15 +430,15 @@
     letter-spacing: 0.04em;
     padding: 0.35rem 0.75rem;
     border-radius: var(--radius-full, 100px);
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--color-text-muted, #94A3B8);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #F1F5F9;
+    color: var(--color-text-muted, #64748B);
+    border: 1px solid #E2E8F0;
     transition: all 0.25s ease;
   }
 
   .fx-bento-card:hover .fx-badge {
     background: var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
-    color: #FF944D;
+    color: #EA580C;
     border-color: rgba(255, 102, 0, 0.3);
   }
 
@@ -448,8 +446,8 @@
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #FFF7ED;
+    border: 1px solid #FFEDD5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -461,6 +459,7 @@
   .fx-bento-card:hover .fx-icon-box {
     background: var(--card-accent, #FF6600);
     color: #ffffff;
+    border-color: transparent;
     transform: rotate(3deg) scale(1.06);
     box-shadow: 0 6px 16px rgba(255, 102, 0, 0.3);
   }
@@ -487,7 +486,7 @@
     font-family: var(--font-display, inherit);
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--color-text-primary, #F8FAFC);
+    color: var(--color-text-primary, #0F172A);
     line-height: 1.3;
     letter-spacing: -0.02em;
     margin-bottom: 0.65rem;
@@ -500,7 +499,7 @@
 
   .fx-card-desc {
     font-size: 0.92rem;
-    color: var(--color-text-secondary, #CBD5E1);
+    color: var(--color-text-secondary, #475569);
     line-height: 1.55;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -520,18 +519,18 @@
   .fx-tag-pill {
     font-size: 0.73rem;
     font-weight: 600;
-    color: var(--color-text-secondary, #CBD5E1);
-    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-secondary, #475569);
+    background: #F8FAFC;
     padding: 0.28rem 0.6rem;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid #E2E8F0;
     transition: all 0.2s ease;
   }
 
   .fx-bento-card:hover .fx-tag-pill {
-    background: rgba(255, 255, 255, 0.1);
-    color: #FFFFFF;
-    border-color: rgba(255, 255, 255, 0.15);
+    background: #FFF7ED;
+    color: var(--color-primary, #FF6600);
+    border-color: #FFEDD5;
   }
 
   /* --- Footer: Action Link with Arrow --- */
@@ -541,9 +540,9 @@
     gap: 0.45rem;
     font-size: 0.88rem;
     font-weight: 700;
-    color: #E2E8F0;
+    color: var(--color-text-primary, #0F172A);
     padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid #E2E8F0;
     margin-top: auto;
     transition: color 0.2s ease;
   }

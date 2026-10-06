@@ -1,25 +1,26 @@
-/* --- Sistema de Diseño Foxbyte Studio - Obsidian Slate & Warm Ember --- */
+/* --- Sistema de Diseño Foxbyte Studio - Editorial Clean Marfil & Warm Ember --- */
 :root {
   /* --- Tokens Semánticos Principales --- */
-  --color-primary: #FF6600;                        /* Naranja Foxbyte Ember: cálido, energizante, sin estridencia */
+  --color-primary: #FF6600;                        /* Naranja Foxbyte Ember: cálido, energizante, firma de marca */
   --color-primary-hover: #EA580C;                  /* Naranja hover accesible */
-  --color-primary-subtle: rgba(255, 102, 0, 0.12); /* Para badges y halos sutiles */
-  --color-primary-glow: rgba(255, 102, 0, 0.28);   /* Resplandor cálido */
+  --color-primary-subtle: rgba(255, 102, 0, 0.08); /* Para badges y halos sutiles */
+  --color-primary-glow: rgba(255, 102, 0, 0.22);   /* Resplandor cálido */
   
-  --color-background: #090D16;                    /* Obsidian Slate cinematográfico unificado */
-  --color-background-dark: #090D16;               /* Fondo base consistente en todo el sitio */
-  --color-surface: rgba(17, 24, 39, 0.65);        /* Superficie vítrea de alto confort */
-  --color-surface-elevated: rgba(23, 32, 51, 0.82); /* Superficie elevada / hover */
-  --color-border: rgba(255, 255, 255, 0.09);      /* Micro-bordes translúcidos nítidos */
-  --color-border-subtle: rgba(255, 255, 255, 0.05);
-  --color-border-hover: rgba(255, 102, 0, 0.35);
+  --color-background: #F8FAFC;                    /* Marfil suave / Slate 50: amplio, limpio, descansado */
+  --color-background-alt: #F1F5F9;                /* Alternancia sutil para contraste */
+  --color-background-dark: #0B0F19;               /* Para bloques oscuros deliberados (Hero / Footer técnico) */
+  --color-surface: #FFFFFF;                       /* Superficie blanca pura elevada */
+  --color-surface-elevated: #FFFFFF;              /* Superficie hover */
+  --color-border: #E2E8F0;                        /* Micro-bordes hairline Slate 200 */
+  --color-border-subtle: #F1F5F9;
+  --color-border-hover: #CBD5E1;
   
-  --color-text-primary: #F8FAFC;                  /* Slate 50 para titulares, alto contraste */
-  --color-text-secondary: #CBD5E1;                /* Slate 300 para párrafos: lectura suave, cero fatiga */
-  --color-text-muted: #94A3B8;                    /* Slate 400 para metadatos */
-  --color-text-light: #F8FAFC;
+  --color-text-primary: #0F172A;                  /* Slate 900 para titulares, máxima nitidez */
+  --color-text-secondary: #475569;                /* Slate 600 para párrafos: lectura suave, cero fatiga */
+  --color-text-muted: #64748B;                    /* Slate 500 para metadatos y categorías */
+  --color-text-light: #F8FAFC;                    /* Para elementos sobre fondo oscuro deliberado */
   
-  --color-accent-tech: #6366F1;                   /* Indigo técnico armónico */
+  --color-accent-tech: #4F46E5;                   /* Indigo técnico armónico */
   --color-ring: #FF6600;                          /* Anillo de foco accesible */
 
   /* --- Tokens Tipográficos --- */
@@ -32,9 +33,10 @@
   --radius-md: 14px;
   --radius-lg: 20px;
   --radius-full: 9999px;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 25px rgba(255, 102, 0, 0.25);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px 0 rgba(15, 23, 42, 0.03);
+  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
+  --shadow-glow: 0 0 25px rgba(255, 102, 0, 0.18);
 
   /* --- Mapeo de Compatibilidad Retroactiva --- */
   --terracota-suave: var(--color-primary);  
@@ -57,7 +59,7 @@
 html {
   scroll-padding-top: 90px;
   background-color: var(--color-background);
-  color-scheme: dark;
+  color-scheme: light;
   overflow-x: hidden;
   max-width: 100%;
   width: 100%;
@@ -79,7 +81,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  color: #FFFFFF;
+  color: var(--color-text-primary);
   letter-spacing: -0.025em;
   text-wrap: balance;
 }
@@ -108,10 +110,10 @@ input, textarea, [contenteditable="true"] {
   caret-color: var(--color-primary);
 }
 
-/* Scrollbar Minimalista Obsidian */
+/* Scrollbar Editorial Clean */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  scrollbar-color: rgba(15, 23, 42, 0.2) transparent;
 }
 
 ::-webkit-scrollbar {
@@ -124,7 +126,7 @@ input, textarea, [contenteditable="true"] {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(15, 23, 42, 0.18);
   border-radius: 9999px;
 }
 

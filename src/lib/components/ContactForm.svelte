@@ -132,8 +132,8 @@
     width: 100%;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    color: #FFFFFF;
+    border-bottom: 1px solid var(--color-border, #CBD5E1);
+    color: var(--color-text-primary, #0F172A);
     font-size: 1rem;
     padding: 0.75rem 0;
     font-family: inherit;
@@ -149,7 +149,7 @@
     position: absolute;
     top: 0.75rem;
     left: 0;
-    color: #94A3B8;
+    color: var(--color-text-muted, #64748B);
     pointer-events: none;
     transition: all 0.25s ease;
     font-family: inherit;
@@ -211,15 +211,15 @@
   }
 
   .status-msg.success {
-    background: rgba(34, 197, 94, 0.12);
-    color: #4ade80;
-    border: 1px solid rgba(34, 197, 94, 0.25);
+    background: #DCFCE7;
+    color: #15803D;
+    border: 1px solid #BBF7D0;
   }
 
   .status-msg.error {
-    background: rgba(239, 68, 68, 0.12);
-    color: #f87171;
-    border: 1px solid rgba(239, 68, 68, 0.25);
+    background: #FEE2E2;
+    color: #B91C1C;
+    border: 1px solid #FECACA;
   }
 
   .spinner {

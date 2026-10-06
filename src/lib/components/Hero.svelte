@@ -148,12 +148,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-background, #090D16);
+    background-color: #0B0F19;
     overflow: hidden;
     font-family: var(--font-principal, system-ui, sans-serif);
   }
 
-  /* Living Background Video */
+  /* Living Background Video - Pure Hardware Acceleration */
   .hero-media-wrapper {
     position: absolute;
     inset: 0;
@@ -172,20 +172,22 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    filter: brightness(0.88) contrast(1.06) saturate(1.05);
-    transform: scale(1.02);
+    filter: brightness(0.95) contrast(1.05);
+    transform: translateZ(0);
+    will-change: transform;
   }
 
-  /* Cinematic Feather Overlay - Preserva visibilidad viva del video con transiciones suaves */
+  /* Cinematic Feather Overlay - Preserva visibilidad viva y transiciona limpiamente a Marfil */
   .hero-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       to bottom,
-      rgba(9, 13, 22, 0.55) 0%,
-      rgba(9, 13, 22, 0.2) 20%,
-      rgba(9, 13, 22, 0.25) 60%,
-      var(--color-background, #090D16) 100%
+      rgba(15, 23, 42, 0.45) 0%,
+      rgba(15, 23, 42, 0.12) 25%,
+      rgba(15, 23, 42, 0.2) 60%,
+      rgba(248, 250, 252, 0.78) 85%,
+      var(--color-background, #F8FAFC) 100%
     );
     pointer-events: none;
   }
@@ -210,13 +212,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: rgba(9, 13, 22, 0.62);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 28px;
-    padding: 3.5rem 2.5rem 2.75rem 2.5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 1.5rem 1rem 0.5rem 1rem;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   /* Status Pill */
@@ -226,12 +228,12 @@
     gap: 0.65rem;
     padding: 0.45rem 1.15rem;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     margin-bottom: 2rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   }
 
   .status-indicator {
@@ -262,7 +264,7 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Headline */
+  /* Headline con contraste nítido sobre video vivo */
   h1 {
     font-size: clamp(2.35rem, 5.5vw, 4.25rem);
     line-height: 1.08;
@@ -272,17 +274,19 @@
     letter-spacing: -0.035em;
     max-width: 24ch;
     text-wrap: balance;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.75), 0 1px 4px rgba(0, 0, 0, 0.5);
   }
 
   /* Description */
   .hero-description {
     font-size: clamp(1.05rem, 2vw, 1.25rem);
     line-height: 1.6;
-    color: var(--color-text-secondary, #CBD5E1);
+    color: #F8FAFC;
     margin-bottom: 2.5rem;
-    font-weight: 400;
+    font-weight: 450;
     max-width: 65ch;
     text-wrap: pretty;
+    text-shadow: 0 1px 16px rgba(0, 0, 0, 0.75);
   }
 
   /* CTA Buttons */
@@ -319,28 +323,28 @@
   .hero-button.primary {
     background-color: var(--color-primary, #FF6600);
     color: #FFFFFF;
-    box-shadow: 0 4px 20px rgba(255, 102, 0, 0.35);
+    box-shadow: 0 4px 20px rgba(255, 102, 0, 0.4);
   }
 
   .hero-button.primary:hover {
     background-color: var(--color-primary-hover, #EA580C);
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(255, 102, 0, 0.5);
+    box-shadow: 0 8px 30px rgba(255, 102, 0, 0.55);
   }
 
   .hero-button.secondary {
-    background-color: rgba(255, 255, 255, 0.06);
+    background-color: rgba(15, 23, 42, 0.55);
     color: #FFFFFF;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   .hero-button.secondary:hover {
-    background-color: rgba(255, 255, 255, 0.14);
-    border-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(15, 23, 42, 0.85);
+    border-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   }
 
   /* Engineering Pillars */
@@ -351,7 +355,7 @@
     gap: 2rem;
     flex-wrap: wrap;
     padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
     width: 100%;
     max-width: 820px;
   }
@@ -360,16 +364,18 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.65);
-    font-weight: 400;
+    font-size: 0.88rem;
+    color: #FFFFFF;
+    font-weight: 500;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
   }
 
   .pillar-dot {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: var(--color-primary, #FF6600);
+    box-shadow: 0 0 8px var(--color-primary, #FF6600);
   }
 
   /* Video Control */
@@ -383,9 +389,9 @@
     gap: 0.45rem;
     padding: 0.4rem 0.85rem;
     border-radius: 9999px;
-    background: rgba(9, 13, 22, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.75);
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
     font-size: 0.75rem;
     font-weight: 500;
     cursor: pointer;
@@ -396,9 +402,9 @@
   }
 
   .video-control:hover {
-    background: rgba(9, 13, 22, 0.95);
+    background: rgba(15, 23, 42, 0.95);
     color: #FFFFFF;
-    border-color: rgba(255, 255, 255, 0.35);
+    border-color: rgba(255, 255, 255, 0.4);
   }
 
   /* Mobile Layout */
@@ -408,8 +414,8 @@
     }
 
     .hero-container {
-      padding: 2.5rem 1.25rem 2rem 1.25rem;
-      border-radius: 20px;
+      padding: 1.5rem 0.5rem 1rem 0.5rem;
+      border-radius: 0;
     }
 
     h1 {

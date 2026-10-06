@@ -66,8 +66,8 @@
 <style>
   .services-list-page {
     position: relative;
-    background-color: var(--azul-petroleo, #0F172A);
-    color: var(--marfil-claro, #F8FAFC);
+    background-color: var(--color-background, #F8FAFC);
+    color: var(--color-text, #0F172A);
     padding: 10rem 1.5rem 6rem;
     overflow: hidden;
     min-height: 100vh;
@@ -80,7 +80,7 @@
     transform: translateX(-50%);
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(255, 107, 0, 0.08) 0%, rgba(15, 23, 42, 0) 70%);
+    background: radial-gradient(circle, rgba(255, 102, 0, 0.06) 0%, rgba(248, 250, 252, 0) 70%);
     z-index: 0;
     pointer-events: none;
   }
@@ -106,25 +106,25 @@
     font-size: clamp(2.4rem, 5.2vw, 4rem);
     font-weight: 900;
     line-height: 1.12;
-    color: white;
+    color: var(--color-text, #0F172A);
     margin-bottom: 1.5rem;
     letter-spacing: -0.035em;
   }
 
   .text-highlight {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
   }
 
   .intro-p {
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
     font-size: 1.15rem;
     line-height: 1.7;
-    color: rgba(248, 250, 252, 0.7);
+    color: var(--color-text-secondary, #475569);
     margin-bottom: 2.5rem;
   }
 
   .primary-cta {
-    background-color: var(--color-primary, #FF5A00);
+    background-color: var(--color-primary, #FF6600);
     color: white;
     border: none;
     padding: 1rem 2.5rem;
@@ -134,13 +134,13 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    box-shadow: 0 10px 20px rgba(255, 107, 0, 0.2);
+    box-shadow: 0 10px 20px rgba(255, 102, 0, 0.2);
   }
 
   .primary-cta:hover {
-    background-color: var(--ciruela-profunda, #E67E22);
+    background-color: var(--color-primary-hover, #EA580C);
     transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(255, 107, 0, 0.3);
+    box-shadow: 0 15px 30px rgba(255, 102, 0, 0.3);
   }
 
   .services-grid {
@@ -157,11 +157,12 @@
 
   .service-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 20px;
     padding: 3rem 2rem;
     overflow: hidden;
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(15, 23, 42, 0.05));
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
@@ -170,8 +171,8 @@
 
   .service-card:hover {
     transform: translateY(-8px);
-    border-color: rgba(255, 107, 0, 0.3);
-    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 102, 0, 0.35);
+    box-shadow: var(--shadow-lg, 0 16px 32px rgba(15, 23, 42, 0.08));
   }
 
   .card-glow {
@@ -180,7 +181,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at top left, rgba(255, 107, 0, 0.05) 0%, rgba(255, 107, 0, 0) 50%);
+    background: radial-gradient(circle at top left, rgba(255, 102, 0, 0.04) 0%, rgba(255, 255, 255, 0) 60%);
     z-index: 0;
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -201,34 +202,36 @@
   .service-icon {
     width: 60px;
     height: 60px;
-    background: rgba(255, 90, 0, 0.08);
-    border-radius: 12px;
+    background: #FFF7ED;
+    border: 1px solid #FFEDD5;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     margin-bottom: 2rem;
+    transition: all 0.3s ease;
   }
 
   .service-card:hover .service-icon {
-    background: var(--color-primary, #FF5A00);
+    background: var(--color-primary, #FF6600);
+    border-color: var(--color-primary, #FF6600);
     color: white;
     transform: scale(1.05);
-    transition: all 0.3s ease;
   }
 
   h2 {
     font-family: var(--font-principal, 'Montserrat', sans-serif);
     font-size: 1.6rem;
     font-weight: 700;
-    color: white;
+    color: var(--color-text, #0F172A);
     margin-bottom: 1rem;
     line-height: 1.3;
   }
 
   .service-desc {
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    color: rgba(248, 250, 252, 0.7);
+    color: var(--color-text-secondary, #475569);
     line-height: 1.6;
     margin-bottom: 2rem;
     flex-grow: 1;
@@ -236,18 +239,18 @@
   }
 
   .capabilities-summary {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid var(--color-border, #E2E8F0);
     padding-top: 1.5rem;
     margin-bottom: 2.5rem;
   }
 
   .capabilities-summary h3 {
     font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: rgba(248, 250, 252, 0.5);
+    color: #94A3B8;
     margin-bottom: 1rem;
   }
 
@@ -263,7 +266,7 @@
   .capabilities-summary li {
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
     font-size: 0.95rem;
-    color: rgba(248, 250, 252, 0.9);
+    color: var(--color-text, #0F172A);
     position: relative;
     padding-left: 1.5rem;
   }
@@ -277,7 +280,7 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: var(--color-primary, #FF5A00);
+    background-color: var(--color-primary, #FF6600);
   }
 
   .secondary-cta {
@@ -285,7 +288,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: white;
+    color: var(--color-text, #0F172A);
     text-decoration: none;
     font-weight: 700;
     font-size: 0.95rem;
@@ -294,10 +297,11 @@
 
   .secondary-cta svg {
     transition: transform 0.2s ease;
+    color: var(--color-primary, #FF6600);
   }
 
   .secondary-cta:hover {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
   }
 
   .secondary-cta:hover svg {

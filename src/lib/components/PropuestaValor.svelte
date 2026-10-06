@@ -127,11 +127,11 @@
     max-width: 100%;
     box-sizing: border-box;
     padding: 7rem 1.5rem;
-    background-color: var(--color-background, #090D16);
-    color: var(--color-text-primary, #F8FAFC);
+    background-color: var(--color-background, #F8FAFC);
+    color: var(--color-text-primary, #0F172A);
     overflow: hidden;
     scroll-margin-top: 80px;
-    border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    border-top: 1px solid var(--color-border, #E2E8F0);
   }
 
   .container {
@@ -153,11 +153,12 @@
     align-items: center;
     padding: 0.35rem 0.95rem;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
+    box-shadow: var(--shadow-sm);
     font-size: 0.78rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--color-text-secondary, #475569);
     margin-bottom: 1.25rem;
   }
 
@@ -165,7 +166,7 @@
     font-size: clamp(2.1rem, 4.2vw, 3.25rem);
     font-weight: 800;
     line-height: 1.15;
-    color: #FFFFFF;
+    color: var(--color-text-primary, #0F172A);
     margin: 0 0 1.25rem 0;
     letter-spacing: -0.035em;
     text-wrap: balance;
@@ -174,7 +175,7 @@
   .section-subtitle {
     font-size: 1.05rem;
     line-height: 1.6;
-    color: var(--color-text-secondary, #CBD5E1);
+    color: var(--color-text-secondary, #475569);
     margin: 0;
     font-weight: 400;
     text-wrap: pretty;
@@ -182,21 +183,19 @@
 
   /* Matrix Layout */
   .comparison-container {
-    background: var(--color-surface, rgba(17, 24, 39, 0.65));
-    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 20px;
     overflow: hidden;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-sm);
     margin-bottom: 3.5rem;
   }
 
   .matrix-header {
     display: grid;
     grid-template-columns: 220px 1fr 1fr;
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    background: #F8FAFC;
+    border-bottom: 1px solid var(--color-border, #E2E8F0);
     font-size: 0.88rem;
     font-weight: 700;
   }
@@ -209,19 +208,19 @@
   }
 
   .col-topic {
-    color: var(--color-text-muted, #94A3B8);
+    color: var(--color-text-muted, #64748B);
     font-weight: 600;
     font-size: 0.82rem;
   }
 
   .col-traditional {
-    color: var(--color-text-muted, #94A3B8);
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--color-text-muted, #64748B);
+    border-right: 1px solid #E2E8F0;
   }
 
   .col-foxbyte {
-    background: var(--color-primary-subtle, rgba(255, 102, 0, 0.08));
-    color: #FFFFFF;
+    background: #FFF7ED;
+    color: var(--color-text-primary, #0F172A);
   }
 
   .foxbyte-badge {
@@ -237,7 +236,7 @@
   .matrix-row {
     display: grid;
     grid-template-columns: 220px 1fr 1fr;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid #F1F5F9;
     transition: background 0.2s ease;
   }
 
@@ -246,7 +245,7 @@
   }
 
   .matrix-row:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: #F8FAFC;
   }
 
   .matrix-row > div {
@@ -255,7 +254,7 @@
 
   .topic-label {
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--color-text-primary, #0F172A);
     font-size: 0.95rem;
     letter-spacing: -0.01em;
   }
@@ -273,24 +272,24 @@
   }
 
   .col-traditional .point-content p {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-secondary, #475569);
   }
 
   .col-foxbyte .point-content p {
-    color: rgba(255, 255, 255, 0.92);
-    font-weight: 450;
+    color: var(--color-text-primary, #0F172A);
+    font-weight: 500;
   }
 
   .col-traditional {
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    border-right: 1px solid #E2E8F0;
   }
 
   .col-foxbyte {
-    background: var(--color-primary-subtle, rgba(255, 102, 0, 0.05));
+    background: #FFF7ED;
   }
 
   .icon-cross {
-    color: rgba(239, 68, 68, 0.75);
+    color: rgba(239, 68, 68, 0.85);
     flex-shrink: 0;
     margin-top: 2px;
   }
@@ -326,11 +325,12 @@
     align-items: center;
     gap: 0.6rem;
     font-size: 0.85rem;
-    color: var(--color-text-secondary, #CBD5E1);
-    background: var(--color-surface, rgba(17, 24, 39, 0.65));
-    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    color: var(--color-text-secondary, #475569);
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
     padding: 0.5rem 1rem;
     border-radius: 9999px;
+    box-shadow: var(--shadow-sm);
   }
 
   .guarantee-icon {
@@ -376,18 +376,19 @@
     justify-content: center;
     padding: 0.95rem 2.2rem;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #FFFFFF;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
+    color: var(--color-text-primary, #0F172A);
     font-weight: 600;
     font-size: 0.95rem;
     text-decoration: none;
+    box-shadow: var(--shadow-sm);
     transition: all 0.25s ease;
   }
 
   .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: #F8FAFC;
+    border-color: #CBD5E1;
     transform: translateY(-2px);
   }
 

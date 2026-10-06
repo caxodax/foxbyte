@@ -350,11 +350,11 @@
     max-width: 100%;
     box-sizing: border-box;
     padding: 6.5rem 1.5rem;
-    background-color: var(--color-background, #090D16);
+    background-color: var(--color-background, #F8FAFC);
     overflow: hidden;
     font-family: var(--font-body, system-ui, sans-serif);
     scroll-margin-top: 80px;
-    border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    border-top: 1px solid var(--color-border, #E2E8F0);
   }
 
   .fx-ambient-mesh {
@@ -383,7 +383,7 @@
   .fx-title {
     font-family: var(--font-display, inherit);
     font-size: clamp(2.3rem, 4.2vw, 3.4rem);
-    color: #FFFFFF;
+    color: var(--color-text-primary, #0F172A);
     font-weight: 800;
     line-height: 1.12;
     letter-spacing: -0.035em;
@@ -392,7 +392,7 @@
 
   .fx-subtitle {
     font-size: 1.05rem;
-    color: var(--color-text-secondary, #CBD5E1);
+    color: var(--color-text-secondary, #475569);
     line-height: 1.65;
     margin-bottom: 2.2rem;
   }
@@ -411,18 +411,18 @@
     border-radius: var(--radius-full, 100px);
     font-size: 0.86rem;
     font-weight: 600;
-    color: var(--color-text-secondary, #CBD5E1);
-    background: var(--color-surface, rgba(17, 24, 39, 0.65));
-    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    color: var(--color-text-secondary, #475569);
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-sm);
   }
 
   .fx-chip:hover {
-    color: #FFFFFF;
-    background: var(--color-surface-elevated, rgba(23, 32, 51, 0.82));
-    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--color-text-primary, #0F172A);
+    background: #FFFFFF;
+    border-color: #CBD5E1;
     transform: translateY(-1px);
   }
 
@@ -452,25 +452,23 @@
     }
   }
 
-  /* --- Project Card Dark Glassmorphism Container --- */
+  /* --- Project Card White Elevated Container --- */
   .fx-project-card {
     position: relative;
-    background: var(--color-surface, rgba(17, 24, 39, 0.65));
+    background: var(--color-surface, #FFFFFF);
     border-radius: 20px;
-    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--color-border, #E2E8F0);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-sm);
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .fx-project-card:hover {
     transform: translateY(-6px);
-    background: var(--color-surface-elevated, rgba(23, 32, 51, 0.82));
-    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 24px var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
+    background: #FFFFFF;
+    box-shadow: var(--shadow-lg), 0 0 24px var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
     border-color: rgba(255, 102, 0, 0.35);
   }
 
@@ -527,7 +525,7 @@
     letter-spacing: 0.04em;
     padding: 0.35rem 0.75rem;
     border-radius: var(--radius-full, 100px);
-    background: rgba(7, 11, 20, 0.85);
+    background: rgba(15, 23, 42, 0.8);
     color: #F8FAFC;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -563,7 +561,7 @@
     font-family: var(--font-display, inherit);
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--color-text-primary, #F8FAFC);
+    color: var(--color-text-primary, #0F172A);
     line-height: 1.3;
     letter-spacing: -0.02em;
     margin-bottom: 0.65rem;
@@ -576,7 +574,7 @@
 
   .fx-card-desc {
     font-size: 0.92rem;
-    color: var(--color-text-secondary, #CBD5E1);
+    color: var(--color-text-secondary, #475569);
     line-height: 1.55;
     margin-bottom: 1.25rem;
     display: -webkit-box;
@@ -591,13 +589,13 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
-    border: 1px solid rgba(255, 102, 0, 0.25);
+    background: #FFF7ED;
+    border: 1px solid #FFEDD5;
     border-radius: 8px;
     padding: 0.4rem 0.8rem;
     font-size: 0.82rem;
     margin-bottom: 1.25rem;
-    color: var(--color-text-primary, #F8FAFC);
+    color: var(--color-text-primary, #0F172A);
   }
 
   .fx-kpi-val {
@@ -607,7 +605,7 @@
   }
 
   .fx-kpi-lbl {
-    color: var(--color-text-secondary, #CBD5E1);
+    color: var(--color-text-secondary, #475569);
     font-weight: 500;
   }
 
@@ -622,17 +620,17 @@
   .fx-tech-chip {
     font-size: 0.73rem;
     font-weight: 600;
-    color: var(--color-text-secondary, #CBD5E1);
-    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-secondary, #475569);
+    background: #F8FAFC;
     padding: 0.28rem 0.6rem;
     border-radius: 6px;
-    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--color-border, #E2E8F0);
   }
 
   /* --- Card Footer & Action Buttons --- */
   .fx-card-footer {
     padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid #E2E8F0;
     margin-top: auto;
   }
 
@@ -652,7 +650,7 @@
   }
 
   .fx-btn-public {
-    color: #E2E8F0;
+    color: var(--color-text-primary, #0F172A);
   }
 
   .fx-btn-public svg {
@@ -669,11 +667,11 @@
   }
 
   .fx-btn-nda {
-    color: #fb7185;
+    color: #e11d48;
   }
 
   .fx-btn-nda:hover {
-    color: #fda4af;
+    color: #be123c;
   }
 
   /* --- Section Bottom CTA --- */
@@ -688,28 +686,28 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1rem 2.4rem;
-    background: rgba(255, 255, 255, 0.04);
-    color: #F8FAFC;
+    background: #FFFFFF;
+    color: var(--color-text-primary, #0F172A);
     font-weight: 700;
     font-size: 0.98rem;
     text-decoration: none;
     border-radius: var(--radius-full, 100px);
-    border: 1.5px solid rgba(255, 255, 255, 0.14);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    border: 1.5px solid var(--color-border, #E2E8F0);
+    box-shadow: var(--shadow-sm);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .fx-explore-all-btn svg {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     transition: transform 0.25s ease;
   }
 
   .fx-explore-all-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--color-primary, #FF5A00);
-    color: #FF7A1A;
+    background: #F8FAFC;
+    border-color: var(--color-primary, #FF6600);
+    color: var(--color-primary, #FF6600);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 90, 0, 0.25);
+    box-shadow: var(--shadow-md);
   }
 
   .fx-explore-all-btn:hover svg {

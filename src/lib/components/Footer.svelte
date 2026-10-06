@@ -100,10 +100,10 @@
     max-width: 100%;
     box-sizing: border-box;
     overflow-x: hidden;
-    background-color: var(--color-background, #090D16);
-    color: var(--color-text-primary, #F8FAFC);
+    background-color: var(--color-background-dark, #0B0F19);
+    color: #F8FAFC;
     padding: 5rem 1.5rem 2.5rem;
-    border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     font-family: var(--font-body, 'Inter', sans-serif);
   }
 
@@ -243,8 +243,8 @@
     display: flex;
     align-items: center;
     gap: 0.85rem;
-    background: var(--color-surface, rgba(17, 24, 39, 0.65));
-    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 0.75rem 1rem;
     border-radius: 12px;
     text-decoration: none;
@@ -252,8 +252,8 @@
   }
 
   .channel-card:hover {
-    background: var(--color-surface-elevated, rgba(23, 32, 51, 0.82));
-    border-color: rgba(255, 102, 0, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 102, 0, 0.4);
     transform: translateY(-2px);
   }
 

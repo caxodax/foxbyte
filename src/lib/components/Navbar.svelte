@@ -122,11 +122,11 @@
   }
   
   .navbar.scrolled { 
-    background-color: rgba(9, 13, 22, 0.88); 
+    background-color: rgba(255, 255, 255, 0.92); 
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5); 
-    border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08); 
+    border-bottom: 1px solid var(--color-border, #E2E8F0);
   }
   
   .navbar-container { 
@@ -143,7 +143,7 @@
     align-items: center; 
     text-decoration: none; 
     color: white; 
-    transition: transform 0.25s ease, opacity 0.2s ease; 
+    transition: transform 0.25s ease, opacity 0.2s ease, color 0.25s ease; 
   }
   .logo:active {
     transform: scale(0.97);
@@ -161,7 +161,7 @@
 
   /* Scrolled State */
   .navbar.scrolled .logo { 
-    color: #FFFFFF; 
+    color: var(--color-text-primary, #0F172A); 
   }
 
   .desktop-nav { 
@@ -201,7 +201,7 @@
     transform-origin: left center; 
   }
   .navbar.scrolled .bar { 
-    background: white; 
+    background: var(--color-text-primary, #0F172A); 
   }
   
   .bar.open:nth-child(1) { 
@@ -343,15 +343,17 @@
     .nav-links a { 
       margin: 0 0.85rem; 
       text-decoration: none; 
-      color: rgba(255, 255, 255, 0.9); 
+      color: rgba(255, 255, 255, 0.95); 
       font-weight: 600; 
       font-size: 0.95rem;
       position: relative; 
       padding-bottom: 6px; 
       transition: color 0.25s ease; 
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
     }
     .navbar.scrolled .nav-links a { 
-      color: var(--color-text-primary); 
+      color: var(--color-text-primary, #0F172A); 
+      text-shadow: none;
     }
     
     .nav-links a:hover { 

@@ -109,11 +109,11 @@
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    background-color: var(--color-background, #090D16);
+    background-color: var(--color-background, #F8FAFC);
     padding: 6.5rem 1.5rem;
     overflow: hidden;
     scroll-margin-top: 80px;
-    border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    border-top: 1px solid var(--color-border, #E2E8F0);
   }
 
   .ambient-glow {
@@ -123,7 +123,7 @@
     transform: translate(-50%, -50%);
     width: 700px;
     height: 700px;
-    background: radial-gradient(circle, rgba(255, 102, 0, 0.08) 0%, rgba(255, 102, 0, 0.015) 50%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 102, 0, 0.06) 0%, rgba(255, 102, 0, 0.01) 50%, transparent 70%);
     pointer-events: none;
     z-index: 1;
   }
@@ -136,14 +136,12 @@
   }
 
   .cta-card {
-    background: var(--color-surface, rgba(17, 24, 39, 0.65));
-    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    background: var(--color-surface, #FFFFFF);
+    border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 28px;
     padding: 4.5rem 2.5rem;
     text-align: center;
-    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--shadow-md);
   }
 
   .trust-badges {
@@ -161,9 +159,9 @@
     gap: 0.45rem;
     font-size: 0.82rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.85);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--color-text-secondary, #475569);
+    background: #F8FAFC;
+    border: 1px solid var(--color-border, #E2E8F0);
     padding: 0.4rem 0.95rem;
     border-radius: 9999px;
   }
@@ -178,7 +176,7 @@
   .cta-title {
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 800;
-    color: #FFFFFF;
+    color: var(--color-text-primary, #0F172A);
     line-height: 1.15;
     letter-spacing: -0.03em;
     max-width: 820px;
@@ -187,7 +185,7 @@
   }
 
   .cta-subtitle {
-    color: var(--color-text-secondary, #CBD5E1);
+    color: var(--color-text-secondary, #475569);
     font-size: clamp(1rem, 1.8vw, 1.15rem);
     line-height: 1.65;
     max-width: 680px;
@@ -207,7 +205,7 @@
   .scoper-label {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--color-text-muted, #94A3B8);
+    color: var(--color-text-muted, #64748B);
   }
 
   .scoper-chips {
@@ -224,17 +222,17 @@
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
-    background: var(--color-surface, rgba(17, 24, 39, 0.65));
-    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
-    color: var(--color-text-secondary, #CBD5E1);
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
+    color: var(--color-text-secondary, #475569);
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     font-family: inherit;
   }
 
   .scoper-chip:hover {
-    background: var(--color-surface-elevated, rgba(23, 32, 51, 0.82));
-    color: #FFFFFF;
-    border-color: rgba(255, 255, 255, 0.2);
+    background: #F8FAFC;
+    color: var(--color-text-primary, #0F172A);
+    border-color: #CBD5E1;
   }
 
   .scoper-chip.selected {
@@ -296,22 +294,23 @@
     align-items: center;
     justify-content: center;
     gap: 0.65rem;
-    background: rgba(255, 255, 255, 0.05);
-    color: #F8FAFC;
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: #FFFFFF;
+    color: var(--color-text-primary, #0F172A);
+    border: 1px solid var(--color-border, #E2E8F0);
     padding: 1.05rem 2rem;
     border-radius: 9999px;
     font-size: 1rem;
     font-weight: 600;
     text-decoration: none;
+    box-shadow: var(--shadow-sm);
     transition: all 0.25s ease;
     font-family: inherit;
   }
 
   .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: #FFFFFF;
+    background: #F8FAFC;
+    border-color: #CBD5E1;
+    color: var(--color-text-primary, #0F172A);
     transform: translateY(-2px);
   }
 

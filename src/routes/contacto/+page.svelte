@@ -61,8 +61,8 @@
 <style>
   .contacto-page {
     position: relative;
-    background-color: var(--azul-petroleo, #0F172A);
-    color: var(--marfil-claro, #F8FAFC);
+    background-color: var(--color-background, #F8FAFC);
+    color: var(--color-text-primary, #0F172A);
     padding: 10rem 1.5rem 6rem;
     overflow: hidden;
     min-height: 100vh;
@@ -74,7 +74,7 @@
     left: 30%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(255, 107, 0, 0.06) 0%, rgba(15, 23, 42, 0) 70%);
+    background: radial-gradient(circle, rgba(255, 102, 0, 0.05) 0%, transparent 70%);
     z-index: 0;
     pointer-events: none;
   }
@@ -96,16 +96,16 @@
     font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
     font-size: clamp(2.4rem, 5vw, 3.8rem);
     font-weight: 900;
-    color: white;
+    color: var(--color-text-primary, #0F172A);
     margin-bottom: 1.5rem;
     line-height: 1.12;
     letter-spacing: -0.035em;
   }
 
   .header p {
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
+    font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 1.1rem;
-    color: rgba(248, 250, 252, 0.7);
+    color: var(--color-text-secondary, #475569);
     line-height: 1.6;
   }
 
@@ -123,16 +123,16 @@
   }
 
   h2 {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
+    font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
     font-size: 1.5rem;
     font-weight: 700;
-    color: white;
+    color: var(--color-text-primary, #0F172A);
     margin-bottom: 1.5rem;
   }
 
   .direct-desc {
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    color: rgba(248, 250, 252, 0.7);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    color: var(--color-text-secondary, #475569);
     line-height: 1.6;
     margin-bottom: 2rem;
     font-size: 0.95rem;
@@ -145,68 +145,74 @@
   }
 
   .direct-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
+    border-radius: 14px;
     padding: 1.5rem;
     display: flex;
     align-items: center;
     gap: 1.25rem;
     text-decoration: none;
-    color: white;
-    transition: all 0.3s ease;
+    color: var(--color-text-primary, #0F172A);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
   }
 
   .direct-card .icon {
     width: 48px;
     height: 48px;
-    background: rgba(255, 255, 255, 0.05);
+    background: #F8FAFC;
+    border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(248, 250, 252, 0.8);
-    transition: all 0.3s ease;
+    color: var(--color-text-secondary, #475569);
+    transition: all 0.25s ease;
   }
 
   .direct-card.whatsapp:hover {
-    border-color: rgba(37, 211, 102, 0.3);
-    background: rgba(37, 211, 102, 0.03);
+    border-color: #25D366;
+    background: #FFFFFF;
+    box-shadow: var(--shadow-md);
   }
 
   .direct-card.whatsapp:hover .icon {
     background: #25D366;
     color: white;
+    border-color: transparent;
   }
 
   .direct-card.email:hover {
-    border-color: rgba(255, 90, 0, 0.3);
-    background: rgba(255, 90, 0, 0.04);
+    border-color: var(--color-primary, #FF6600);
+    background: #FFFFFF;
+    box-shadow: var(--shadow-md);
   }
 
   .direct-card.email:hover .icon {
-    background: var(--color-primary, #FF5A00);
+    background: var(--color-primary, #FF6600);
     color: white;
+    border-color: transparent;
   }
 
   .info h3 {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
+    font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
     font-size: 1.1rem;
     font-weight: 700;
     margin: 0 0 0.25rem;
   }
 
   .info span {
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    color: rgba(248, 250, 252, 0.5);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    color: var(--color-text-muted, #64748B);
     font-size: 0.9rem;
   }
 
   .form-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E2E8F0);
     padding: 2.5rem 2rem;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-md);
   }
 </style>

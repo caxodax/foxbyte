@@ -78,25 +78,25 @@
 {/if}
 
 <style>
-  @keyframes fox-glow { 0% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 90, 0, 0.2); } 50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 90, 0, 0.4); } 100% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 90, 0, 0.2); } }
-  .background-animation { position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 0; background: radial-gradient(circle at 50% 0%, rgba(255, 90, 0, 0.12) 0%, transparent 70%); pointer-events: none; }
-  .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(7, 11, 20, 0.8); backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; }
-  .modal-content { position: relative; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; overflow-x: hidden; background: rgba(13, 18, 31, 0.96); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 2rem; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); z-index: 1; }
-  .close-button { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: rgba(255, 255, 255, 0.5); cursor: pointer; transition: all 0.3s ease; z-index: 2; }
+  @keyframes fox-glow { 0% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 102, 0, 0.2); } 50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 102, 0, 0.4); } 100% { transform: scale(1); box-shadow: 0 0 5px rgba(255, 102, 0, 0.2); } }
+  .background-animation { position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 0; background: radial-gradient(circle at 50% 0%, rgba(255, 102, 0, 0.12) 0%, transparent 70%); pointer-events: none; }
+  .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(9, 13, 22, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+  .modal-content { position: relative; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; overflow-x: hidden; background: rgba(13, 18, 31, 0.98); border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1)); border-radius: 20px; padding: 2rem; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); z-index: 1; }
+  .close-button { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--color-text-muted, rgba(255, 255, 255, 0.5)); cursor: pointer; transition: all 0.3s ease; z-index: 2; }
   .close-button:hover { color: white; transform: rotate(90deg); }
   .modal-header, .view-toggle, .modal-body { position: relative; z-index: 1; }
   .modal-header { text-align: center; margin-bottom: 2rem; }
   .fox-logo-wrapper { display: inline-block; padding: 10px; border-radius: 50%; animation: fox-glow 3s infinite ease-in-out; margin-bottom: 1rem; }
   .modal-fox-logo { width: 80px; height: auto; display: block; }
   .modal-header h3 { font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif); font-size: 1.8rem; font-weight: 800; color: white; margin-bottom: 0.5rem; }
-  .modal-header p { font-family: var(--font-body, 'Inter', sans-serif); color: rgba(255, 255, 255, 0.7); }
-  .view-toggle { display: flex; justify-content: center; background-color: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 0.25rem; margin-bottom: 2rem; }
-  .view-toggle button { flex: 1; padding: 0.75rem; background: transparent; border: none; color: rgba(255, 255, 255, 0.7); font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; }
-  .view-toggle button.active { background-color: var(--color-primary, #FF5A00); color: white; box-shadow: 0 4px 12px rgba(255, 90, 0, 0.3); }
+  .modal-header p { font-family: var(--font-body, 'Inter', sans-serif); color: var(--color-text-secondary, #CBD5E1); }
+  .view-toggle { display: flex; justify-content: center; background-color: rgba(0, 0, 0, 0.4); border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08)); border-radius: 8px; padding: 0.25rem; margin-bottom: 2rem; }
+  .view-toggle button { flex: 1; padding: 0.75rem; background: transparent; border: none; color: var(--color-text-secondary, #CBD5E1); font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; }
+  .view-toggle button.active { background-color: var(--color-primary, #FF6600); color: white; box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3); }
   .quick-contact-view, .form-view { min-height: 250px; }
   .quick-contact-view { display: flex; flex-direction: column; gap: 1rem; justify-content: center; }
-  .direct-button { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 1rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 0.75rem; }
+  .direct-button { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1)); color: white; padding: 1rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 0.75rem; }
   .direct-button.whatsapp:hover { background-color: #25D366; border-color: transparent; }
-  .direct-button.email:hover { background-color: var(--color-primary, #FF5A00); border-color: transparent; }
+  .direct-button.email:hover { background-color: var(--color-primary, #FF6600); border-color: transparent; }
   .form-view { display: flex; flex-direction: column; gap: 1.5rem; }
 </style>

@@ -1,24 +1,26 @@
-/* --- Sistema de Diseño Foxbyte Studio (UI/UX Pro Max) - Dark Tech Boutique --- */
+/* --- Sistema de Diseño Foxbyte Studio - Obsidian Slate & Warm Ember --- */
 :root {
-  /* --- Tokens Semánticos Principales (Dark Tech) --- */
-  --color-primary: #FF5A00;                        /* Naranja Foxbyte vibrante */
-  --color-primary-hover: #E04E00;                  /* Naranja hover accesible */
-  --color-primary-subtle: rgba(255, 90, 0, 0.14);  /* Para badges y halos de foco */
+  /* --- Tokens Semánticos Principales --- */
+  --color-primary: #FF6600;                        /* Naranja Foxbyte Ember: cálido, energizante, sin estridencia */
+  --color-primary-hover: #EA580C;                  /* Naranja hover accesible */
+  --color-primary-subtle: rgba(255, 102, 0, 0.12); /* Para badges y halos sutiles */
+  --color-primary-glow: rgba(255, 102, 0, 0.28);   /* Resplandor cálido */
   
-  --color-background: #070B14;                    /* Obsidian Tech profundo y continuo */
-  --color-background-dark: #070B14;               /* Consistencia total */
-  --color-surface: rgba(15, 23, 42, 0.75);        /* Superficie medianoche vítrea */
-  --color-surface-hover: rgba(30, 41, 59, 0.85);  /* Superficie en hover */
-  --color-border: rgba(255, 255, 255, 0.08);      /* Micro-bordes translúcidos nítidos */
-  --color-border-subtle: rgba(255, 255, 255, 0.04);
+  --color-background: #090D16;                    /* Obsidian Slate cinematográfico unificado */
+  --color-background-dark: #090D16;               /* Fondo base consistente en todo el sitio */
+  --color-surface: rgba(17, 24, 39, 0.65);        /* Superficie vítrea de alto confort */
+  --color-surface-elevated: rgba(23, 32, 51, 0.82); /* Superficie elevada / hover */
+  --color-border: rgba(255, 255, 255, 0.09);      /* Micro-bordes translúcidos nítidos */
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  --color-border-hover: rgba(255, 102, 0, 0.35);
   
-  --color-text-primary: #FFFFFF;                  /* Titulares y textos de alto contraste */
-  --color-text-secondary: #94A3B8;                /* Slate 400 accesible para descripciones */
-  --color-text-muted: #64748B;                    /* Slate 500 para metadatos */
-  --color-text-light: #F8FAFC;                    /* Blanco nítido */
+  --color-text-primary: #F8FAFC;                  /* Slate 50 para titulares, alto contraste */
+  --color-text-secondary: #CBD5E1;                /* Slate 300 para párrafos: lectura suave, cero fatiga */
+  --color-text-muted: #94A3B8;                    /* Slate 400 para metadatos */
+  --color-text-light: #F8FAFC;
   
-  --color-accent-tech: #00E5FF;                   /* Cyan eléctrico para detalles tech / IA */
-  --color-ring: #FF5A00;                          /* Anillo de foco accesible */
+  --color-accent-tech: #6366F1;                   /* Indigo técnico armónico */
+  --color-ring: #FF6600;                          /* Anillo de foco accesible */
 
   /* --- Tokens Tipográficos --- */
   --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
@@ -32,14 +34,14 @@
   --radius-full: 9999px;
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 25px rgba(255, 90, 0, 0.25);
+  --shadow-glow: 0 0 25px rgba(255, 102, 0, 0.25);
 
   /* --- Mapeo de Compatibilidad Retroactiva --- */
   --terracota-suave: var(--color-primary);  
-  --ciruela-profunda: #6366F1;                    /* Indigo tecnológico */
-  --azul-petroleo: #070B14;
-  --marfil-claro: #070B14;                        /* Unificado a base oscura */
-  --gris-grafito: #94A3B8;    
+  --ciruela-profunda: var(--color-accent-tech);
+  --azul-petroleo: var(--color-background);
+  --marfil-claro: var(--color-background);
+  --gris-grafito: var(--color-text-secondary);
   --ambar-luminoso: #F59E0B;  
   --font-principal: var(--font-display);
   --font-secundaria: var(--font-body);

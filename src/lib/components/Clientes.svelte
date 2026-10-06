@@ -112,10 +112,10 @@
 
 <style>
   .clientes-section {
-    background-color: var(--azul-petroleo, #0F172A);
-    padding: 4rem 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    background-color: var(--color-background, #090D16);
+    padding: 4.5rem 1.5rem;
+    border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
     overflow: hidden;
     position: relative;
     box-sizing: border-box;
@@ -153,8 +153,8 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background-color: var(--color-primary, #FF5A00);
-    box-shadow: 0 0 8px var(--color-primary, #FF5A00);
+    background-color: var(--color-primary, #FF6600);
+    box-shadow: 0 0 8px var(--color-primary, #FF6600);
     animation: dot-pulse 2s infinite ease-in-out;
   }
 
@@ -179,7 +179,7 @@
   .section-title {
     font-size: 0.95rem;
     line-height: 1.5;
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--color-text-secondary, #CBD5E1);
     margin: 0;
     max-width: 58ch;
     text-wrap: pretty;
@@ -229,8 +229,8 @@
     align-items: center;
     gap: 0.85rem;
     padding: 0.65rem 1.25rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-surface, rgba(17, 24, 39, 0.65));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
     border-radius: 12px;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: default;
@@ -243,7 +243,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.6);
     transition: all 0.25s ease;
   }
 
@@ -256,14 +256,14 @@
   .tech-name {
     font-size: 0.92rem;
     font-weight: 600;
-    color: #FFFFFF;
+    color: var(--color-text-primary, #F8FAFC);
     letter-spacing: -0.015em;
     transition: color 0.25s ease;
   }
 
   .tech-category {
     font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-muted, #94A3B8);
     font-weight: 400;
     margin-top: 0.1rem;
     font-variant-numeric: tabular-nums;
@@ -271,14 +271,14 @@
 
   /* Hover micro-interactions */
   .tech-item:hover {
-    background: rgba(255, 255, 255, 0.07);
+    background: var(--color-surface-elevated, rgba(23, 32, 51, 0.82));
     border-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
   }
 
   .tech-item:hover .tech-icon {
-    color: var(--hover-color, var(--color-primary, #FF5A00));
+    color: var(--hover-color, var(--color-primary, #FF6600));
     transform: scale(1.08);
   }
 

@@ -36,12 +36,12 @@
   const bentoMeta: Record<string, { badge: string; accent: string; defaultIcon: string }> = {
     'e-commerce': {
       badge: 'Comercio Digital',
-      accent: '#FF5A00',
+      accent: '#FF6600',
       defaultIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>`
     },
     'aplicaciones-moviles': {
       badge: 'Mobile Engineering',
-      accent: '#0284C7',
+      accent: '#0EA5E9',
       defaultIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z" /><path d="M11 4h2" /><path d="M12 17v.01" /></svg>`
     },
     'bases-de-datos': {
@@ -51,7 +51,7 @@
     },
     'solucion-a-la-medida': {
       badge: 'Software a Medida',
-      accent: '#8B5CF6',
+      accent: '#6366F1',
       defaultIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 8l-4 4l4 4" /><path d="M17 8l4 4l-4 4" /><path d="M14 4l-4 16" /></svg>`
     }
   };
@@ -59,7 +59,7 @@
   function getCardMeta(slug: string) {
     return bentoMeta[slug] || {
       badge: 'Solución Digital',
-      accent: '#FF5A00',
+      accent: '#FF6600',
       defaultIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" /></svg>`
     };
   }
@@ -217,11 +217,11 @@
     max-width: 100%;
     box-sizing: border-box;
     padding: 6.5rem 1.5rem;
-    background-color: #090E1A;
+    background-color: var(--color-background, #090D16);
     overflow: hidden;
     font-family: var(--font-body, system-ui, sans-serif);
     scroll-margin-top: 80px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
   }
 
   /* --- Ambient Static Vignette --- */
@@ -231,7 +231,7 @@
     overflow: hidden;
     z-index: 0;
     pointer-events: none;
-    background: radial-gradient(circle at 90% 15%, rgba(255, 90, 0, 0.035) 0%, transparent 60%);
+    background: radial-gradient(circle at 90% 15%, rgba(255, 102, 0, 0.035) 0%, transparent 60%);
   }
 
   .fx-container {
@@ -281,13 +281,13 @@
   }
 
   .fx-title-accent {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     font-weight: 800;
   }
 
   .fx-subtitle {
     font-size: 1.05rem;
-    color: #94A3B8;
+    color: var(--color-text-secondary, #CBD5E1);
     line-height: 1.65;
     margin-bottom: 2rem;
   }
@@ -306,14 +306,14 @@
     align-items: center;
     gap: 0.75rem;
     font-size: 0.95rem;
-    color: #E2E8F0;
+    color: var(--color-text-secondary, #CBD5E1);
     font-weight: 500;
   }
 
   .fx-check-icon {
     flex-shrink: 0;
-    color: var(--color-primary, #FF5A00);
-    background: rgba(255, 90, 0, 0.15);
+    color: var(--color-primary, #FF6600);
+    background: var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
     border-radius: 50%;
     padding: 2px;
   }
@@ -328,7 +328,7 @@
     align-items: center;
     gap: 0.65rem;
     padding: 0.95rem 2rem;
-    background-color: var(--color-primary, #FF5A00);
+    background-color: var(--color-primary, #FF6600);
     color: #ffffff;
     font-weight: 700;
     font-size: 0.98rem;
@@ -336,15 +336,15 @@
     border-radius: var(--radius-full, 100px);
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(255, 90, 0, 0.35);
+    box-shadow: 0 4px 16px rgba(255, 102, 0, 0.35);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
   }
 
   .fx-cta-btn:hover {
-    background-color: var(--color-primary-hover, #E04E00);
+    background-color: var(--color-primary-hover, #EA580C);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 90, 0, 0.5);
+    box-shadow: 0 8px 24px rgba(255, 102, 0, 0.5);
   }
 
   .fx-cta-btn:active {
@@ -379,13 +379,13 @@
     flex-direction: column;
     text-decoration: none;
     color: inherit;
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(10, 16, 30, 0.95) 100%);
+    background: var(--color-surface, rgba(17, 24, 39, 0.65));
     border-radius: 20px;
     padding: 2rem 1.6rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
     box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
     z-index: 1;
@@ -393,12 +393,13 @@
 
   .fx-bento-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 24px rgba(255, 90, 0, 0.15);
-    border-color: rgba(255, 90, 0, 0.4);
+    background: var(--color-surface-elevated, rgba(23, 32, 51, 0.82));
+    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 24px var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
+    border-color: rgba(255, 102, 0, 0.35);
   }
 
   .fx-bento-card:focus-visible {
-    outline: 2px solid var(--color-primary, #FF5A00);
+    outline: 2px solid var(--color-primary, #FF6600);
     outline-offset: 3px;
   }
 
@@ -412,7 +413,7 @@
   }
 
   .fx-bento-card:hover .fx-bento-border {
-    border-color: rgba(255, 90, 0, 0.35);
+    border-color: rgba(255, 102, 0, 0.35);
   }
 
   /* --- Card Header: Badge & Icon --- */
@@ -432,15 +433,15 @@
     padding: 0.35rem 0.75rem;
     border-radius: var(--radius-full, 100px);
     background: rgba(255, 255, 255, 0.06);
-    color: #94A3B8;
+    color: var(--color-text-muted, #94A3B8);
     border: 1px solid rgba(255, 255, 255, 0.08);
     transition: all 0.25s ease;
   }
 
   .fx-bento-card:hover .fx-badge {
-    background: rgba(255, 90, 0, 0.14);
+    background: var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
     color: #FF944D;
-    border-color: rgba(255, 90, 0, 0.3);
+    border-color: rgba(255, 102, 0, 0.3);
   }
 
   .fx-icon-box {
@@ -452,16 +453,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #FF7A1A;
+    color: var(--color-primary, #FF6600);
     transition: all 0.3s ease;
     flex-shrink: 0;
   }
 
   .fx-bento-card:hover .fx-icon-box {
-    background: var(--card-accent, #FF5A00);
+    background: var(--card-accent, #FF6600);
     color: #ffffff;
     transform: rotate(3deg) scale(1.06);
-    box-shadow: 0 6px 16px rgba(255, 90, 0, 0.3);
+    box-shadow: 0 6px 16px rgba(255, 102, 0, 0.3);
   }
 
   .fx-icon-inner {
@@ -486,7 +487,7 @@
     font-family: var(--font-display, inherit);
     font-size: 1.25rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--color-text-primary, #F8FAFC);
     line-height: 1.3;
     letter-spacing: -0.02em;
     margin-bottom: 0.65rem;
@@ -494,12 +495,12 @@
   }
 
   .fx-bento-card:hover .fx-card-title {
-    color: #FF7A1A;
+    color: var(--color-primary, #FF6600);
   }
 
   .fx-card-desc {
     font-size: 0.92rem;
-    color: #94A3B8;
+    color: var(--color-text-secondary, #CBD5E1);
     line-height: 1.55;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -519,7 +520,7 @@
   .fx-tag-pill {
     font-size: 0.73rem;
     font-weight: 600;
-    color: #CBD5E1;
+    color: var(--color-text-secondary, #CBD5E1);
     background: rgba(255, 255, 255, 0.05);
     padding: 0.28rem 0.6rem;
     border-radius: 6px;
@@ -550,12 +551,12 @@
   .fx-arrow-icon {
     display: inline-flex;
     align-items: center;
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .fx-bento-card:hover .fx-card-footer {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
   }
 
   .fx-bento-card:hover .fx-arrow-icon {

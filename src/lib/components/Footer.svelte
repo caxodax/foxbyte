@@ -100,10 +100,10 @@
     max-width: 100%;
     box-sizing: border-box;
     overflow-x: hidden;
-    background-color: #050912;
-    color: #F8FAFC;
+    background-color: var(--color-background, #090D16);
+    color: var(--color-text-primary, #F8FAFC);
     padding: 5rem 1.5rem 2.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
     font-family: var(--font-body, 'Inter', sans-serif);
   }
 
@@ -149,7 +149,7 @@
   }
 
   .footer-tagline {
-    color: rgba(248, 250, 252, 0.72);
+    color: var(--color-text-secondary, #CBD5E1);
     line-height: 1.65;
     font-size: 0.95rem;
     max-width: 380px;
@@ -220,7 +220,7 @@
   }
 
   .footer-nav-col ul a {
-    color: rgba(248, 250, 252, 0.7);
+    color: var(--color-text-secondary, #CBD5E1);
     text-decoration: none;
     font-size: 0.92rem;
     line-height: 1.4;
@@ -229,7 +229,7 @@
   }
 
   .footer-nav-col ul a:hover {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     transform: translateX(3px);
   }
 
@@ -243,8 +243,8 @@
     display: flex;
     align-items: center;
     gap: 0.85rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-surface, rgba(17, 24, 39, 0.65));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
     padding: 0.75rem 1rem;
     border-radius: 12px;
     text-decoration: none;
@@ -252,8 +252,8 @@
   }
 
   .channel-card:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 107, 0, 0.3);
+    background: var(--color-surface-elevated, rgba(23, 32, 51, 0.82));
+    border-color: rgba(255, 102, 0, 0.35);
     transform: translateY(-2px);
   }
 
@@ -268,8 +268,8 @@
   }
 
   .channel-icon.mail {
-    background: rgba(255, 107, 0, 0.12);
-    color: #FF7A1A;
+    background: var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
+    color: var(--color-primary, #FF6600);
   }
 
   .channel-icon.mail svg {
@@ -360,6 +360,6 @@
   }
 
   .legal-btn:hover {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
   }
 </style>

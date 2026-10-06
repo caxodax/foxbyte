@@ -158,7 +158,7 @@
 
   .input-group input:focus,
   .input-group textarea:focus {
-    border-color: var(--color-primary, #FF5A00);
+    border-color: var(--color-primary, #FF6600);
     outline: none;
   }
 
@@ -168,12 +168,12 @@
   .input-group textarea:not(:placeholder-shown) ~ label {
     transform: translateY(-1.3rem);
     font-size: 0.75rem;
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     font-weight: 600;
   }
 
   .submit-btn {
-    background-color: var(--color-primary, #FF5A00);
+    background-color: var(--color-primary, #FF6600);
     color: #FFFFFF;
     border: none;
     padding: 1rem 1.8rem;

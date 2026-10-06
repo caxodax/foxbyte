@@ -283,6 +283,7 @@
       role="dialog"
       aria-modal="true"
       aria-labelledby="nda-modal-title"
+      tabindex="-1"
     >
       <button 
         type="button" 
@@ -349,11 +350,11 @@
     max-width: 100%;
     box-sizing: border-box;
     padding: 6.5rem 1.5rem;
-    background-color: #070B14;
+    background-color: var(--color-background, #090D16);
     overflow: hidden;
     font-family: var(--font-body, system-ui, sans-serif);
     scroll-margin-top: 80px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
   }
 
   .fx-ambient-mesh {
@@ -362,7 +363,7 @@
     pointer-events: none;
     overflow: hidden;
     z-index: 0;
-    background: radial-gradient(circle at 10% 20%, rgba(255, 90, 0, 0.035) 0%, transparent 60%);
+    background: radial-gradient(circle at 10% 20%, rgba(255, 102, 0, 0.035) 0%, transparent 60%);
   }
 
   .fx-container {
@@ -389,14 +390,9 @@
     margin-bottom: 1.25rem;
   }
 
-  .fx-title-accent {
-    color: var(--color-primary, #FF5A00);
-    font-weight: 800;
-  }
-
   .fx-subtitle {
     font-size: 1.05rem;
-    color: #94A3B8;
+    color: var(--color-text-secondary, #CBD5E1);
     line-height: 1.65;
     margin-bottom: 2.2rem;
   }
@@ -415,9 +411,9 @@
     border-radius: var(--radius-full, 100px);
     font-size: 0.86rem;
     font-weight: 600;
-    color: #94A3B8;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    color: var(--color-text-secondary, #CBD5E1);
+    background: var(--color-surface, rgba(17, 24, 39, 0.65));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -425,16 +421,16 @@
 
   .fx-chip:hover {
     color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.09);
+    background: var(--color-surface-elevated, rgba(23, 32, 51, 0.82));
     border-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-1px);
   }
 
   .fx-chip.active {
-    background-color: var(--color-primary, #FF5A00);
+    background-color: var(--color-primary, #FF6600);
     color: #ffffff;
-    border-color: var(--color-primary, #FF5A00);
-    box-shadow: 0 4px 16px rgba(255, 90, 0, 0.4);
+    border-color: var(--color-primary, #FF6600);
+    box-shadow: 0 4px 16px rgba(255, 102, 0, 0.4);
   }
 
   /* --- Showcase Grid Modular --- */
@@ -459,22 +455,23 @@
   /* --- Project Card Dark Glassmorphism Container --- */
   .fx-project-card {
     position: relative;
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.75) 0%, rgba(10, 16, 30, 0.95) 100%);
+    background: var(--color-surface, rgba(17, 24, 39, 0.65));
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
     overflow: hidden;
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .fx-project-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 24px rgba(255, 90, 0, 0.15);
-    border-color: rgba(255, 90, 0, 0.35);
+    background: var(--color-surface-elevated, rgba(23, 32, 51, 0.82));
+    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 24px var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
+    border-color: rgba(255, 102, 0, 0.35);
   }
 
   /* --- Media (16:10 aspect ratio) --- */
@@ -566,7 +563,7 @@
     font-family: var(--font-display, inherit);
     font-size: 1.3rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--color-text-primary, #F8FAFC);
     line-height: 1.3;
     letter-spacing: -0.02em;
     margin-bottom: 0.65rem;
@@ -574,12 +571,12 @@
   }
 
   .fx-project-card:hover .fx-card-title {
-    color: #FF7A1A;
+    color: var(--color-primary, #FF6600);
   }
 
   .fx-card-desc {
     font-size: 0.92rem;
-    color: #94A3B8;
+    color: var(--color-text-secondary, #CBD5E1);
     line-height: 1.55;
     margin-bottom: 1.25rem;
     display: -webkit-box;
@@ -594,23 +591,23 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(255, 90, 0, 0.1);
-    border: 1px solid rgba(255, 90, 0, 0.25);
+    background: var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
+    border: 1px solid rgba(255, 102, 0, 0.25);
     border-radius: 8px;
     padding: 0.4rem 0.8rem;
     font-size: 0.82rem;
     margin-bottom: 1.25rem;
-    color: #F8FAFC;
+    color: var(--color-text-primary, #F8FAFC);
   }
 
   .fx-kpi-val {
-    color: #FF7A1A;
+    color: var(--color-primary, #FF6600);
     font-weight: 800;
     font-size: 0.92rem;
   }
 
   .fx-kpi-lbl {
-    color: #CBD5E1;
+    color: var(--color-text-secondary, #CBD5E1);
     font-weight: 500;
   }
 
@@ -625,11 +622,11 @@
   .fx-tech-chip {
     font-size: 0.73rem;
     font-weight: 600;
-    color: #CBD5E1;
+    color: var(--color-text-secondary, #CBD5E1);
     background: rgba(255, 255, 255, 0.05);
     padding: 0.28rem 0.6rem;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
   }
 
   /* --- Card Footer & Action Buttons --- */
@@ -659,12 +656,12 @@
   }
 
   .fx-btn-public svg {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .fx-project-card:hover .fx-btn-public {
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
   }
 
   .fx-project-card:hover .fx-btn-public svg {

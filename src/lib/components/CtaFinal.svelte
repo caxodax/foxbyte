@@ -109,11 +109,11 @@
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    background-color: #070B14;
+    background-color: var(--color-background, #090D16);
     padding: 6.5rem 1.5rem;
     overflow: hidden;
     scroll-margin-top: 80px;
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
   }
 
   .ambient-glow {
@@ -123,7 +123,7 @@
     transform: translate(-50%, -50%);
     width: 700px;
     height: 700px;
-    background: radial-gradient(circle, rgba(255, 90, 0, 0.08) 0%, rgba(255, 90, 0, 0.015) 50%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 102, 0, 0.08) 0%, rgba(255, 102, 0, 0.015) 50%, transparent 70%);
     pointer-events: none;
     z-index: 1;
   }
@@ -136,14 +136,14 @@
   }
 
   .cta-card {
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(11, 15, 25, 0.95) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-surface, rgba(17, 24, 39, 0.65));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
     border-radius: 28px;
     padding: 4.5rem 2.5rem;
     text-align: center;
     box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   .trust-badges {
@@ -171,7 +171,7 @@
   .badge-icon {
     width: 14px;
     height: 14px;
-    color: var(--color-primary, #FF5A00);
+    color: var(--color-primary, #FF6600);
     flex-shrink: 0;
   }
 
@@ -187,7 +187,7 @@
   }
 
   .cta-subtitle {
-    color: rgba(255, 255, 255, 0.75);
+    color: var(--color-text-secondary, #CBD5E1);
     font-size: clamp(1rem, 1.8vw, 1.15rem);
     line-height: 1.65;
     max-width: 680px;
@@ -207,7 +207,7 @@
   .scoper-label {
     font-size: 0.85rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-muted, #94A3B8);
   }
 
   .scoper-chips {
@@ -224,25 +224,25 @@
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.75);
+    background: var(--color-surface, rgba(17, 24, 39, 0.65));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+    color: var(--color-text-secondary, #CBD5E1);
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     font-family: inherit;
   }
 
   .scoper-chip:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-surface-elevated, rgba(23, 32, 51, 0.82));
     color: #FFFFFF;
     border-color: rgba(255, 255, 255, 0.2);
   }
 
   .scoper-chip.selected {
-    background: rgba(255, 90, 0, 0.12);
-    border-color: var(--color-primary, #FF5A00);
+    background: var(--color-primary, #FF6600);
+    border-color: var(--color-primary, #FF6600);
     color: #FFFFFF;
     font-weight: 600;
-    box-shadow: 0 0 16px rgba(255, 90, 0, 0.2);
+    box-shadow: 0 0 16px rgba(255, 102, 0, 0.35);
   }
 
   .cta-actions {
@@ -258,7 +258,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.65rem;
-    background: var(--color-primary, #FF5A00);
+    background: var(--color-primary, #FF6600);
     color: #FFFFFF;
     border: none;
     padding: 1.05rem 2.25rem;
@@ -267,14 +267,14 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 4px 20px rgba(255, 90, 0, 0.35);
+    box-shadow: 0 4px 20px rgba(255, 102, 0, 0.35);
     font-family: inherit;
   }
 
   .btn-primary:hover {
     transform: translateY(-2px);
-    background: var(--color-primary-hover, #E04E00);
-    box-shadow: 0 8px 30px rgba(255, 90, 0, 0.5);
+    background: var(--color-primary-hover, #EA580C);
+    box-shadow: 0 8px 30px rgba(255, 102, 0, 0.5);
   }
 
   .btn-primary:active {

@@ -148,7 +148,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #070B14;
+    background-color: var(--color-background, #090D16);
     overflow: hidden;
     font-family: var(--font-principal, system-ui, sans-serif);
   }
@@ -172,17 +172,21 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    filter: brightness(0.48) contrast(1.15) saturate(1.1);
+    filter: brightness(0.88) contrast(1.06) saturate(1.05);
     transform: scale(1.02);
   }
 
-  /* Obsidian Gradient Vignette - Conecta fluidamente con el fondo de Clientes (#0F172A) */
+  /* Cinematic Feather Overlay - Preserva visibilidad viva del video con transiciones suaves */
   .hero-overlay {
     position: absolute;
     inset: 0;
-    background: 
-      radial-gradient(ellipse at 50% 30%, rgba(7, 11, 20, 0.45) 0%, rgba(7, 11, 20, 0.85) 65%, #070B14 100%),
-      linear-gradient(to bottom, rgba(7, 11, 20, 0.5) 0%, rgba(7, 11, 20, 0.65) 45%, rgba(15, 23, 42, 0.95) 85%, #0F172A 100%);
+    background: linear-gradient(
+      to bottom,
+      rgba(9, 13, 22, 0.55) 0%,
+      rgba(9, 13, 22, 0.2) 20%,
+      rgba(9, 13, 22, 0.25) 60%,
+      var(--color-background, #090D16) 100%
+    );
     pointer-events: none;
   }
 
@@ -201,11 +205,18 @@
   }
 
   .hero-container {
-    max-width: 900px;
+    max-width: 960px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: rgba(9, 13, 22, 0.62);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 28px;
+    padding: 3.5rem 2.5rem 2.75rem 2.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
   }
 
   /* Status Pill */
@@ -227,8 +238,8 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--color-primary, #FF5A00);
-    box-shadow: 0 0 10px var(--color-primary, #FF5A00);
+    background-color: var(--color-primary, #FF6600);
+    box-shadow: 0 0 10px var(--color-primary, #FF6600);
     animation: status-pulse 2s infinite ease-in-out;
   }
 
@@ -267,7 +278,7 @@
   .hero-description {
     font-size: clamp(1.05rem, 2vw, 1.25rem);
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.78);
+    color: var(--color-text-secondary, #CBD5E1);
     margin-bottom: 2.5rem;
     font-weight: 400;
     max-width: 65ch;
@@ -306,15 +317,15 @@
   }
 
   .hero-button.primary {
-    background-color: var(--color-primary, #FF5A00);
+    background-color: var(--color-primary, #FF6600);
     color: #FFFFFF;
-    box-shadow: 0 4px 20px rgba(255, 90, 0, 0.35);
+    box-shadow: 0 4px 20px rgba(255, 102, 0, 0.35);
   }
 
   .hero-button.primary:hover {
-    background-color: var(--color-primary-hover, #E04E00);
+    background-color: var(--color-primary-hover, #EA580C);
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(255, 90, 0, 0.5);
+    box-shadow: 0 8px 30px rgba(255, 102, 0, 0.5);
   }
 
   .hero-button.secondary {
@@ -372,7 +383,7 @@
     gap: 0.45rem;
     padding: 0.4rem 0.85rem;
     border-radius: 9999px;
-    background: rgba(7, 11, 20, 0.75);
+    background: rgba(9, 13, 22, 0.75);
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: rgba(255, 255, 255, 0.75);
     font-size: 0.75rem;
@@ -385,7 +396,7 @@
   }
 
   .video-control:hover {
-    background: rgba(7, 11, 20, 0.95);
+    background: rgba(9, 13, 22, 0.95);
     color: #FFFFFF;
     border-color: rgba(255, 255, 255, 0.35);
   }
@@ -394,6 +405,11 @@
   @media (max-width: 640px) {
     .hero-content-wrapper {
       padding: 6.5rem 1.25rem 3.5rem 1.25rem;
+    }
+
+    .hero-container {
+      padding: 2.5rem 1.25rem 2rem 1.25rem;
+      border-radius: 20px;
     }
 
     h1 {

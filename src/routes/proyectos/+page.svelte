@@ -16,7 +16,6 @@
 
   <div class="container">
     <header class="page-header">
-      <span class="sub-heading">Nuestro Portafolio</span>
       <h1>Proyectos y <br/><span class="text-highlight">Casos de Éxito</span></h1>
       <p class="intro-text">
         Ingeniería robusta aplicada a necesidades comerciales. Conoce cómo ayudamos a las empresas a simplificar procesos, automatizar tareas y optimizar sus ingresos mediante productos de software premium.
@@ -123,28 +122,18 @@
     align-items: center;
   }
 
-  .sub-heading {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: var(--terracota-suave, #FF6B00);
-    margin-bottom: 1.25rem;
-  }
-
   h1 {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
+    font-size: clamp(2.4rem, 5.2vw, 4rem);
     font-weight: 900;
-    line-height: 1.15;
+    line-height: 1.12;
     color: white;
     margin-bottom: 1.5rem;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.035em;
   }
 
   .text-highlight {
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
   }
 
   .intro-text {
@@ -156,7 +145,7 @@
   }
 
   .primary-cta {
-    background-color: var(--terracota-suave, #FF6B00);
+    background-color: var(--color-primary, #FF5A00);
     color: white;
     border: none;
     padding: 1rem 2.5rem;
@@ -191,7 +180,7 @@
   }
 
   .status-msg svg {
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
   }
 
   .status-msg.error svg {
@@ -284,7 +273,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
     margin-bottom: 0.75rem;
   }
 
@@ -337,9 +326,9 @@
     font-family: var(--font-principal, 'Montserrat', sans-serif);
     font-size: 0.85rem;
     font-weight: 700;
-    background: rgba(255, 107, 0, 0.05);
-    border: 1px solid rgba(255, 107, 0, 0.15);
-    color: var(--terracota-suave, #FF6B00);
+    background: rgba(255, 90, 0, 0.06);
+    border: 1px solid rgba(255, 90, 0, 0.2);
+    color: var(--color-primary, #FF5A00);
     padding: 0.4rem 1rem;
     border-radius: 8px;
   }
@@ -362,7 +351,7 @@
   }
 
   .view-project-link:hover {
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
   }
 
   .view-project-link:hover svg {

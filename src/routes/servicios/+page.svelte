@@ -16,7 +16,6 @@
   
   <div class="container">
     <header class="page-header">
-      <span class="sub-title">Nuestras Soluciones</span>
       <h1>Servicios de Ingeniería y <br/><span class="text-highlight">Desarrollo Tecnológico</span></h1>
       <p class="intro-p">
         Diseñamos y forjamos ecosistemas digitales a la medida. Resolvemos cuellos de botella operativos y habilitamos el crecimiento comercial de tu empresa con bases técnicas sólidas.
@@ -102,28 +101,18 @@
     align-items: center;
   }
 
-  .sub-title {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: var(--terracota-suave, #FF6B00);
-    margin-bottom: 1.25rem;
-  }
-
   h1 {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
+    font-size: clamp(2.4rem, 5.2vw, 4rem);
     font-weight: 900;
-    line-height: 1.15;
+    line-height: 1.12;
     color: white;
     margin-bottom: 1.5rem;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.035em;
   }
 
   .text-highlight {
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
   }
 
   .intro-p {
@@ -135,7 +124,7 @@
   }
 
   .primary-cta {
-    background-color: var(--terracota-suave, #FF6B00);
+    background-color: var(--color-primary, #FF5A00);
     color: white;
     border: none;
     padding: 1rem 2.5rem;
@@ -212,17 +201,17 @@
   .service-icon {
     width: 60px;
     height: 60px;
-    background: rgba(255, 107, 0, 0.1);
+    background: rgba(255, 90, 0, 0.08);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
     margin-bottom: 2rem;
   }
 
   .service-card:hover .service-icon {
-    background: var(--terracota-suave, #FF6B00);
+    background: var(--color-primary, #FF5A00);
     color: white;
     transform: scale(1.05);
     transition: all 0.3s ease;
@@ -288,7 +277,7 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: var(--terracota-suave, #FF6B00);
+    background-color: var(--color-primary, #FF5A00);
   }
 
   .secondary-cta {
@@ -308,7 +297,7 @@
   }
 
   .secondary-cta:hover {
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
   }
 
   .secondary-cta:hover svg {

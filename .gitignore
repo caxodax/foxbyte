@@ -24,3 +24,9 @@ vite.config.ts.timestamp-*
 
 # Archivos comprimidos
 *.zip
+
+# Agent tools & local skills cache
+.agents/
+.codex/
+.impeccable/
+

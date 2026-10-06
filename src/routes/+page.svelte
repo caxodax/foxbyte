@@ -12,7 +12,7 @@
 
 <Hero />
 <Clientes />
-<Servicios />
+<Servicios initialServices={data.services} />
 <Portafolio initialPortfolioItems={data.portfolioItems} />
 <PropuestaValor />
 <Testimonios />

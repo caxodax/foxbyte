@@ -1,545 +1,944 @@
 <script lang="ts">
-  import { onMount, onDestroy, tick } from 'svelte';
   import { fade, fly } from 'svelte/transition';
-  import { db } from '$lib/firebase';
-  import { collection, getDocs } from 'firebase/firestore';
+  import { isContactModalOpen } from '$lib/contactStore';
+  import { slugify } from '$lib/firestoreRest';
 
-  // Refs DOM
-  let scroller: HTMLDivElement | null = null;
-  let prevBtn: HTMLButtonElement | null = null;
-  let nextBtn: HTMLButtonElement | null = null;
-  let dotsWrap: HTMLDivElement | null = null;
-
-  // Props de SSR
   export let initialPortfolioItems: any[] | null = null;
 
-  // Estado interno
-  let portfolioItems: any[] = initialPortfolioItems || [];
-  let loading = initialPortfolioItems === null;
-  let error = false;
-  let cards: HTMLElement[] = [];
-  let dots: HTMLSpanElement[] = [];
-  let io: IntersectionObserver | null = null;
-  let raf = 0;
-  let reduce = false;
-  let viewIO: IntersectionObserver | null = null;
+  type Project = {
+    id: string;
+    slug?: string;
+    title?: string;
+    category?: string;
+    description?: string;
+    image?: string;
+    image_url?: string;
+    stack?: string[];
+    kpis?: any[];
+    isPrivate?: boolean;
+    is_private?: boolean;
+    confidential?: boolean;
+    [key: string]: any;
+  };
 
-  // Autoplay & progreso
-  let autoplayMs = 4500;
-  let autoplayId: number | null = null;
-  let progressEl: HTMLSpanElement | null = null;
-  let progress = 0; // 0..1
-  let inView = false;
-  let userHolding = false;
+  let portfolioItems: Project[] = initialPortfolioItems ? normalizeProjects(initialPortfolioItems) : [];
+  let loading = false;
+  let selectedCategory = 'all';
 
-  // Cleanup listeners arrays
-  let cleanupFns: Function[] = [];
+  // Modal ejecutivo de proyectos bajo NDA
+  let selectedNdaProject: Project | null = null;
 
-  // Modal de detalles
-  let selectedProject: any = null;
-  let lightboxImage: string | null = null;
-
-  function openModal(item: any) {
-    selectedProject = item;
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    selectedProject = null;
-    document.body.style.overflow = '';
-  }
-
-  function handleModalKeydown(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
-      if (lightboxImage) lightboxImage = null;
-      else if (selectedProject) closeModal();
-    }
-  }
-
-  onMount(async () => {
-    // Si ya tenemos los datos de SSR, inicializamos el carrusel y terminamos
-    if (initialPortfolioItems !== null) {
-      loading = false;
-      await tick();
-      if (portfolioItems.length > 0) initCarousel();
-      return;
-    }
-
-    try {
-      // Fallback a client-side fetch si el SSR falló
-      const fetchPromise = getDocs(collection(db, 'portfolio'));
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('TIMEOUT')), 8000)
+  function normalizeProjects(items: any[]): Project[] {
+    return items.map(item => {
+      const slug = item.slug || slugify(item.title || item.id || '');
+      const isPrivate = Boolean(
+        item.isPrivate ||
+        item.is_private ||
+        item.confidential ||
+        item.category?.toLowerCase().includes('nda') ||
+        item.category?.toLowerCase().includes('confidencial')
       );
-      
-      const querySnapshot = await Promise.race([fetchPromise, timeoutPromise]) as any;
-      
-      portfolioItems = querySnapshot.docs.map((doc: any) => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-    } catch (err) {
-      console.error("Error cargando portafolio:", err);
-      error = true;
-    } finally {
-      loading = false;
-      await tick(); // Wait for DOM to update with the loaded items
-      if (portfolioItems.length > 0) {
-        initCarousel();
-      }
-    }
-  });
-
-  function initCarousel() {
-    if (!scroller || !dotsWrap) return;
-
-    // Congelar refs no-nulas (evita type 'never')
-    const el: HTMLDivElement = scroller;
-    const dotsEl: HTMLDivElement = dotsWrap;
-    const prev: HTMLButtonElement | null = prevBtn;
-    const next: HTMLButtonElement | null = nextBtn;
-
-    reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Cards
-    cards = Array.from(el.querySelectorAll<HTMLElement>('.fx-portfolio__card'));
-
-    // IO para visibilidad de la sección (autoplay on/off)
-    const section = el.closest('.fx-portfolio') as HTMLElement | null;
-    viewIO = new IntersectionObserver((entries) => {
-      entries.forEach((en) => {
-        inView = en.isIntersecting;
-        if (inView) startAutoplay(el);
-        else { stopAutoplay(); resetProgress(); }
-      });
-    }, { threshold: 0.3 });
-    if (section) viewIO.observe(section);
-
-    // IO para entrada suave de cards
-    io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) (e.target as HTMLElement).classList.add('in-view');
-      });
-    }, { threshold: 0.2 });
-    cards.forEach((c) => io!.observe(c));
-
-    // Dots dinámicos
-    dotsEl.innerHTML = '';
-    dots = cards.map(() => {
-      const d = document.createElement('span');
-      d.className = 'dot';
-      dotsEl.appendChild(d);
-      return d as HTMLSpanElement;
-    });
-    updateDots(el);
-    updateDepthAndParallax(el);
-
-    // Listeners
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        updateDots(el);
-        updateDepthAndParallax(el);
-      });
-    };
-    const onResize = () => {
-      updateDots(el);
-      updateDepthAndParallax(el);
-    };
-    el.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize);
-    cleanupFns.push(() => el.removeEventListener('scroll', onScroll as EventListener));
-    cleanupFns.push(() => window.removeEventListener('resize', onResize as EventListener));
-
-    // Pausas de autoplay según interacción del usuario
-    const hold = () => { userHolding = true; stopAutoplay(); };
-    const release = () => { userHolding = false; resetProgress(); startAutoplay(el); };
-    
-    el.addEventListener('pointerdown', hold);
-    el.addEventListener('pointerup', release);
-    el.addEventListener('mouseenter', hold);
-    el.addEventListener('mouseleave', release);
-    el.addEventListener('focusin', hold);
-    el.addEventListener('focusout', release);
-    
-    cleanupFns.push(() => el.removeEventListener('pointerdown', hold as EventListener));
-    cleanupFns.push(() => el.removeEventListener('pointerup', release as EventListener));
-    cleanupFns.push(() => el.removeEventListener('mouseenter', hold as EventListener));
-    cleanupFns.push(() => el.removeEventListener('mouseleave', release as EventListener));
-    cleanupFns.push(() => el.removeEventListener('focusin', hold as EventListener));
-    cleanupFns.push(() => el.removeEventListener('focusout', release as EventListener));
-
-    const onVisChange = () => {
-      if (document.hidden) stopAutoplay();
-      else { resetProgress(); startAutoplay(el); }
-    };
-    document.addEventListener('visibilitychange', onVisChange);
-    cleanupFns.push(() => document.removeEventListener('visibilitychange', onVisChange));
-
-    // Teclado
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') { e.preventDefault(); snapTo(nearestIndex(el) + 1, el); resetProgress(); }
-      else if (e.key === 'ArrowLeft') { e.preventDefault(); snapTo(nearestIndex(el) - 1, el); resetProgress(); }
-    };
-    el.addEventListener('keydown', onKey);
-    cleanupFns.push(() => el.removeEventListener('keydown', onKey as EventListener));
-
-    // Botones
-    const onPrev = () => { snapTo(nearestIndex(el) - 1, el); resetProgress(); };
-    const onNext = () => { snapTo(nearestIndex(el) + 1, el); resetProgress(); };
-    prev?.addEventListener('click', onPrev);
-    next?.addEventListener('click', onNext);
-    cleanupFns.push(() => prev?.removeEventListener('click', onPrev as EventListener));
-    cleanupFns.push(() => next?.removeEventListener('click', onNext as EventListener));
-
-    // Tilt 3D suave
-    if (!reduce) {
-      const onMove = (e: PointerEvent) => {
-        const card = e.currentTarget as HTMLElement;
-        const r = card.getBoundingClientRect();
-        const rx = ((e.clientY - r.top) / r.height - 0.5) * -4;
-        const ry = ((e.clientX - r.left) / r.width - 0.5) * 4;
-        card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      return {
+        ...item,
+        slug,
+        isPrivate
       };
-      const onLeave = (e: PointerEvent) => { (e.currentTarget as HTMLElement).style.transform = ''; };
-      cards.forEach((c) => { c.addEventListener('pointermove', onMove); c.addEventListener('pointerleave', onLeave); });
-      cleanupFns.push(() => { cards.forEach((c) => { c.removeEventListener('pointermove', onMove); c.removeEventListener('pointerleave', onLeave); }); });
-    }
-
-    // Autoplay
-    startAutoplay(el);
-  }
-
-  onDestroy(() => {
-    if (typeof window !== 'undefined') {
-      io?.disconnect(); 
-      viewIO?.disconnect(); 
-      stopAutoplay();
-      cleanupFns.forEach(fn => fn());
-      if (typeof cancelAnimationFrame !== 'undefined') {
-        cancelAnimationFrame(raf);
-      }
-    }
-  });
-
-  // Helpers
-  function startAutoplay(container: HTMLDivElement) {
-    if (autoplayId || !inView || userHolding) return;
-    const step = 1000 / 60; // ~60fps
-    let acc = 0;
-    autoplayId = window.setInterval(() => {
-      if (!progressEl) progressEl = document.querySelector('.fx-portfolio__progress-bar') as HTMLSpanElement | null;
-      progress += step / autoplayMs;
-      if (progressEl) progressEl.style.width = Math.min(progress * 100, 100).toFixed(2) + '%';
-      acc += step;
-      if (acc >= autoplayMs) {
-        progress = 0; acc = 0;
-        snapTo(nearestIndex(container) + 1, container);
-      }
-    }, step) as unknown as number;
-  }
-  function stopAutoplay() { if (autoplayId) { clearInterval(autoplayId); autoplayId = null; } }
-  function resetProgress() { progress = 0; if (progressEl) progressEl.style.width = '0%'; }
-
-  function getCardFullWidth(container: HTMLDivElement): number {
-    if (cards.length === 0) return 0;
-    const style = getComputedStyle(container);
-    const gap = parseFloat((style as any).columnGap || (style as any).gap || '0');
-    const first = cards[0];
-    return first.getBoundingClientRect().width + gap;
-  }
-  function nearestIndex(container: HTMLDivElement): number {
-    const itemW = getCardFullWidth(container);
-    if (itemW === 0) return 0;
-    const idx = Math.round(container.scrollLeft / itemW);
-    return Math.max(0, Math.min(idx, cards.length - 1));
-  }
-  function snapTo(index: number, container: HTMLDivElement): void {
-    const itemW = getCardFullWidth(container);
-    container.scrollTo({ left: index * itemW, behavior: 'smooth' });
-  }
-  function updateDots(container: HTMLDivElement): void {
-    const idx = nearestIndex(container);
-    dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
-  }
-  function updateDepthAndParallax(container: HTMLDivElement) {
-    const rect = container.getBoundingClientRect();
-    const viewportCenter = rect.left + rect.width / 2;
-    cards.forEach((card) => {
-      const cRect = card.getBoundingClientRect();
-      const center = cRect.left + cRect.width / 2;
-      const dist = Math.min(1, Math.abs(center - viewportCenter) / (rect.width / 2));
-      const scale = 1 - dist * 0.06;      // 1 -> 0.94
-      const opacity = 1 - dist * 0.2;     // 1 -> 0.8
-      const parallax = (center - viewportCenter) * -0.04; // px
-      card.style.setProperty('--fx-scale', scale.toString());
-      card.style.setProperty('--fx-opacity', opacity.toString());
-      const img = card.querySelector<HTMLImageElement>('.fx-portfolio__media img');
-      if (img) img.style.setProperty('--fx-parallax', parallax.toFixed(1) + 'px');
     });
+  }
+
+  // Reactividad instantánea para SSR e hidratación
+  $: if (initialPortfolioItems && initialPortfolioItems.length > 0) {
+    portfolioItems = normalizeProjects(initialPortfolioItems);
+    loading = false;
+  }
+
+  // Lista de categorías únicas para los chips de filtro
+  $: categories = [
+    'all',
+    ...Array.from(new Set(portfolioItems.map(p => p.category).filter(Boolean))) as string[]
+  ];
+
+  // Proyectos filtrados reactivamente
+  $: filteredProjects = selectedCategory === 'all'
+    ? portfolioItems
+    : portfolioItems.filter(p => p.category === selectedCategory);
+
+  function openNdaModal(project: Project) {
+    selectedNdaProject = project;
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeNdaModal() {
+    selectedNdaProject = null;
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
+  }
+
+  function handleKeydown(e: KeyboardEvent) {
+    if (e.key === 'Escape' && selectedNdaProject) {
+      closeNdaModal();
+    }
+  }
+
+  function requestNdaAccess(project: Project) {
+    closeNdaModal();
+    isContactModalOpen.set(true);
+  }
+
+  function parseKpiText(kpi: any): { val: string; lbl: string } {
+    if (!kpi) return { val: '', lbl: '' };
+    if (typeof kpi === 'string') {
+      const parts = kpi.split(' ');
+      return {
+        val: parts[0] || '',
+        lbl: parts.slice(1).join(' ') || ''
+      };
+    }
+    return {
+      val: kpi.value || kpi.val || '',
+      lbl: kpi.label || kpi.name || ''
+    };
   }
 </script>
 
-<section id="portafolio" class="fx-portfolio" aria-labelledby="portfolio-title">
-  <div class="fx-portfolio__container">
-    <header class="fx-portfolio__header">
-      <span class="fx-portfolio__subtitle">Nuestro Trabajo</span>
-      <h2 id="portfolio-title" class="fx-portfolio__title">Proyectos que impulsan el crecimiento y la eficiencia.</h2>
-      <p class="fx-portfolio__kicker">Desliza para explorar casos reales. KPIs y stack a primera vista.</p>
+<svelte:window on:keydown={handleKeydown} />
+
+<section id="portafolio" class="fx-portfolio-section" aria-labelledby="portfolio-title">
+  <!-- Ambient background sutil y estático -->
+  <div class="fx-ambient-mesh" aria-hidden="true"></div>
+
+  <div class="fx-container">
+    <!-- Encabezado de la sección -->
+    <header class="fx-portfolio-header">
+      <h2 id="portfolio-title" class="fx-title">
+        Ingeniería aplicada que convierte visión en tracción comercial
+      </h2>
+
+      <p class="fx-subtitle">
+        Diseñamos plataformas web de alto rendimiento, tiendas e-commerce escalables y software empresarial a la medida. Conoce cómo resolvemos desafíos reales de negocio.
+      </p>
+
+      <!-- Chips de Filtrado por Categoría -->
+      {#if categories.length > 2}
+        <div class="fx-filter-chips" role="tablist" aria-label="Filtrar proyectos por categoría">
+          {#each categories as category}
+            <button
+              type="button"
+              role="tab"
+              aria-selected={selectedCategory === category}
+              class="fx-chip"
+              class:active={selectedCategory === category}
+              on:click={() => selectedCategory = category}
+            >
+              {#if category === 'all'}
+                Todos los proyectos
+              {:else}
+                {category}
+              {/if}
+            </button>
+          {/each}
+        </div>
+      {/if}
     </header>
 
+    <!-- Estado de Carga -->
     {#if loading}
-      <div class="fx-portfolio__loading">
-        <p>Cargando portafolio...</p>
+      <div class="fx-showcase-grid" aria-busy="true" aria-label="Cargando proyectos">
+        {#each Array(3) as _}
+          <div class="fx-project-card fx-skeleton-card">
+            <div class="fx-skeleton-media fx-skeleton-pulse"></div>
+            <div class="fx-card-content">
+              <div class="fx-skeleton-badge fx-skeleton-pulse"></div>
+              <div class="fx-skeleton-title fx-skeleton-pulse"></div>
+              <div class="fx-skeleton-desc fx-skeleton-pulse"></div>
+              <div class="fx-skeleton-tags fx-skeleton-pulse"></div>
+            </div>
+          </div>
+        {/each}
       </div>
-    {:else if error}
-      <div class="fx-portfolio__loading fx-portfolio__error">
-        <p>No pudimos cargar los proyectos en este momento. Por favor, revisa tu conexión.</p>
-        <button class="cta-primary" style="margin-top: 1.5rem;" on:click={() => window.location.reload()}>Reintentar</button>
-      </div>
-    {:else if portfolioItems.length === 0}
-      <div class="fx-portfolio__loading">
-        <p>No hay proyectos en el portafolio actualmente.</p>
+    {:else if filteredProjects.length === 0}
+      <div class="fx-empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" /><path d="M12 12l8 -4.5" /><path d="M12 12l0 9" /><path d="M12 12l-8 -4.5" /></svg>
+        <p>No se encontraron proyectos en esta categoría.</p>
+        <button type="button" class="fx-reset-filter-btn" on:click={() => selectedCategory = 'all'}>
+          Ver todos los proyectos
+        </button>
       </div>
     {:else}
-      <div class="fx-portfolio__carousel">
-        <button class="fx-portfolio__nav fx-portfolio__nav--prev" bind:this={prevBtn} type="button" aria-label="Anterior">‹</button>
+      <!-- Showcase Grid Modular -->
+      <div class="fx-showcase-grid">
+        {#each filteredProjects as project (project.id || project.slug)}
+          {@const imgSource = project.image || project.image_url}
+          {@const kpiData = project.kpis && project.kpis.length > 0 ? parseKpiText(project.kpis[0]) : null}
 
-        <div class="fx-portfolio__scroller" bind:this={scroller} role="region" aria-label="Proyectos destacables" tabindex="0">
-          
-          {#each portfolioItems as item}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-            <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-            <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
-            <article class="fx-portfolio__card fx-card-minimal" aria-label={item.title} on:click={() => openModal(item)} on:keydown={(e) => e.key === 'Enter' && openModal(item)} role="button" tabindex="0">
-              <figure class="fx-portfolio__media">
-                <img loading="lazy" decoding="async" src={item.image_url || 'https://placehold.co/960x640'} alt={item.title} />
-              </figure>
-              <div class="fx-portfolio__content">
-                <span class="fx-portfolio__category">{item.category}</span>
-                <h3 class="fx-portfolio__h3">{item.title}</h3>
-                
-                <div class="fx-portfolio__minimal-cta">
-                  <span class="minimal-link">Ver proyecto <span class="arrow">→</span></span>
+          <article class="fx-project-card" class:is-private={project.isPrivate}>
+            <!-- Cabecera Visual: Imagen con relación de aspecto 16:10 -->
+            <div class="fx-media-wrapper">
+              {#if imgSource}
+                <img
+                  src={imgSource}
+                  alt={project.title || 'Proyecto Foxbyte'}
+                  loading="lazy"
+                  decoding="async"
+                  class="fx-project-image"
+                />
+              {:else}
+                <div class="fx-fallback-image">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" /><path d="M12 12l8 -4.5" /><path d="M12 12l0 9" /><path d="M12 12l-8 -4.5" /><path d="M16 5.25l-8 4.5" /></svg>
+                  <span>Foxbyte Engineering</span>
                 </div>
+              {/if}
+
+              <!-- Badges Superpuestos -->
+              <div class="fx-badges-overlay">
+                <span class="fx-category-badge">{project.category || 'Ingeniería de Software'}</span>
+                {#if project.isPrivate}
+                  <span class="fx-nda-badge" title="Proyecto protegido bajo acuerdo de confidencialidad">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg>
+                    Bajo NDA
+                  </span>
+                {/if}
               </div>
-            </article>
-          {/each}
+            </div>
 
-        </div>
+            <!-- Cuerpo de la Tarjeta -->
+            <div class="fx-card-content">
+              <h3 class="fx-card-title">{project.title}</h3>
+              <p class="fx-card-desc">
+                {project.description ? project.description.substring(0, 140) + '...' : 'Plataforma digital escalable y arquitectura modular de alto rendimiento.'}
+              </p>
 
-        <button class="fx-portfolio__nav fx-portfolio__nav--next" bind:this={nextBtn} type="button" aria-label="Siguiente">›</button>
+              <!-- Métrica KPI Destacada si existe -->
+              {#if kpiData && kpiData.val}
+                <div class="fx-kpi-highlight">
+                  <span class="fx-kpi-icon">⚡</span>
+                  <strong class="fx-kpi-val">{kpiData.val}</strong>
+                  <span class="fx-kpi-lbl">{kpiData.lbl}</span>
+                </div>
+              {/if}
 
-        <div class="fx-portfolio__progress" aria-hidden="true">
-          <span class="fx-portfolio__progress-bar"></span>
-        </div>
-        <div class="fx-portfolio__dots" bind:this={dotsWrap} aria-hidden="true"></div>
+              <!-- Tech Stack Tags -->
+              {#if project.stack && project.stack.length > 0}
+                <div class="fx-tech-tags" aria-label="Tecnologías utilizadas">
+                  {#each project.stack.slice(0, 4) as tech}
+                    <span class="fx-tech-chip">{tech}</span>
+                  {/each}
+                </div>
+              {/if}
+
+              <!-- Footer de Acción: Público vs Privado -->
+              <div class="fx-card-footer">
+                {#if project.isPrivate}
+                  <button
+                    type="button"
+                    class="fx-action-btn fx-btn-nda"
+                    on:click={() => openNdaModal(project)}
+                    aria-label="Solicitar acceso privado para {project.title}"
+                  >
+                    <span>Solicitar acceso NDA</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg>
+                  </button>
+                {:else}
+                  <a
+                    href="/proyectos/{project.slug}"
+                    class="fx-action-btn fx-btn-public"
+                    aria-label="Ver caso de estudio de {project.title}"
+                  >
+                    <span>Ver caso de estudio</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /></svg>
+                  </a>
+                {/if}
+              </div>
+            </div>
+          </article>
+        {/each}
       </div>
     {/if}
+
+    <!-- Footer Global de la Sección de Portafolio -->
+    <div class="fx-section-bottom">
+      <a href="/proyectos" class="fx-explore-all-btn">
+        <span>Explorar todos los proyectos y casos de éxito</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /></svg>
+      </a>
+    </div>
   </div>
 </section>
 
-<!-- MODAL PREMIUM -->
-{#if selectedProject}
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div class="fx-modal-backdrop" transition:fade={{duration: 200}} on:click={closeModal} on:keydown={handleModalKeydown} tabindex="0">
-    <div class="fx-modal-content" transition:fly={{y: 50, duration: 300}} on:click|stopPropagation>
-      <button class="fx-modal-close" on:click={closeModal} aria-label="Cerrar modal">×</button>
-      
-      <div class="fx-modal-grid">
-        <div class="fx-modal-image" role="button" tabindex="0" on:click={() => lightboxImage = selectedProject.image_url} on:keydown={(e) => e.key === 'Enter' && (lightboxImage = selectedProject.image_url)} aria-label="Ampliar imagen">
-          <img src={selectedProject.image_url || 'https://placehold.co/960x640'} alt={selectedProject.title} />
-          <div class="fx-modal-image-overlay">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 4l4 0l0 4" /><path d="M14 10l6 -6" /><path d="M8 20l-4 0l0 -4" /><path d="M4 20l6 -6" /><path d="M16 20l4 0l0 -4" /><path d="M14 14l6 6" /><path d="M8 4l-4 0l0 4" /><path d="M4 4l6 6" /></svg>
-          </div>
-        </div>
-        
-        <div class="fx-modal-body">
-          <span class="fx-portfolio__category">{selectedProject.category}</span>
-          <h2>{selectedProject.title}</h2>
-          
-          <div class="fx-modal-desc">
-            <p>{selectedProject.description}</p>
-          </div>
-          
-          {#if selectedProject.kpis && selectedProject.kpis.length > 0}
-            <div class="fx-modal-kpis">
-              {#each selectedProject.kpis as kpi}
-                <div class="modal-kpi-item">
-                  <span class="val">{kpi.value}</span>
-                  <span class="lbl">{kpi.label}</span>
-                </div>
+<!-- MODAL EJECUTIVO PARA PROYECTOS PRIVADOS (BAJO NDA) -->
+{#if selectedNdaProject}
+  <div 
+    class="fx-nda-backdrop" 
+    transition:fade={{ duration: 200 }} 
+    on:click={closeNdaModal}
+    role="presentation"
+  >
+    <div 
+      class="fx-nda-modal" 
+      transition:fly={{ y: 30, duration: 300 }} 
+      on:click|stopPropagation
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="nda-modal-title"
+    >
+      <button 
+        type="button" 
+        class="fx-modal-close" 
+        on:click={closeNdaModal} 
+        aria-label="Cerrar modal de proyecto confidencial"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+      </button>
+
+      <div class="fx-nda-badge-header">
+        <span class="fx-lock-icon">🔒</span>
+        <span>PROYECTO PROTEGIDO POR ACUERDO DE CONFIDENCIALIDAD (NDA)</span>
+      </div>
+
+      <h3 id="nda-modal-title" class="fx-nda-title">{selectedNdaProject.title}</h3>
+      <span class="fx-nda-category">{selectedNdaProject.category || 'Desarrollo Especializado'}</span>
+
+      <div class="fx-nda-body">
+        <p class="fx-nda-desc">
+          {selectedNdaProject.description || 'Solución tecnológica empresarial diseñada para optimizar procesos críticos de negocio con alta seguridad y escalabilidad.'}
+        </p>
+
+        {#if selectedNdaProject.stack && selectedNdaProject.stack.length > 0}
+          <div class="fx-nda-tech-block">
+            <h4>Arquitectura y Stack Tecnológico:</h4>
+            <div class="fx-tech-tags">
+              {#each selectedNdaProject.stack as tech}
+                <span class="fx-tech-chip">{tech}</span>
               {/each}
             </div>
-          {/if}
-          
-          {#if selectedProject.stack && selectedProject.stack.length > 0}
-            <div class="fx-modal-stack">
-              <strong>Stack Tecnológico:</strong>
-              <div class="tags">
-                {#each selectedProject.stack as stackItem}
-                  <span class="tag">{stackItem}</span>
-                {/each}
-              </div>
-            </div>
-          {/if}
-          
-          <div class="fx-modal-actions">
-            <button class="cta-primary" aria-label={`Cotizar ${selectedProject.title}`}>Cotizar Proyecto</button>
-            <button class="cta-back" on:click={closeModal} aria-label="Volver">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
-              <span>Volver a los proyectos</span>
-            </button>
           </div>
+        {/if}
+
+        <div class="fx-nda-notice-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v4" /><path d="M12 16v.01" /><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /></svg>
+          <p>
+            Por políticas de privacidad del cliente, el código fuente y las métricas internas no son públicos. Podemos presentar la arquitectura y casos análogos en una sesión técnica confidencial.
+          </p>
         </div>
+      </div>
+
+      <div class="fx-nda-actions">
+        <button 
+          type="button" 
+          class="fx-cta-btn-primary" 
+          on:click={() => requestNdaAccess(selectedNdaProject)}
+        >
+          <span>Solicitar demostración confidencial</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /></svg>
+        </button>
+        <button type="button" class="fx-cta-btn-ghost" on:click={closeNdaModal}>
+          Volver al portafolio
+        </button>
       </div>
     </div>
   </div>
 {/if}
 
-<!-- LIGHTBOX PARA IMÁGENES -->
-{#if lightboxImage}
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-  <div class="fx-lightbox" transition:fade={{duration: 200}} on:click={() => lightboxImage = null} on:keydown={handleModalKeydown} tabindex="0" role="dialog" aria-modal="true">
-    <button class="fx-lightbox-close" aria-label="Cerrar imagen" title="Cerrar (Esc)">×</button>
-    <img src={lightboxImage} alt="Vista ampliada" transition:fly={{y: 20, duration: 300}} on:click|stopPropagation />
-  </div>
-{/if}
-
 <style>
-  /* NAMESPACE: .fx-portfolio para evitar colisiones globales */
-  .fx-portfolio{ padding: 3.5rem 1rem; background: var(--marfil-claro, #F8F6F3); }
-  .fx-portfolio__container{ max-width: 1200px; margin: 0 auto; }
-  .fx-portfolio__header{ text-align: center; margin-bottom: 1.75rem; }
-  .fx-portfolio__subtitle{ display:inline-block; margin-bottom:.5rem; color: var(--terracota-suave, #E67E22); font-weight:700; text-transform:uppercase; letter-spacing:.08em; font-size:.8rem; }
-  .fx-portfolio__title{ font-size: 1.6rem; color: var(--azul-petroleo, #2C3E50); line-height: 1.2; margin: 0 auto .5rem; max-width: 28ch; }
-  .fx-portfolio__kicker{ color: var(--gris-grafito, #4A4A4A); font-size:.95rem; opacity:.9; }
-
-  .fx-portfolio__loading { text-align: center; padding: 3rem; color: var(--gris-grafito); }
-
-  /* Slider */
-  .fx-portfolio__carousel{ position: relative; }
-  .fx-portfolio__scroller{
-    position: relative; display: grid; gap: 1rem;
-    grid-auto-flow: column; grid-auto-columns: 88%;
-    overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
-    padding: .25rem 2.5rem 2.4rem; -webkit-overflow-scrolling: touch;
+  .fx-portfolio-section {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 6.5rem 1.5rem;
+    background-color: #070B14;
+    overflow: hidden;
+    font-family: var(--font-body, system-ui, sans-serif);
+    scroll-margin-top: 80px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
   }
-  /* Rediseño Minimalista Tarjeta */
-  .fx-portfolio__card.fx-card-minimal {
-    position: relative; scroll-snap-align: center; background: #ffffff; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 8px 24px rgba(0,0,0,0.03); border-radius: 20px;
-    cursor: pointer; padding: 0.75rem 0.75rem 1.75rem; text-align: left;
-    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
-  }
-  .fx-portfolio__card.fx-card-minimal:hover { transform: translateY(-8px); box-shadow: 0 16px 32px rgba(0,0,0,0.08); }
-  
-  .fx-portfolio__card.fx-card-minimal .fx-portfolio__media {
-    position: relative; border-radius: 14px; aspect-ratio: 4/3; overflow: hidden; margin-bottom: 1.5rem;
-  }
-  .fx-portfolio__card.fx-card-minimal .fx-portfolio__media img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(1.05) contrast(1.05); transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
-  .fx-portfolio__card.fx-card-minimal:hover .fx-portfolio__media img { transform: scale(1.06); }
 
-  .fx-portfolio__card.fx-card-minimal .fx-portfolio__content { padding: 0 0.5rem; display: flex; flex-direction: column; }
-  
-  .fx-portfolio__card.fx-card-minimal .fx-portfolio__category {
-    font-size: 0.75rem; font-weight: 800; letter-spacing: 0.12em; color: var(--terracota-suave, #E67E22); margin-bottom: 0.6rem; text-transform: uppercase;
+  .fx-ambient-mesh {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+    background: radial-gradient(circle at 10% 20%, rgba(255, 90, 0, 0.035) 0%, transparent 60%);
   }
-  .fx-portfolio__card.fx-card-minimal .fx-portfolio__h3 {
-    font-size: 1.4rem; font-weight: 800; color: var(--azul-petroleo, #2C3E50); margin-bottom: 0; line-height: 1.25; letter-spacing: -0.02em;
+
+  .fx-container {
+    position: relative;
+    max-width: 1240px;
+    margin: 0 auto;
+    z-index: 1;
   }
-  
-  .fx-portfolio__minimal-cta { margin-top: 1.2rem; }
-  .fx-portfolio__minimal-cta .minimal-link {
-    font-size: 0.95rem; font-weight: 800; color: var(--ciruela-profunda, #5E3A6B); display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.3s;
+
+  /* --- Encabezado --- */
+  .fx-portfolio-header {
+    text-align: center;
+    max-width: 780px;
+    margin: 0 auto 3.5rem;
   }
-  .fx-portfolio__card.fx-card-minimal:hover .minimal-link { color: var(--terracota-suave, #E67E22); }
-  .fx-portfolio__minimal-cta .arrow { transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
-  .fx-portfolio__card.fx-card-minimal:hover .arrow { transform: translateX(8px); }
 
-  /* Estilos para los botones del modal */
-  .cta-primary{ appearance:none; border:0; border-radius:10px; padding:.7rem 1.2rem; font-weight:800; font-size: 0.95rem; letter-spacing: 0.03em; background: var(--azul-petroleo, #2C3E50); color:#fff; box-shadow:0 4px 14px rgba(44,62,80,.2); cursor:pointer; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
-  .cta-primary:hover { transform: translateY(-3px); box-shadow:0 8px 20px rgba(44,62,80,.3); background: #1a2530; }
-
-  .fx-portfolio__nav{
-    position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; border-radius:50%; border:0; cursor:pointer;
-    background: rgba(255,255,255,.9); box-shadow:0 6px 16px rgba(0,0,0,.15); display:grid; place-items:center; font-size:26px; line-height:1; font-weight:800; color: var(--azul-petroleo, #2C3E50); z-index:2;
+  .fx-title {
+    font-family: var(--font-display, inherit);
+    font-size: clamp(2.3rem, 4.2vw, 3.4rem);
+    color: #FFFFFF;
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+    margin-bottom: 1.25rem;
   }
-  .fx-portfolio__nav--prev{ left:.25rem; }
-  .fx-portfolio__nav--next{ right:.25rem; }
 
-  .fx-portfolio__progress{ position: relative; height: 4px; background: rgba(0,0,0,.08); border-radius: 999px; margin: .6rem auto 0; width: 160px; overflow: hidden; }
-  .fx-portfolio__progress-bar{ position: absolute; inset: 0 auto 0 0; width: 0%; background: var(--terracota-suave, #E67E22); border-radius: 999px; transition: width .12s linear; }
-
-  .fx-portfolio__dots{ position:relative; display:flex; justify-content:center; gap:.45rem; margin-top:.5rem; }
-  :global(.fx-portfolio__dots .dot){ width:8px; height:8px; border-radius:999px; background: rgba(0,0,0,.18); transition: transform 0.2s, background 0.2s; }
-  :global(.fx-portfolio__dots .dot.is-active){ background: var(--terracota-suave, #E67E22); transform: scale(1.2); }
-
-  /* Breakpoints */
-  @media (min-width: 640px){ .fx-portfolio__scroller{ grid-auto-columns: 70%; } }
-  @media (min-width: 920px){ .fx-portfolio__scroller{ grid-auto-columns: 48%; } }
-  @media (min-width: 1200px){ .fx-portfolio__scroller{ grid-auto-columns: 32%; } }
-
-  @media (prefers-reduced-motion: reduce){
-    .fx-portfolio__card, .fx-portfolio__media img, .fx-portfolio__accent{ transition:none !important; }
-    .fx-portfolio__nav{ transition:none !important; }
+  .fx-title-accent {
+    color: var(--color-primary, #FF5A00);
+    font-weight: 800;
   }
-  .fx-portfolio__scroller:focus-visible{ outline:3px solid var(--ambar, #F1C40F); outline-offset:4px; border-radius:12px; }
-  .fx-portfolio__card:focus-within{ outline:2px solid var(--terracota-suave, #E67E22); outline-offset:2px; }
 
-  /* MODAL */
-  .fx-modal-backdrop {
-    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem;
+  .fx-subtitle {
+    font-size: 1.05rem;
+    color: #94A3B8;
+    line-height: 1.65;
+    margin-bottom: 2.2rem;
   }
-  .fx-modal-content {
-    background: #fff; border-radius: 20px; width: 100%; max-width: 900px; max-height: 90vh;
-    overflow-y: auto; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-    display: flex; flex-direction: column; cursor: default;
+
+  /* --- Chips de Filtro --- */
+  .fx-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
   }
+
+  .fx-chip {
+    padding: 0.55rem 1.2rem;
+    border-radius: var(--radius-full, 100px);
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: #94A3B8;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .fx-chip:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .fx-chip.active {
+    background-color: var(--color-primary, #FF5A00);
+    color: #ffffff;
+    border-color: var(--color-primary, #FF5A00);
+    box-shadow: 0 4px 16px rgba(255, 90, 0, 0.4);
+  }
+
+  /* --- Showcase Grid Modular --- */
+  .fx-showcase-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 640px) {
+    .fx-showcase-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .fx-showcase-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* --- Project Card Dark Glassmorphism Container --- */
+  .fx-project-card {
+    position: relative;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.75) 0%, rgba(10, 16, 30, 0.95) 100%);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .fx-project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 24px rgba(255, 90, 0, 0.15);
+    border-color: rgba(255, 90, 0, 0.35);
+  }
+
+  /* --- Media (16:10 aspect ratio) --- */
+  .fx-media-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #090e1a;
+    overflow: hidden;
+  }
+
+  .fx-project-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .fx-project-card:hover .fx-project-image {
+    transform: scale(1.06);
+  }
+
+  .fx-fallback-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #090e1a 0%, #111a2e 100%);
+  }
+
+  .fx-badges-overlay {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .fx-category-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-full, 100px);
+    background: rgba(7, 11, 20, 0.85);
+    color: #F8FAFC;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .fx-nda-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-full, 100px);
+    background: rgba(225, 29, 72, 0.9);
+    color: #ffffff;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(225, 29, 72, 0.4);
+  }
+
+  /* --- Card Content --- */
+  .fx-card-content {
+    padding: 1.8rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .fx-card-title {
+    font-family: var(--font-display, inherit);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.65rem;
+    transition: color 0.2s ease;
+  }
+
+  .fx-project-card:hover .fx-card-title {
+    color: #FF7A1A;
+  }
+
+  .fx-card-desc {
+    font-size: 0.92rem;
+    color: #94A3B8;
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* --- KPI Highlight --- */
+  .fx-kpi-highlight {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 90, 0, 0.1);
+    border: 1px solid rgba(255, 90, 0, 0.25);
+    border-radius: 8px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.82rem;
+    margin-bottom: 1.25rem;
+    color: #F8FAFC;
+  }
+
+  .fx-kpi-val {
+    color: #FF7A1A;
+    font-weight: 800;
+    font-size: 0.92rem;
+  }
+
+  .fx-kpi-lbl {
+    color: #CBD5E1;
+    font-weight: 500;
+  }
+
+  /* --- Tech Tags --- */
+  .fx-tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .fx-tech-chip {
+    font-size: 0.73rem;
+    font-weight: 600;
+    color: #CBD5E1;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.28rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* --- Card Footer & Action Buttons --- */
+  .fx-card-footer {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin-top: auto;
+  }
+
+  .fx-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+    transition: color 0.2s ease;
+  }
+
+  .fx-btn-public {
+    color: #E2E8F0;
+  }
+
+  .fx-btn-public svg {
+    color: var(--color-primary, #FF5A00);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .fx-project-card:hover .fx-btn-public {
+    color: var(--color-primary, #FF5A00);
+  }
+
+  .fx-project-card:hover .fx-btn-public svg {
+    transform: translateX(5px);
+  }
+
+  .fx-btn-nda {
+    color: #fb7185;
+  }
+
+  .fx-btn-nda:hover {
+    color: #fda4af;
+  }
+
+  /* --- Section Bottom CTA --- */
+  .fx-section-bottom {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .fx-explore-all-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.4rem;
+    background: rgba(255, 255, 255, 0.04);
+    color: #F8FAFC;
+    font-weight: 700;
+    font-size: 0.98rem;
+    text-decoration: none;
+    border-radius: var(--radius-full, 100px);
+    border: 1.5px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .fx-explore-all-btn svg {
+    color: var(--color-primary, #FF5A00);
+    transition: transform 0.25s ease;
+  }
+
+  .fx-explore-all-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--color-primary, #FF5A00);
+    color: #FF7A1A;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 90, 0, 0.25);
+  }
+
+  .fx-explore-all-btn:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* --- Empty State --- */
+  .fx-empty-state {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: #94a3b8;
+  }
+
+  .fx-empty-state svg {
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+
+  .fx-reset-filter-btn {
+    margin-top: 1rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: var(--radius-full, 100px);
+    background: var(--color-primary, #FF5A00);
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* --- Skeletons --- */
+  .fx-skeleton-card { 
+    pointer-events: none; 
+    border-color: rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .fx-skeleton-pulse {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 75%);
+    background-size: 200% 100%;
+    animation: fx-pulse 1.5s infinite linear;
+    border-radius: 6px;
+  }
+
+  @keyframes fx-pulse {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .fx-skeleton-media { width: 100%; aspect-ratio: 16 / 10; }
+  .fx-skeleton-badge { width: 90px; height: 20px; border-radius: 100px; margin-bottom: 1rem; }
+  .fx-skeleton-title { width: 70%; height: 24px; border-radius: 6px; margin-bottom: 0.75rem; }
+  .fx-skeleton-desc { width: 100%; height: 16px; border-radius: 6px; margin-bottom: 1rem; }
+  .fx-skeleton-tags { width: 50%; height: 20px; border-radius: 6px; }
+
+  /* --- MODAL EJECUTIVO NDA --- */
+  .fx-nda-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .fx-nda-modal {
+    position: relative;
+    background: linear-gradient(180deg, #0F172A 0%, #0B1120 100%);
+    border-radius: 24px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    padding: 2.5rem;
+    box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
   .fx-modal-close {
-    position: absolute; top: 1rem; right: 1rem; width: 36px; height: 36px; border-radius: 50%;
-    border: none; background: #f1f5f9; color: #475569; font-size: 1.5rem; display: grid;
-    place-items: center; cursor: pointer; z-index: 10; transition: all 0.2s; line-height: 1; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #CBD5E1;
+    transition: all 0.2s ease;
   }
-  .fx-modal-close:hover { background: var(--terracota-suave, #E67E22); color: #fff; transform: scale(1.05); }
-  
-  .fx-modal-grid { display: grid; grid-template-columns: 1fr; }
-  @media (min-width: 768px) { .fx-modal-grid { grid-template-columns: 1.1fr 1.4fr; } }
-  
-  .fx-modal-image { background: #f8fafc; position: relative; cursor: zoom-in; overflow: hidden; }
-  .fx-modal-image img { width: 100%; height: 100%; object-fit: cover; max-height: 300px; display: block; transition: transform 0.4s ease; }
-  .fx-modal-image:hover img { transform: scale(1.04); }
-  .fx-modal-image-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; color: white; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-  .fx-modal-image:hover .fx-modal-image-overlay { opacity: 1; }
-  @media (min-width: 768px) { .fx-modal-image img { max-height: none; min-height: 100%; } }
-  
-  .fx-modal-body { padding: 2rem 2.5rem; display: flex; flex-direction: column; }
-  .fx-modal-body h2 { font-size: 1.7rem; color: var(--azul-petroleo, #2C3E50); margin: 0 0 1.2rem; line-height: 1.2; font-weight: 800; }
-  .fx-modal-desc { margin-bottom: 2rem; }
-  .fx-modal-desc p { color: var(--gris-grafito, #4A4A4A); line-height: 1.7; font-size: 1rem; white-space: pre-wrap; margin: 0; }
-  
-  .fx-modal-kpis { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; padding: 1.2rem; background: #f8fafc; border-radius: 14px; border: 1px solid #e2e8f0; }
-  .modal-kpi-item { display: flex; flex-direction: column; }
-  .modal-kpi-item .val { font-size: 1.4rem; font-weight: 800; color: var(--terracota-suave, #E67E22); }
-  .modal-kpi-item .lbl { font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
-  
-  .fx-modal-stack strong { display: block; font-size: 0.85rem; font-weight: 800; color: var(--azul-petroleo, #2C3E50); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
-  .fx-modal-stack .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .fx-modal-stack .tag { background: #eef1f3; color: var(--azul-petroleo, #2C3E50); padding: 0.35rem 0.8rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; }
-  
-  .fx-modal-actions { margin-top: 2.5rem; display: flex; align-items: center; gap: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; }
-  
-  /* BOTÓN VOLVER */
-  .cta-back { display: inline-flex; align-items: center; gap: 0.6rem; background: transparent; border: none; color: var(--azul-petroleo, #2C3E50); font-weight: 800; font-size: 1.05rem; cursor: pointer; padding: 0.5rem 0; transition: color 0.2s, transform 0.2s; }
-  .cta-back:hover { color: var(--terracota-suave, #E67E22); transform: translateX(-6px); }
 
-  /* LIGHTBOX */
-  .fx-lightbox { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(8px); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
-  .fx-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 40px rgba(0,0,0,0.5); border-radius: 8px; cursor: default; }
-  .fx-lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; width: 44px; height: 44px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; color: white; font-size: 2rem; display: grid; place-items: center; cursor: pointer; transition: background 0.2s; }
-  .fx-lightbox-close:hover { background: rgba(255,255,255,0.25); }
+  .fx-modal-close:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #FFFFFF;
+  }
+
+  .fx-nda-badge-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #fb7185;
+    background: rgba(225, 29, 72, 0.15);
+    border: 1px solid rgba(225, 29, 72, 0.35);
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-full, 100px);
+    margin-bottom: 1.25rem;
+  }
+
+  .fx-nda-title {
+    font-family: var(--font-display, inherit);
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+  }
+
+  .fx-nda-category {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #94A3B8;
+    margin-bottom: 1.5rem;
+  }
+
+  .fx-nda-desc {
+    font-size: 1rem;
+    color: #CBD5E1;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .fx-nda-tech-block {
+    margin-bottom: 1.5rem;
+  }
+
+  .fx-nda-tech-block h4 {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94A3B8;
+    margin-bottom: 0.75rem;
+  }
+
+  .fx-nda-notice-box {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    font-size: 0.88rem;
+    color: #94A3B8;
+    line-height: 1.5;
+  }
+
+  .fx-nda-notice-box svg {
+    flex-shrink: 0;
+    color: var(--color-primary, #FF5A00);
+    margin-top: 2px;
+  }
+
+  .fx-nda-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .fx-nda-actions {
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+  }
+
+  .fx-cta-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.8rem;
+    background-color: var(--color-primary, #FF5A00);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: var(--radius-full, 100px);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255, 90, 0, 0.35);
+    transition: all 0.2s ease;
+  }
+
+  .fx-cta-btn-primary:hover {
+    background-color: var(--color-primary-hover, #E04E00);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 90, 0, 0.45);
+  }
+
+  .fx-cta-btn-ghost {
+    padding: 0.9rem 1.5rem;
+    background: transparent;
+    color: #94A3B8;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-full, 100px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .fx-cta-btn-ghost:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
 </style>

@@ -1,40 +1,5 @@
 <script lang="ts">
-  import { db } from '$lib/firebase';
-  import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-  import { fade } from 'svelte/transition';
-
-  let name = '', email = '', message = '';
-  let isLoading = false, isSuccess = false, errorMessage = '';
-
-  const handleSubmit = async () => {
-    if (!name || !email || !message) {
-      errorMessage = 'Por favor, completa todos los campos.';
-      setTimeout(() => errorMessage = '', 3000);
-      return;
-    }
-    
-    isLoading = true; 
-    errorMessage = ''; 
-    isSuccess = false;
-    
-    try {
-      await addDoc(collection(db, "messages"), { 
-        name: name, 
-        email: email, 
-        message: message, 
-        sentAt: serverTimestamp() 
-      });
-      isSuccess = true; 
-      name = ''; 
-      email = ''; 
-      message = '';
-    } catch (e) {
-      console.error("ERROR AL ENVIAR CONTACTO:", e); 
-      errorMessage = 'Hubo un error al enviar tu propuesta. Inténtalo de nuevo.';
-    } finally {
-      isLoading = false;
-    }
-  };
+  import ContactForm from '$lib/components/ContactForm.svelte';
 </script>
 
 <svelte:head>
@@ -48,7 +13,6 @@
   <div class="container">
     <div class="contacto-wrapper">
       <header class="header">
-        <span class="tag">Taller de Ideas</span>
         <h1>Solicitar diagnóstico</h1>
         <p>Cuéntanos tu idea, problema o desafío técnico. Analizamos tu requerimiento y te mostramos un camino de solución sin compromiso.</p>
       </header>
@@ -85,43 +49,9 @@
         <!-- Form -->
         <div class="form-column">
           <h2>Describe tu Proyecto</h2>
-          
-          <form on:submit|preventDefault={handleSubmit} class="contact-form">
-            <div class="input-group">
-              <input type="text" id="name" placeholder=" " bind:value={name} required>
-              <label for="name">Tu Nombre</label>
-            </div>
-
-            <div class="input-group">
-              <input type="email" id="email" placeholder=" " bind:value={email} required>
-              <label for="email">Correo Electrónico</label>
-            </div>
-
-            <div class="input-group">
-              <textarea id="message" rows="5" placeholder=" " bind:value={message} required></textarea>
-              <label for="message">Describe tu idea, proceso manual o desafío técnico</label>
-            </div>
-
-            {#if isSuccess}
-              <p class="status-msg success" transition:fade>
-                ¡Propuesta recibida con éxito! Nos pondremos en contacto contigo a la brevedad.
-              </p>
-            {/if}
-
-            {#if errorMessage}
-              <p class="status-msg error" transition:fade>
-                {errorMessage}
-              </p>
-            {/if}
-
-            <button type="submit" class="submit-btn" disabled={isLoading}>
-              {#if isLoading}
-                <span class="spinner"></span>
-              {:else}
-                Enviar propuesta
-              {/if}
-            </button>
-          </form>
+          <div class="form-card">
+            <ContactForm submitLabel="Enviar propuesta" idPrefix="page" />
+          </div>
         </div>
       </div>
     </div>
@@ -162,25 +92,14 @@
     margin: 0 auto 5rem;
   }
 
-  .tag {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: var(--terracota-suave, #FF6B00);
-    margin-bottom: 1.25rem;
-    display: inline-block;
-  }
-
   h1 {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
     font-weight: 900;
     color: white;
     margin-bottom: 1.5rem;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    line-height: 1.12;
+    letter-spacing: -0.035em;
   }
 
   .header p {
@@ -261,12 +180,12 @@
   }
 
   .direct-card.email:hover {
-    border-color: rgba(255, 107, 0, 0.3);
-    background: rgba(255, 107, 0, 0.03);
+    border-color: rgba(255, 90, 0, 0.3);
+    background: rgba(255, 90, 0, 0.04);
   }
 
   .direct-card.email:hover .icon {
-    background: var(--terracota-suave, #FF6B00);
+    background: var(--color-primary, #FF5A00);
     color: white;
   }
 
@@ -283,98 +202,11 @@
     font-size: 0.9rem;
   }
 
-  .contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.03);
+  .form-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     padding: 2.5rem 2rem;
     border-radius: 20px;
-  }
-
-  .input-group {
-    position: relative;
-  }
-
-  .input-group input, .input-group textarea {
-    width: 100%;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    color: white;
-    font-size: 1rem;
-    padding: 0.75rem 0;
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-  }
-
-  .input-group label {
-    position: absolute;
-    top: 0.75rem;
-    left: 0;
-    color: rgba(248, 250, 252, 0.5);
-    pointer-events: none;
-    transition: all 0.3s ease;
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-  }
-
-  .input-group input:focus, .input-group textarea:focus {
-    border-color: var(--terracota-suave, #FF6B00);
-    outline: none;
-  }
-
-  .input-group input:focus ~ label, .input-group input:not(:placeholder-shown) ~ label,
-  .input-group textarea:focus ~ label, .input-group textarea:not(:placeholder-shown) ~ label {
-    transform: translateY(-1.25rem);
-    font-size: 0.75rem;
-    color: var(--terracota-suave, #FF6B00);
-  }
-
-  .submit-btn {
-    background-color: var(--terracota-suave, #FF6B00);
-    color: white;
-    border: none;
-    padding: 1rem;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    margin-top: 1rem;
-  }
-
-  .submit-btn:hover {
-    background-color: var(--ciruela-profunda, #E67E22);
-  }
-
-  .status-msg {
-    text-align: center;
-    font-weight: 600;
-    font-size: 0.95rem;
-  }
-
-  .status-msg.success {
-    color: #4ade80;
-  }
-
-  .status-msg.error {
-    color: #f87171;
-  }
-
-  .spinner {
-    width: 20px;
-    height: 20px;
-    border: 2.5px solid rgba(255,255,255,0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto;
-    display: inline-block;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   }
 </style>

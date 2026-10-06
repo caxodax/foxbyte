@@ -1,20 +1,48 @@
-/* --- Paleta de Colores FOXBYTE 2.0 (Premium & Viva) --- */
+/* --- Sistema de Diseño Foxbyte Studio (UI/UX Pro Max) - Dark Tech Boutique --- */
 :root {
-  /* Naranja tecnológico intenso y vibrante */
-  --terracota-suave: #FF6B00;  
-  /* Violeta moderno estilo SaaS/Web3 */
-  --ciruela-profunda: #7C3AED; 
-  /* Azul medianoche profundo (Slate 900) para máxima elegancia */
-  --azul-petroleo: #0F172A;
-  /* Blanco hueso muy sutil para que destaquen los colores */
-  --marfil-claro: #F8FAFC;
-  /* Gris frío y legible (Slate 600) */
-  --gris-grafito: #475569;    
-  /* Ámbar puro y eléctrico */
-  --ambar-luminoso: #F59E0B;  
+  /* --- Tokens Semánticos Principales (Dark Tech) --- */
+  --color-primary: #FF5A00;                        /* Naranja Foxbyte vibrante */
+  --color-primary-hover: #E04E00;                  /* Naranja hover accesible */
+  --color-primary-subtle: rgba(255, 90, 0, 0.14);  /* Para badges y halos de foco */
+  
+  --color-background: #070B14;                    /* Obsidian Tech profundo y continuo */
+  --color-background-dark: #070B14;               /* Consistencia total */
+  --color-surface: rgba(15, 23, 42, 0.75);        /* Superficie medianoche vítrea */
+  --color-surface-hover: rgba(30, 41, 59, 0.85);  /* Superficie en hover */
+  --color-border: rgba(255, 255, 255, 0.08);      /* Micro-bordes translúcidos nítidos */
+  --color-border-subtle: rgba(255, 255, 255, 0.04);
+  
+  --color-text-primary: #FFFFFF;                  /* Titulares y textos de alto contraste */
+  --color-text-secondary: #94A3B8;                /* Slate 400 accesible para descripciones */
+  --color-text-muted: #64748B;                    /* Slate 500 para metadatos */
+  --color-text-light: #F8FAFC;                    /* Blanco nítido */
+  
+  --color-accent-tech: #00E5FF;                   /* Cyan eléctrico para detalles tech / IA */
+  --color-ring: #FF5A00;                          /* Anillo de foco accesible */
 
-  --font-principal: 'Montserrat', sans-serif;
-  --font-secundaria: 'Open Sans', sans-serif;
+  /* --- Tokens Tipográficos --- */
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* --- Radios y Sombras --- */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 25px rgba(255, 90, 0, 0.25);
+
+  /* --- Mapeo de Compatibilidad Retroactiva --- */
+  --terracota-suave: var(--color-primary);  
+  --ciruela-profunda: #6366F1;                    /* Indigo tecnológico */
+  --azul-petroleo: #070B14;
+  --marfil-claro: #070B14;                        /* Unificado a base oscura */
+  --gris-grafito: #94A3B8;    
+  --ambar-luminoso: #F59E0B;  
+  --font-principal: var(--font-display);
+  --font-secundaria: var(--font-body);
 }
 
 /* --- Reseteo Básico y Estilos Globales --- */
@@ -25,19 +53,100 @@
 }
 
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 100px;
+  scroll-padding-top: 90px;
+  background-color: var(--color-background);
+  color-scheme: dark;
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
 }
 
 body {
-  background-color: var(--marfil-claro);
-  color: var(--azul-petroleo);
-  font-family: var(--font-secundaria);
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+  position: relative;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-principal);
-  color: var(--azul-petroleo);
+  font-family: var(--font-display);
+  color: #FFFFFF;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+h1 {
+  letter-spacing: -0.035em;
+}
+
+p {
+  max-width: 72ch;
+  text-wrap: pretty;
+}
+
+/* --- Themed Browser Surfaces (Impeccable Craft Floor) --- */
+::selection {
+  background: var(--color-primary);
+  color: #FFFFFF;
+}
+
+::-moz-selection {
+  background: var(--color-primary);
+  color: #FFFFFF;
+}
+
+input, textarea, [contenteditable="true"] {
+  caret-color: var(--color-primary);
+}
+
+/* Scrollbar Minimalista Obsidian */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Alineación de cifras y telemetría técnica */
+.tabular-nums, [data-numeric], .metric, .kpi, code, pre, time {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accesibilidad: Foco visible universal para navegación por teclado */
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 3px;
+}
+
+/* Accesibilidad: Respetar preferencia de reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

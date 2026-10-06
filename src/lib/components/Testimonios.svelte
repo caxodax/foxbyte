@@ -1,51 +1,60 @@
 <script lang="ts">
-  const testimonials = [
+  const feedbackItems = [
     {
-      name: 'Sofía Valenzuela',
-      role: 'Directora de Operaciones en Zenith Retail',
-      text: 'La automatización de procesos internos desarrollada por Foxbyte redujo nuestro tiempo administrativo en más del 40%. La comunicación y la calidad técnica superaron nuestras expectativas.',
-      metric: '-40% tiempo adm.'
+      category: 'Plataformas Transaccionales',
+      text: 'El sistema unificado y la pasarela de pagos eliminaron la fricción de compra. Las transacciones se procesan con absoluta estabilidad incluso durante picos de alto volumen.',
+      author: 'Líder de Operaciones',
+      context: 'Comercio Digital & Educación',
+      tag: 'Estabilidad en producción'
     },
     {
-      name: 'Andrés Mendoza',
-      role: 'Fundador de Apex E-learning',
-      text: 'El sistema híbrido de e-commerce y academia digital de Foxbyte nos permitió escalar la venta de cursos a nivel internacional. Las transacciones son 100% estables y la conversión aumentó notablemente.',
-      metric: '+45% conversión'
+      category: 'Automatización e Integraciones',
+      text: 'Logramos centralizar flujos que antes requerían horas manuales entre múltiples herramientas. Hoy el equipo opera sobre una base sólida y automatizada.',
+      author: 'Director General',
+      context: 'Operaciones y Servicios B2B',
+      tag: 'Eficiencia operativa'
     },
     {
-      name: 'Carlos Guerrero',
-      role: 'Director de IT en Nova Logistics',
-      text: 'La optimización y migración de nuestras bases de datos transaccionales eliminó por completo las caídas del sistema en horas pico. Un equipo de ingeniería de primer nivel.',
-      metric: '99.9% uptime'
+      category: 'Arquitectura & Datos',
+      text: 'La optimización y migración de nuestra base de datos eliminó por completo la lentitud en reportes críticos. Rigor técnico e ingeniería de primer nivel.',
+      author: 'Responsable de Tecnología',
+      context: 'Logística y Distribución',
+      tag: 'Alta concurrencia'
     }
   ];
 </script>
 
-<section class="testimonials-section">
-  <div class="glow-bg"></div>
+<section class="testimonials-section" aria-labelledby="feedback-title">
+  <div class="ambient-glow" aria-hidden="true"></div>
 
   <div class="container">
     <header class="section-header">
-      <span class="sub-title">Opiniones Reales</span>
-      <h2>Resultados comprobados <br/><span class="text-highlight">por nuestros clientes</span></h2>
-      <p class="intro-p">Conoce la opinión de las empresas que han forjado su tecnología con nosotros y los resultados tangibles que hemos generado juntos.</p>
+      <div class="badge-pill">
+        <span>Confianza Empresarial</span>
+      </div>
+      <h2 id="feedback-title">
+        Compromiso de entrega y resultados en producción
+      </h2>
+      <p class="intro-p">
+        Cómo respaldamos a cada empresa: acuerdos técnicos rigurosos, comunicación directa con ingenieros y software diseñado para durar.
+      </p>
     </header>
 
     <div class="testimonials-grid">
-      {#each testimonials as t}
+      {#each feedbackItems as item}
         <article class="testimonial-card">
-          <div class="card-glow"></div>
           <div class="card-content">
-            <span class="quote-mark">“</span>
-            <p class="quote-text">{t.text}</p>
+            <div class="card-header-badge">
+              <span class="category-name">{item.category}</span>
+              <span class="metric-badge">{item.tag}</span>
+            </div>
+
+            <p class="quote-text">“{item.text}”</p>
             
             <div class="card-footer">
               <div class="author-info">
-                <strong>{t.name}</strong>
-                <span>{t.role}</span>
-              </div>
-              <div class="metric-badge">
-                {t.metric}
+                <strong>{item.author}</strong>
+                <span>{item.context}</span>
               </div>
             </div>
           </div>
@@ -58,20 +67,24 @@
 <style>
   .testimonials-section {
     position: relative;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     background-color: var(--azul-petroleo, #0F172A);
     color: var(--marfil-claro, #F8FAFC);
-    padding: 6rem 1.5rem;
+    padding: 6.5rem 1.5rem;
     overflow: hidden;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
   }
 
-  .glow-bg {
+  .ambient-glow {
     position: absolute;
-    bottom: -10%;
-    right: 10%;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(255, 107, 0, 0.04) 0%, rgba(15, 23, 42, 0) 70%);
+    bottom: -15%;
+    right: 5%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 90, 0, 0.04) 0%, transparent 70%);
     z-index: 0;
     pointer-events: none;
   }
@@ -81,44 +94,47 @@
     margin: 0 auto;
     position: relative;
     z-index: 1;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .section-header {
     text-align: center;
-    max-width: 700px;
-    margin: 0 auto 4.5rem;
+    max-width: 740px;
+    margin: 0 auto 4rem;
   }
 
-  .sub-title {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: var(--terracota-suave, #FF6B00);
-    margin-bottom: 1rem;
-    display: inline-block;
+  .badge-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.95rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 1.25rem;
   }
 
   h2 {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-family: var(--font-principal, system-ui, sans-serif);
+    font-size: clamp(2.1rem, 4.2vw, 3.25rem);
     font-weight: 800;
-    line-height: 1.2;
-    color: white;
-    margin-bottom: 1.25rem;
-    letter-spacing: -0.01em;
-  }
-
-  .text-highlight {
-    color: var(--terracota-suave, #FF6B00);
+    line-height: 1.15;
+    color: #FFFFFF;
+    margin: 0 0 1.25rem 0;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
   }
 
   .intro-p {
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
     font-size: 1.05rem;
     line-height: 1.6;
-    color: rgba(248, 250, 252, 0.65);
+    color: rgba(248, 250, 252, 0.7);
+    margin: 0;
+    font-weight: 400;
+    text-wrap: pretty;
   }
 
   .testimonials-grid {
@@ -130,69 +146,69 @@
   @media (min-width: 992px) {
     .testimonials-grid {
       grid-template-columns: repeat(3, 1fr);
-      gap: 2.5rem;
+      gap: 2rem;
     }
   }
 
   .testimonial-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 20px;
-    padding: 2.5rem 2rem;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    padding: 2.25rem 2rem;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
     height: 100%;
+    box-sizing: border-box;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   .testimonial-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(255, 107, 0, 0.2);
-    background: rgba(255, 255, 255, 0.03);
-  }
-
-  .card-glow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at bottom left, rgba(255, 107, 0, 0.03) 0%, rgba(255, 107, 0, 0) 50%);
-    z-index: 0;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .testimonial-card:hover .card-glow {
-    opacity: 1;
+    transform: translateY(-4px);
+    border-color: rgba(255, 90, 0, 0.25);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
   }
 
   .card-content {
-    position: relative;
-    z-index: 1;
     display: flex;
     flex-direction: column;
     height: 100%;
     flex-grow: 1;
   }
 
-  .quote-mark {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: 4rem;
-    line-height: 1;
-    color: rgba(255, 107, 0, 0.15);
-    margin-bottom: -1rem;
-    display: block;
+  .card-header-badge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .category-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .metric-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-primary, #FF5A00);
+    background: rgba(255, 90, 0, 0.08);
+    border: 1px solid rgba(255, 90, 0, 0.18);
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    white-space: nowrap;
   }
 
   .quote-text {
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    font-size: 1rem;
-    line-height: 1.6;
-    color: rgba(248, 250, 252, 0.85);
-    margin-bottom: 2.5rem;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: rgba(248, 250, 252, 0.88);
+    margin: 0 0 2rem 0;
     flex-grow: 1;
   }
 
@@ -201,40 +217,35 @@
     justify-content: space-between;
     align-items: flex-end;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
-    padding-top: 1.5rem;
+    padding-top: 1.25rem;
     margin-top: auto;
-    gap: 1rem;
   }
 
   .author-info {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    max-width: 65%;
+    gap: 0.2rem;
   }
 
   .author-info strong {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: 0.95rem;
-    color: white;
+    font-size: 0.92rem;
+    color: #FFFFFF;
+    font-weight: 600;
   }
 
   .author-info span {
-    font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     color: rgba(248, 250, 252, 0.5);
     line-height: 1.3;
   }
 
-  .metric-badge {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--terracota-suave, #FF6B00);
-    background: rgba(255, 107, 0, 0.06);
-    border: 1px solid rgba(255, 107, 0, 0.15);
-    padding: 0.35rem 0.75rem;
-    border-radius: 6px;
-    white-space: nowrap;
+  @media (max-width: 640px) {
+    .testimonials-section {
+      padding: 4.5rem 1.25rem;
+    }
+
+    .testimonial-card {
+      padding: 1.75rem 1.5rem;
+    }
   }
 </style>

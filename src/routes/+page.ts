@@ -1,61 +1,73 @@
-export async function load({ fetch }) {
-  try {
-    const projectId = import.meta.env.VITE_PUBLIC_FIREBASE_PROJECT_ID;
-    const apiKey = import.meta.env.VITE_PUBLIC_FIREBASE_API_KEY;
-    const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/portfolio?key=${apiKey}`;
-    
-    const fetchPromise = fetch(url).then(res => {
-      if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-      return res.json();
-    });
-    
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('TIMEOUT')), 8000)
-    );
-    
-    const data = await Promise.race([fetchPromise, timeoutPromise]) as any;
-    
-    if (!data.documents) {
-      return { portfolioItems: [] };
-    }
+import type { PageLoad } from './$types';
+import { servicesExtendedData } from '$lib/servicesData';
+import { parseFirestoreDoc, getServiceSlug, slugify } from '$lib/firestoreRest';
 
-    // Parseador recursivo para el formato estricto de Firestore REST API
-    const parseValue = (val: any): any => {
-      if (!val) return null;
-      if ('stringValue' in val) return val.stringValue;
-      if ('integerValue' in val) return parseInt(val.integerValue, 10);
-      if ('doubleValue' in val) return parseFloat(val.doubleValue);
-      if ('booleanValue' in val) return val.booleanValue;
-      if ('arrayValue' in val) {
-        return (val.arrayValue.values || []).map(parseValue);
-      }
-      if ('mapValue' in val) {
-        const map: any = {};
-        const fields = val.mapValue.fields || {};
-        for (const key in fields) {
-          map[key] = parseValue(fields[key]);
-        }
-        return map;
-      }
-      return val;
-    };
+export const load: PageLoad = async ({ fetch }) => {
+  const projectId = import.meta.env.VITE_PUBLIC_FIREBASE_PROJECT_ID;
+  const apiKey = import.meta.env.VITE_PUBLIC_FIREBASE_API_KEY;
 
-    const portfolioItems = data.documents.map((doc: any) => {
-      const id = doc.name.split('/').pop();
-      const fields = doc.fields || {};
-      
-      const parsedData: any = {};
-      for (const key in fields) {
-        parsedData[key] = parseValue(fields[key]);
-      }
-      
-      return { id, ...parsedData };
+  // Fallback estático seguro de servicios sin claves duplicadas
+  const fallbackServices = Object.entries(servicesExtendedData).map(([slug, detail]) => ({
+    ...detail,
+    id: slug,
+    slug,
+    title: detail.commercialTitle,
+    icon_svg: ''
+  }));
+
+  // Carga paralela de portfolio y services con AbortSignal nativo de 8s
+  const fetchCollection = async (collectionName: string) => {
+    const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collectionName}?key=${apiKey}`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    if (!res.ok) throw new Error(`HTTP ${res.status} al cargar ${collectionName}`);
+    const data = await res.json() as any;
+    if (!data.documents) return [];
+    return data.documents.map((doc: any) => parseFirestoreDoc(doc));
+  };
+
+  const [portfolioResult, servicesResult] = await Promise.allSettled([
+    fetchCollection('portfolio'),
+    fetchCollection('services')
+  ]);
+
+  let portfolioItems: any[] | null = null;
+  if (portfolioResult.status === 'fulfilled' && portfolioResult.value) {
+    portfolioItems = portfolioResult.value.map((item: any) => {
+      const slug = item.slug || slugify(item.title || item.id || '');
+      const isPrivate = Boolean(
+        item.is_private || 
+        item.isPrivate || 
+        item.confidential || 
+        item.category?.toLowerCase().includes('nda') ||
+        item.category?.toLowerCase().includes('confidencial')
+      );
+      return {
+        ...item,
+        slug,
+        isPrivate
+      };
     });
-    
-    return { portfolioItems };
-  } catch (error) {
-    console.error("SSR Error cargando portafolio via REST:", error);
-    // Fallback nulo para que el cliente intente cargar usando el SDK
-    return { portfolioItems: null };
+  } else if (portfolioResult.status === 'rejected') {
+    console.error("SSR Error cargando portafolio:", portfolioResult.reason);
   }
-}
+
+  let services: any[] = fallbackServices;
+  if (servicesResult.status === 'fulfilled' && servicesResult.value.length > 0) {
+    services = servicesResult.value.map((item: any) => {
+      const slug = getServiceSlug(item.title || '');
+      const extended = servicesExtendedData[slug] || {};
+      return {
+        ...extended,
+        ...item,
+        slug
+      };
+    });
+  } else if (servicesResult.status === 'rejected') {
+    console.error("SSR Error cargando servicios, usando fallback extendido:", servicesResult.reason);
+  }
+
+  return {
+    portfolioItems,
+    services
+  };
+};

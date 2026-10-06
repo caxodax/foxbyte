@@ -15,7 +15,7 @@
   <div class="glow-effect"></div>
 
   <div class="container">
-    <a href="/proyectos" class="back-link">
+    <a href="/#portafolio" class="back-link">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
       Volver a Proyectos
     </a>
@@ -24,6 +24,9 @@
       <span class="project-tag">{project.category || 'Caso de Estudio'}</span>
       <h1>{project.title}</h1>
       <p class="summary-desc">{project.description || 'E-commerce premium interactivo con academia digital autogestionable y descargas seguras.'}</p>
+      {#if project.client}
+        <div class="client-badge">Cliente: {project.client}</div>
+      {/if}
     </header>
 
     {#if project.image}
@@ -37,7 +40,7 @@
       <div class="text-sections">
         <section class="story-section challenge">
           <h2>El Reto</h2>
-          <p>{project.reto || 'Integrar en una sola plataforma la comercialización de cursos interactivos (infoproductos descargables) y productos físicos de repostería con un flujo de distribución robusto.'}</p>
+          <p>{project.reto || project.description || 'Integrar en una sola plataforma la comercialización de cursos interactivos (infoproductos descargables) y productos físicos con un flujo de distribución robusto.'}</p>
         </section>
 
         <section class="story-section solution">
@@ -53,9 +56,12 @@
             <h3>Impacto Generado</h3>
             <div class="kpi-grid">
               {#each project.kpis as kpi}
+                {@const kpiStr = typeof kpi === 'string' ? kpi : (kpi ? `${kpi.value ?? kpi.val ?? ''} ${kpi.label ?? kpi.name ?? ''}`.trim() : '')}
+                {@const kpiValue = kpiStr.includes(' ') ? kpiStr.split(' ')[0] : kpiStr}
+                {@const kpiLabel = kpiStr.includes(' ') ? kpiStr.substring(kpiStr.indexOf(' ') + 1) : ''}
                 <div class="kpi-card">
-                  <span class="kpi-value">{kpi.split(' ')[0]}</span>
-                  <span class="kpi-label">{kpi.substring(kpi.indexOf(' ') + 1)}</span>
+                  <span class="kpi-value">{kpiValue}</span>
+                  <span class="kpi-label">{kpiLabel}</span>
                 </div>
               {/each}
             </div>
@@ -127,7 +133,7 @@
   }
 
   .back-link:hover {
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
   }
 
   .project-header {
@@ -141,7 +147,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
     margin-bottom: 1rem;
     display: inline-block;
   }
@@ -204,13 +210,12 @@
   }
 
   .story-section h2 {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
+    font-family: var(--font-display, inherit);
     font-size: 1.6rem;
     font-weight: 700;
     color: white;
-    margin-bottom: 1.5rem;
-    border-left: 3px solid var(--terracota-suave, #FF6B00);
-    padding-left: 1rem;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
   }
 
   .story-section p {
@@ -271,7 +276,7 @@
     font-family: var(--font-principal, 'Montserrat', sans-serif);
     font-size: 2rem;
     font-weight: 900;
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
     line-height: 1;
     margin-bottom: 0.5rem;
   }
@@ -308,7 +313,7 @@
   }
 
   .cta-btn {
-    background-color: var(--terracota-suave, #FF6B00);
+    background-color: var(--color-primary, #FF5A00);
     color: white;
     border: none;
     padding: 0.9rem 1.8rem;

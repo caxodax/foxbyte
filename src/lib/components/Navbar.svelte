@@ -1,60 +1,99 @@
 <script lang="ts">
-  //Navbar.svelte
-  import { onMount, createEventDispatcher } from 'svelte';
+  // Navbar.svelte - Foxbyte Studio UI/UX Pro Max Optimized
   import { fade, fly } from 'svelte/transition';
+  import { page } from '$app/stores';
   import { isContactModalOpen } from '$lib/contactStore';
-  
-  const dispatch = createEventDispatcher();
 
-  let scrolled = false;
+  let y = 0;
   let isMenuOpen = false;
 
-  const toggleMenu = () => { isMenuOpen = !isMenuOpen; };
-  const handleScroll = () => { scrolled = window.scrollY > 50; };
+  $: scrolled = y > 25;
 
-  onMount(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => { window.removeEventListener('scroll', handleScroll); };
-  });
+  const toggleMenu = () => {
+    isMenuOpen = !isMenuOpen;
+  };
+
+  function handleAnchorClick(e: MouseEvent, targetId: string) {
+    if ($page.url.pathname === '/') {
+      const el = document.getElementById(targetId);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth' });
+        history.pushState(null, '', `/#${targetId}`);
+      }
+    }
+  }
+
+  // Bloquear el scroll del body cuando el menú móvil está abierto
+  $: if (typeof document !== 'undefined') {
+    document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+  }
+
+  const handleKeydown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape' && isMenuOpen) {
+      isMenuOpen = false;
+    }
+  };
 </script>
 
-<nav class="navbar" class:scrolled>
+<svelte:window bind:scrollY={y} on:keydown={handleKeydown} />
+
+<nav class="navbar" class:scrolled aria-label="Navegación principal">
   <div class="navbar-container">
-    <a href="/" class="logo"><img src="/fox-logo-sf.png" alt="Logo de Foxbyte" /><span>Foxbyte</span></a>
+    <a href="/" class="logo" aria-label="Ir a la página de inicio de Foxbyte">
+      <img src="/fox-logo-sf.png" alt="Logo de Foxbyte" />
+      <span>Foxbyte</span>
+    </a>
     
     <div class="desktop-nav">
       <div class="nav-links">
-        <a href="/#servicios">Servicios</a>
-        <a href="/#portafolio">Proyectos</a>
-        <a href="/#propuesta-valor">Propuesta de Valor</a>
+        <a href="/#servicios" on:click={(e) => handleAnchorClick(e, 'servicios')}>Servicios</a>
+        <a href="/#portafolio" on:click={(e) => handleAnchorClick(e, 'portafolio')}>Proyectos</a>
+        <a href="/#propuesta-valor" on:click={(e) => handleAnchorClick(e, 'propuesta-valor')}>Propuesta de Valor</a>
       </div>
-      <button class="cta-button" on:click={() => isContactModalOpen.set(true)}>
+      <button 
+        type="button" 
+        class="cta-button" 
+        on:click={() => isContactModalOpen.set(true)}
+      >
         Solicitar diagnóstico
       </button>
     </div>
     
-    <button class="hamburger-button" on:click={toggleMenu} aria-label="Abrir menú">
-      <div class="bar" class:open={isMenuOpen}></div><div class="bar" class:open={isMenuOpen}></div><div class="bar" class:open={isMenuOpen}></div>
+    <button 
+      type="button"
+      class="hamburger-button" 
+      on:click={toggleMenu} 
+      aria-label={isMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
+      aria-expanded={isMenuOpen}
+    >
+      <div class="bar" class:open={isMenuOpen}></div>
+      <div class="bar" class:open={isMenuOpen}></div>
+      <div class="bar" class:open={isMenuOpen}></div>
     </button>
   </div>
 </nav>
  
 {#if isMenuOpen}
-  <div class="mobile-menu" transition:fade={{ duration: 300 }}>
+  <div class="mobile-menu" transition:fade|local={{ duration: 250 }}>
     <div class="mobile-menu-content">
-      <nav class="mobile-nav-links">
-        <a href="/#servicios" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 100 }}>
+      <nav class="mobile-nav-links" aria-label="Enlaces de navegación móvil">
+        <a href="/#servicios" on:click={(e) => { toggleMenu(); handleAnchorClick(e, 'servicios'); }} in:fly|local={{ y: 20, duration: 350, delay: 50 }}>
           Servicios
         </a>
-        <a href="/#portafolio" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 150 }}>
+        <a href="/#portafolio" on:click={(e) => { toggleMenu(); handleAnchorClick(e, 'portafolio'); }} in:fly|local={{ y: 20, duration: 350, delay: 100 }}>
           Proyectos
         </a>
-        <a href="/#propuesta-valor" on:click={toggleMenu} in:fly={{ y: 20, duration: 400, delay: 200 }}>
+        <a href="/#propuesta-valor" on:click={(e) => { toggleMenu(); handleAnchorClick(e, 'propuesta-valor'); }} in:fly|local={{ y: 20, duration: 350, delay: 150 }}>
           Propuesta de Valor
         </a>
       </nav>
-      <div class="mobile-menu-footer" in:fly={{ y: 20, duration: 400, delay: 300 }}>
-        <button class="mobile-cta-button" on:click={() => { toggleMenu(); isContactModalOpen.set(true); }}>
+      <div class="mobile-menu-footer" in:fly|local={{ y: 20, duration: 350, delay: 200 }}>
+        <button 
+          type="button"
+          class="mobile-cta-button" 
+          on:click={() => { toggleMenu(); isContactModalOpen.set(true); }}
+        >
           Solicitar diagnóstico
         </button>
         <div class="mobile-contact-info">
@@ -66,70 +105,139 @@
 {/if}
 
 <style>
-  .navbar { position: fixed; top: 0; left: 0; width: 100%; padding: 0.75rem 1.5rem; z-index: 1000; transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out; }
-  .navbar.scrolled { background-color: var(--marfil-claro); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
-  .navbar-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .navbar { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0.85rem 1.5rem; 
+    z-index: 1000; 
+    transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                backdrop-filter 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+    border-bottom: 1px solid transparent;
+  }
   
-  /* Text and Icon Colors - Default (Over video) */
-  .logo { display: flex; align-items: center; text-decoration: none; color: white; transition: color 0.3s ease; }
-  .logo img { height: 50px; transition: transform 0.3s ease; } /* Se eliminó el filtro para mantener su color original (naranja) */
-  .logo img:hover { transform: scale(1.05); }
-  .logo span { display: none; }
+  .navbar.scrolled { 
+    background-color: rgba(7, 11, 20, 0.92); 
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5); 
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
+  
+  .navbar-container { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+  }
+  
+  /* Text and Icon Colors - Default */
+  .logo { 
+    display: flex; 
+    align-items: center; 
+    text-decoration: none; 
+    color: white; 
+    transition: transform 0.25s ease, opacity 0.2s ease; 
+  }
+  .logo:active {
+    transform: scale(0.97);
+  }
+  .logo img { 
+    height: 48px; 
+    transition: transform 0.25s ease; 
+  }
+  .logo:hover img { 
+    transform: scale(1.05); 
+  }
+  .logo span { 
+    display: none; 
+  }
 
   /* Scrolled State */
-  .navbar.scrolled .logo { color: var(--azul-petroleo); }
+  .navbar.scrolled .logo { 
+    color: #FFFFFF; 
+  }
 
-  .desktop-nav { display: none; }
+  .desktop-nav { 
+    display: none; 
+  }
   
-  /* Botón Hamburguesa Premium */
+  /* Botón Hamburguesa Accesible */
   .hamburger-button { 
     display: flex; 
     flex-direction: column; 
     justify-content: space-between; 
     width: 32px; 
-    height: 20px; 
+    height: 22px; 
     background: transparent; 
     border: none; 
     cursor: pointer; 
-    padding: 0; 
-    z-index: 10; 
-    transition: transform 0.3s ease;
+    padding: 2px; 
+    z-index: 1001; 
+    transition: transform 0.2s ease;
+    border-radius: var(--radius-sm);
   }
   
-  .hamburger-button:hover { transform: scale(1.05); }
+  .hamburger-button:hover { 
+    transform: scale(1.05); 
+  }
+  .hamburger-button:active {
+    transform: scale(0.95);
+  }
 
   .bar { 
     width: 100%; 
     height: 2.5px; 
     background: white; 
     border-radius: 4px; 
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Animación elástica y fluida */
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); 
     position: relative; 
     transform-origin: left center; 
   }
-  .navbar.scrolled .bar { background: var(--azul-petroleo); }
+  .navbar.scrolled .bar { 
+    background: white; 
+  }
   
-  .bar.open:nth-child(1) { transform: rotate(45deg); width: 110%; } 
-  .bar.open:nth-child(2) { width: 0; opacity: 0; } 
-  .bar.open:nth-child(3) { transform: rotate(-45deg); width: 110%; }
+  .bar.open:nth-child(1) { 
+    transform: rotate(45deg); 
+    width: 110%; 
+    background: white !important;
+  } 
+  .bar.open:nth-child(2) { 
+    width: 0; 
+    opacity: 0; 
+  } 
+  .bar.open:nth-child(3) { 
+    transform: rotate(-45deg); 
+    width: 110%; 
+    background: white !important;
+  }
 
-  /* Menú Móvil Mejorado - Premium & Dark */
+  /* Menú Móvil - Estilo Glassmorphism Premium */
   .mobile-menu { 
     position: fixed; 
     top: 0; 
     left: 0; 
     width: 100%; 
     height: 100vh; 
-    background: rgba(13, 27, 42, 0.96); /* Azul oscuro corporativo casi opaco */
-    backdrop-filter: blur(25px); /* Efecto cristal fuerte */
+    background: rgba(11, 15, 23, 0.96); 
+    backdrop-filter: blur(25px); 
     -webkit-backdrop-filter: blur(25px);
     display: flex; 
     flex-direction: column; 
-    align-items: flex-start; /* Alineado a la izquierda para más elegancia */
+    align-items: flex-start; 
     justify-content: flex-start; 
-    z-index: 5; 
+    z-index: 999; 
     padding: 2rem;
     box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
   
   .mobile-menu-content {
@@ -137,7 +245,7 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-    padding-top: 6rem; /* Espacio para el header/logo/hamburguesa */
+    padding-top: 6rem;
   }
 
   .mobile-nav-links {
@@ -147,20 +255,24 @@
   }
 
   .mobile-menu a { 
-    font-size: 2.5rem; /* Letra más grande y protagonista */
-    font-family: var(--font-principal); 
+    font-size: 2.2rem; 
+    font-family: var(--font-display); 
     color: white; 
     text-decoration: none; 
     font-weight: 700;
-    transition: color 0.3s ease, transform 0.3s ease;
+    transition: color 0.25s ease, transform 0.25s ease;
     display: flex;
     align-items: center;
     gap: 1.5rem;
+    letter-spacing: -0.02em;
   }
   
   .mobile-menu a:hover {
-    color: var(--terracota-suave);
-    transform: translateX(10px);
+    color: var(--color-primary);
+    transform: translateX(8px);
+  }
+  .mobile-menu a:active {
+    transform: translateX(4px) scale(0.98);
   }
   
   .mobile-menu-footer {
@@ -168,28 +280,33 @@
     padding-bottom: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
     width: 100%;
   }
 
   .mobile-cta-button { 
-    font-size: 1.2rem; 
-    font-family: var(--font-principal); 
-    background-color: var(--terracota-suave); 
+    font-size: 1.1rem; 
+    font-family: var(--font-display); 
+    background-color: var(--color-primary); 
     border: none; 
     color: white; 
     cursor: pointer; 
     font-weight: 700;
-    padding: 1.2rem;
-    border-radius: 50px;
-    transition: transform 0.3s ease, background-color 0.3s ease;
+    padding: 1.1rem;
+    border-radius: var(--radius-full);
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
     text-align: center;
+    box-shadow: 0 4px 14px rgba(255, 90, 0, 0.35);
   }
   
   .mobile-cta-button:hover { 
-    background-color: #E67E22;
-    transform: translateY(-3px); 
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 20px rgba(255, 90, 0, 0.45);
+  }
+  .mobile-cta-button:active {
+    transform: scale(0.98);
   }
 
   .mobile-contact-info {
@@ -197,7 +314,7 @@
   }
 
   .mobile-contact-info a {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: rgba(255, 255, 255, 0.7);
     text-decoration: underline;
     display: inline-block;
@@ -209,21 +326,75 @@
   }
 
   @media (min-width: 768px) {
-    .navbar { padding: 0.75rem 2rem; }
-    .logo img { height: 55px; }
-    .logo span { display: inline; font-family: var(--font-principal); font-size: 1.5rem; font-weight: 700; margin-left: 10px; }
+    .navbar { padding: 0.85rem 2rem; }
+    .logo img { height: 52px; }
+    .logo span { 
+      display: inline; 
+      font-family: var(--font-display); 
+      font-size: 1.45rem; 
+      font-weight: 800; 
+      margin-left: 10px; 
+      letter-spacing: -0.03em;
+    }
     .hamburger-button { display: none; }
-    .desktop-nav { display: flex; align-items: center; gap: 1rem; }
-    .nav-links { display: flex; gap: 1rem; }
+    .desktop-nav { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-links { display: flex; gap: 0.5rem; }
     
-    .nav-links a { margin: 0 1rem; text-decoration: none; color: white; font-weight: 600; position: relative; padding-bottom: 5px; transition: color 0.3s ease; }
-    .navbar.scrolled .nav-links a { color: var(--azul-petroleo); }
+    .nav-links a { 
+      margin: 0 0.85rem; 
+      text-decoration: none; 
+      color: rgba(255, 255, 255, 0.9); 
+      font-weight: 600; 
+      font-size: 0.95rem;
+      position: relative; 
+      padding-bottom: 6px; 
+      transition: color 0.25s ease; 
+    }
+    .navbar.scrolled .nav-links a { 
+      color: var(--color-text-primary); 
+    }
     
-    .nav-links a:hover { color: var(--terracota-suave); }
-    .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: var(--terracota-suave); transition: width 0.3s ease; }
-    .nav-links a:hover::after { width: 100%; }
+    .nav-links a:hover { 
+      color: var(--color-primary); 
+    }
+    .nav-links a::after { 
+      content: ''; 
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 2.5px; 
+      background-color: var(--color-primary); 
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); 
+    }
+    .nav-links a:hover::after { 
+      transform: scaleX(1); 
+    }
     
-    .cta-button { background-color: var(--terracota-suave); color: white; padding: 0.75rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: 700; transition: background-color 0.3s ease, transform 0.2s ease; border: none; cursor: pointer; font-size: 1rem; font-family: var(--font-secundaria); }
-    .cta-button:hover { background-color: var(--ciruela-profunda); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .cta-button { 
+      background-color: var(--color-primary); 
+      color: white; 
+      padding: 0.65rem 1.6rem; 
+      border-radius: var(--radius-full); 
+      text-decoration: none; 
+      font-weight: 700; 
+      font-size: 0.95rem; 
+      font-family: var(--font-body); 
+      border: none; 
+      cursor: pointer; 
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); 
+      box-shadow: 0 2px 10px rgba(255, 90, 0, 0.3);
+    }
+    .cta-button:hover { 
+      background-color: var(--color-primary-hover); 
+      transform: translateY(-2px); 
+      box-shadow: 0 6px 18px rgba(255, 90, 0, 0.4); 
+    }
+    .cta-button:active {
+      transform: scale(0.97);
+    }
   }
 </style>

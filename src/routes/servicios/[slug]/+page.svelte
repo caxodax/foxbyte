@@ -1,10 +1,14 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { isContactModalOpen } from '$lib/contactStore';
-  import { fly } from 'svelte/transition';
 
   export let data: any;
   $: service = data.service;
   $: relatedProjects = data.relatedProjects || [];
+
+  onMount(() => {
+    window.scrollTo(0, 0);
+  });
 </script>
 
 <svelte:head>
@@ -16,7 +20,7 @@
   <div class="glow-bg"></div>
 
   <div class="container">
-    <a href="/servicios" class="back-link">
+    <a href="/#servicios" class="back-link">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
       Volver a Servicios
     </a>
@@ -163,7 +167,7 @@
   }
 
   .back-link:hover {
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
   }
 
   .service-header {
@@ -174,12 +178,12 @@
   .service-icon {
     width: 64px;
     height: 64px;
-    background: rgba(255, 107, 0, 0.1);
+    background: rgba(255, 90, 0, 0.08);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
     margin-bottom: 2rem;
   }
 
@@ -208,7 +212,7 @@
   }
 
   .primary-btn {
-    background-color: var(--terracota-suave, #FF6B00);
+    background-color: var(--color-primary, #FF5A00);
     color: white;
     border: none;
     padding: 1rem 2.5rem;
@@ -218,7 +222,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    box-shadow: 0 10px 20px rgba(255, 107, 0, 0.2);
+    box-shadow: 0 10px 20px rgba(255, 90, 0, 0.2);
   }
 
   .primary-btn:hover {
@@ -269,13 +273,12 @@
   }
 
   .info-section h2 {
-    font-family: var(--font-principal, 'Montserrat', sans-serif);
+    font-family: var(--font-display, inherit);
     font-size: 1.5rem;
     font-weight: 700;
     color: white;
-    margin-bottom: 1.75rem;
-    border-left: 3px solid var(--terracota-suave, #FF6B00);
-    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
   }
 
   .styled-list {
@@ -301,7 +304,7 @@
     content: '✓';
     position: absolute;
     left: 0;
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
     font-weight: 700;
     font-size: 1.1rem;
     top: 0;
@@ -312,7 +315,7 @@
     content: '→';
     position: absolute;
     left: 0;
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
     font-weight: 700;
     font-size: 1.1rem;
     top: -1px;
@@ -349,7 +352,7 @@
   }
 
   .timeline-step:hover {
-    border-color: rgba(255, 107, 0, 0.15);
+    border-color: rgba(255, 90, 0, 0.2);
     background: rgba(255, 255, 255, 0.02);
   }
 
@@ -357,7 +360,7 @@
     font-family: var(--font-principal, 'Montserrat', sans-serif);
     font-size: 1.2rem;
     font-weight: 800;
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
   }
 
   .step-desc {
@@ -396,21 +399,24 @@
 
   .project-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 16px;
     overflow: hidden;
     text-decoration: none;
     color: white;
-    transition: all 0.4s ease;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   .project-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(255, 107, 0, 0.25);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 90, 0, 0.45);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 20px rgba(255, 90, 0, 0.15);
   }
 
   .image-wrapper {
@@ -439,16 +445,18 @@
 
   .project-info h3 {
     font-family: var(--font-principal, 'Montserrat', sans-serif);
-    font-size: 1.3rem;
+    font-size: 1.35rem;
     font-weight: 700;
+    color: #FFFFFF;
     margin-bottom: 0.75rem;
+    line-height: 1.3;
   }
 
   .project-info p {
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
-    color: rgba(248, 250, 252, 0.7);
+    color: rgba(248, 250, 252, 0.85);
     font-size: 0.95rem;
-    line-height: 1.5;
+    line-height: 1.6;
     margin-bottom: 1.5rem;
     flex-grow: 1;
   }
@@ -457,7 +465,7 @@
     font-family: var(--font-principal, 'Montserrat', sans-serif);
     font-weight: 700;
     font-size: 0.9rem;
-    color: var(--terracota-suave, #FF6B00);
+    color: var(--color-primary, #FF5A00);
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;

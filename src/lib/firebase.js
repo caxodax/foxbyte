@@ -1,7 +1,7 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 // Tu configuración de Firebase, leída de forma segura desde las variables de entorno.
 const firebaseConfig = {
@@ -25,4 +25,15 @@ if (!getApps().length) {
 // Exporta el servicio de Firestore para que podamos usarlo en nuestros componentes
 export const db = getFirestore(app);
 export const auth = getAuth(app);
-export const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
+
+/** @type {import('firebase/analytics').Analytics | null} */
+export let analytics = null;
+if (typeof window !== "undefined" && firebaseConfig.measurementId) {
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
+    }
+  }).catch(() => {
+    // Ignorar si el entorno bloquea analytics o no está soportado
+  });
+}

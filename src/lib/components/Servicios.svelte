@@ -1,116 +1,207 @@
 <script lang="ts">
-  import { fly } from 'svelte/transition';
-  import { onMount } from 'svelte';
-  import { db } from '$lib/firebase';
-  import { collection, getDocs } from 'firebase/firestore';
   import { isContactModalOpen } from '$lib/contactStore';
+  import { servicesExtendedData } from '$lib/servicesData';
 
   type Service = {
     id: string;
+    slug?: string;
     title?: string;
+    commercialTitle?: string;
     description?: string;
     icon_svg?: string;
     sub_services?: string[];
+    capabilities?: string[];
     [key: string]: any;
   };
-  let services: Service[] = [];
-  let loading = true;
 
-  onMount(async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, 'services'));
-      services = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-    } catch (error) {
-      console.error("Error cargando servicios:", error);
-    } finally {
-      loading = false;
+  export let initialServices: Service[] | null = null;
+
+  const fallbackServices: Service[] = Object.entries(servicesExtendedData).map(([slug, detail]) => ({
+    ...detail,
+    id: slug,
+    slug,
+    title: detail.commercialTitle,
+    icon_svg: ''
+  }));
+
+  let services: Service[] = initialServices && initialServices.length > 0 ? initialServices : fallbackServices;
+  let loading = false;
+
+  // Reactividad para hidratación SSR instantánea
+  $: if (initialServices && initialServices.length > 0) {
+    services = initialServices;
+  }
+
+  // Metadata visual para enriquecer cada tarjeta del Bento Box
+  const bentoMeta: Record<string, { badge: string; accent: string; defaultIcon: string }> = {
+    'e-commerce': {
+      badge: 'Comercio Digital',
+      accent: '#FF5A00',
+      defaultIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>`
+    },
+    'aplicaciones-moviles': {
+      badge: 'Mobile Engineering',
+      accent: '#0284C7',
+      defaultIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z" /><path d="M11 4h2" /><path d="M12 17v.01" /></svg>`
+    },
+    'bases-de-datos': {
+      badge: 'Cloud & High Scale',
+      accent: '#10B981',
+      defaultIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0" /><path d="M4 6v6a8 3 0 0 0 16 0v-6" /><path d="M4 12v6a8 3 0 0 0 16 0v-6" /></svg>`
+    },
+    'solucion-a-la-medida': {
+      badge: 'Software a Medida',
+      accent: '#8B5CF6',
+      defaultIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 8l-4 4l4 4" /><path d="M17 8l4 4l-4 4" /><path d="M14 4l-4 16" /></svg>`
     }
-  });
+  };
+
+  function getCardMeta(slug: string) {
+    return bentoMeta[slug] || {
+      badge: 'Solución Digital',
+      accent: '#FF5A00',
+      defaultIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" /></svg>`
+    };
+  }
+
+  function getCardTags(service: Service): string[] {
+    if (service.sub_services && service.sub_services.length > 0) {
+      return service.sub_services.slice(0, 3);
+    }
+    if (service.capabilities && service.capabilities.length > 0) {
+      return service.capabilities.slice(0, 3).map(c => {
+        const clean = c.split('(')[0].trim();
+        return clean.length > 28 ? clean.substring(0, 26) + '...' : clean;
+      });
+    }
+    return ['Arquitectura Cloud', 'Alta Disponibilidad', 'SLA Garantizado'];
+  }
 </script>
 
-<section id="servicios" class="fx-services-section">
-  <!-- Mesh Gradient Background -->
-  <div class="fx-mesh-bg" aria-hidden="true">
-    <div class="fx-blob fx-blob-1"></div>
-    <div class="fx-blob fx-blob-2"></div>
-  </div>
+<section id="servicios" class="fx-services-section" aria-labelledby="servicios-heading">
+  <!-- Ambient background sutil y estático -->
+  <div class="fx-ambient-bg" aria-hidden="true"></div>
 
   <div class="fx-container fx-split-layout">
     
-    <!-- Columna Izquierda: Sticky Header -->
+    <!-- Columna Izquierda: Sticky Header de Autoridad -->
     <div class="fx-left-column">
       <header class="fx-section-header">
-        <h2 class="fx-title">Precisión en cada línea de código,<br/> estrategia en cada decisión.</h2>
-        <!-- Una pequeña línea descriptiva para complementar el diseño asimétrico sin recargarlo -->
-        <p class="fx-subtitle">Transformamos ideas complejas en productos digitales escalables y de alto rendimiento.</p>
+        <h2 id="servicios-heading" class="fx-title">
+          Precisión en cada línea de código,<br />
+          estrategia en cada decisión
+        </h2>
+        
+        <p class="fx-subtitle">
+          Diseñamos y desarrollamos soluciones tecnológicas de nivel empresarial que eliminan cuellos de botella operativos y escalan con tu volumen de negocio.
+        </p>
+
+        <!-- Propuestas de valor clave con checkmarks vectoriales -->
+        <ul class="fx-value-props">
+          <li class="fx-prop-item">
+            <svg class="fx-check-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+            <span>Arquitectura moderna, modular y libre de deuda técnica</span>
+          </li>
+          <li class="fx-prop-item">
+            <svg class="fx-check-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+            <span>Seguridad corporativa, encriptación y alta disponibilidad</span>
+          </li>
+          <li class="fx-prop-item">
+            <svg class="fx-check-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+            <span>Entregas iterativas con código auditable y documentado</span>
+          </li>
+        </ul>
         
         <div class="fx-cta-wrapper">
-          <a href="#contacto" on:click|preventDefault={() => isContactModalOpen.set(true)} class="fx-cta-btn">
-            Solicitar diagnóstico
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 7l-10 10" /><path d="M8 7l9 0l0 9" /></svg>
-          </a>
+          <button 
+            type="button" 
+            on:click={() => isContactModalOpen.set(true)} 
+            class="fx-cta-btn"
+            aria-label="Abrir modal para solicitar diagnóstico de proyecto"
+          >
+            <span>Solicitar diagnóstico técnico</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 7l-10 10" /><path d="M8 7l9 0l0 9" /></svg>
+          </button>
         </div>
       </header>
     </div>
 
-    <!-- Columna Derecha: El "Widget" de Servicios -->
+    <!-- Columna Derecha: Bento Box Grid 2x2 -->
     <div class="fx-right-column">
       {#if loading}
-        <div class="fx-services-grid">
+        <div class="fx-bento-grid" aria-busy="true" aria-label="Cargando servicios">
           {#each Array(4) as _}
-            <article class="fx-service-card fx-skeleton-card">
-              <div class="fx-card-inner">
-                <div class="fx-card-header-inline">
-                  <div class="fx-icon-container fx-skeleton-pulse"></div>
-                  <div class="fx-skeleton-text fx-skeleton-title fx-skeleton-pulse"></div>
-                </div>
-                <div class="fx-skeleton-text fx-skeleton-desc fx-skeleton-pulse" style="width: 100%"></div>
-                <div class="fx-skeleton-text fx-skeleton-desc fx-skeleton-pulse" style="width: 85%"></div>
-                <div class="fx-skeleton-text fx-skeleton-desc fx-skeleton-pulse" style="width: 60%"></div>
+            <div class="fx-bento-card fx-skeleton-card">
+              <div class="fx-card-top">
+                <div class="fx-skeleton-pulse fx-sk-badge"></div>
+                <div class="fx-skeleton-pulse fx-sk-icon"></div>
               </div>
-            </article>
+              <div class="fx-skeleton-pulse fx-sk-title"></div>
+              <div class="fx-skeleton-pulse fx-sk-desc"></div>
+              <div class="fx-skeleton-pulse fx-sk-desc" style="width: 75%;"></div>
+              <div class="fx-sk-tags">
+                <div class="fx-skeleton-pulse fx-sk-tag"></div>
+                <div class="fx-skeleton-pulse fx-sk-tag"></div>
+              </div>
+            </div>
           {/each}
         </div>
-      {:else if services.length === 0}
-        <div class="fx-loading-state">
-          <p>No hay servicios disponibles en este momento.</p>
-        </div>
       {:else}
-        <div class="fx-services-grid">
-          {#each services as service, index (service.id)}
-            <article class="fx-service-card" in:fly={{ y: 40, duration: 800, delay: 100 + (index * 150) }}>
-              <div class="fx-card-inner">
-                
-                <!-- Cabecera de la tarjeta con icono y título en la misma línea -->
-                <div class="fx-card-header-inline">
-                  <div class="fx-icon-container">
-                    <div class="fx-icon-gradient-bg"></div>
-                    <div class="fx-icon-svg">
-                      {#if service.icon_svg}
-                        {@html service.icon_svg}
-                      {:else}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 4h-4v16h4" /><path d="M17 4h4v16h-4" /><path d="M8 16h.01" /><path d="M12 16h.01" /><path d="M16 16h.01" /></svg>
-                      {/if}
-                    </div>
+        <div class="fx-bento-grid">
+          {#each services as service (service.id || service.slug)}
+            {@const meta = getCardMeta(service.slug || '')}
+            {@const tags = getCardTags(service)}
+            {@const displayTitle = service.title || service.commercialTitle || 'Servicio Digital'}
+
+            <a 
+              href="/servicios/{service.slug}" 
+              class="fx-bento-card"
+              style="--card-accent: {meta.accent};"
+              aria-label="Conocer más sobre {displayTitle}"
+            >
+              <!-- Card Top Header: Badge de especialidad + Icono con relieve -->
+              <div class="fx-card-top">
+                <span class="fx-badge">
+                  {meta.badge}
+                </span>
+
+                <div class="fx-icon-box" aria-hidden="true">
+                  <div class="fx-icon-inner">
+                    {#if service.icon_svg}
+                      {@html service.icon_svg}
+                    {:else}
+                      {@html meta.defaultIcon}
+                    {/if}
                   </div>
-                  <h3 class="fx-card-title">{service.title}</h3>
                 </div>
-                
-                <p class="fx-card-desc">{service.description}</p>
-                
-                {#if service.sub_services && service.sub_services.length > 0}
-                  <div class="fx-tags">
-                    {#each service.sub_services as subService}
-                      <span class="fx-tag">{subService}</span>
-                    {/each}
-                  </div>
-                {/if}
               </div>
-              <div class="fx-card-border"></div>
-            </article>
+
+              <!-- Titular y Descripción de Alto Impacto -->
+              <div class="fx-card-body">
+                <h3 class="fx-card-title">{displayTitle}</h3>
+                <p class="fx-card-desc">{service.description || ''}</p>
+              </div>
+
+              <!-- Tags / Capacidades Técnicas -->
+              {#if tags.length > 0}
+                <div class="fx-card-tags" aria-label="Tecnologías y capacidades">
+                  {#each tags as tag}
+                    <span class="fx-tag-pill">{tag}</span>
+                  {/each}
+                </div>
+              {/if}
+
+              <!-- Footer de la tarjeta: Acción interactiva con flecha animada -->
+              <div class="fx-card-footer">
+                <span class="fx-action-label">Explorar solución</span>
+                <span class="fx-arrow-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /></svg>
+                </span>
+              </div>
+
+              <!-- Borde interactivo con gradiente en hover -->
+              <div class="fx-bento-border" aria-hidden="true"></div>
+            </a>
           {/each}
         </div>
       {/if}
@@ -122,319 +213,407 @@
 <style>
   .fx-services-section {
     position: relative;
-    padding: 6rem 1.5rem;
-    background-color: #fafbfc;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 6.5rem 1.5rem;
+    background-color: #090E1A;
     overflow: hidden;
-    font-family: var(--font-secundaria);
+    font-family: var(--font-body, system-ui, sans-serif);
+    scroll-margin-top: 80px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
   }
 
-  /* --- Premium Mesh/Blob Background --- */
-  .fx-mesh-bg {
+  /* --- Ambient Static Vignette --- */
+  .fx-ambient-bg {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    inset: 0;
     overflow: hidden;
     z-index: 0;
     pointer-events: none;
-  }
-  .fx-blob {
-    position: absolute;
-    filter: blur(80px);
-    opacity: 0.4;
-    border-radius: 50%;
-    animation: float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .fx-blob-1 {
-    width: 40vw; height: 40vw;
-    background: radial-gradient(circle, rgba(230,126,34,0.15) 0%, rgba(230,126,34,0) 70%);
-    top: -10%; left: -10%;
-  }
-  .fx-blob-2 {
-    width: 35vw; height: 35vw;
-    background: radial-gradient(circle, rgba(142,68,173,0.08) 0%, rgba(142,68,173,0) 70%);
-    bottom: 10%; right: -5%;
-    animation-delay: -10s;
-  }
-  @keyframes float {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(5%, 10%) scale(1.1); }
+    background: radial-gradient(circle at 90% 15%, rgba(255, 90, 0, 0.035) 0%, transparent 60%);
   }
 
   .fx-container {
     position: relative;
-    max-width: 1200px;
+    max-width: 1240px;
     margin: 0 auto;
     z-index: 1;
   }
 
-  /* --- Split Layout (2 Columnas) --- */
+  /* --- Layout Split (Izquierda Sticky, Derecha Bento) --- */
   .fx-split-layout {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 3.5rem;
     align-items: start;
   }
 
-  .fx-section-header {
-    text-align: left; /* Alineado a la izquierda para el diseño dividido */
-  }
-
   @media (min-width: 1024px) {
-    .fx-services-section { padding: 8rem 2rem; }
+    .fx-services-section {
+      padding: 7.5rem 2rem;
+    }
     
     .fx-split-layout {
-      grid-template-columns: 1fr 1.4fr; /* Izquierda toma menos espacio, derecha más */
-      gap: 5rem;
+      grid-template-columns: 1fr 1.45fr;
+      gap: 4.5rem;
     }
     
     .fx-left-column {
       position: sticky;
-      top: 140px; /* Se queda fijo mientras el scroll baja por la derecha */
+      top: 110px;
     }
   }
 
-  /* --- Header --- */
+  /* --- Columna Izquierda: Encabezado y Proposiciones --- */
+  .fx-section-header {
+    text-align: left;
+  }
 
   .fx-title {
-    font-family: var(--font-principal);
-    font-size: clamp(2rem, 3.5vw, 3.2rem);
-    color: var(--azul-petroleo);
+    font-family: var(--font-display, inherit);
+    font-size: clamp(2.3rem, 4.2vw, 3.4rem);
+    color: #FFFFFF;
     font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.03em;
-    margin-bottom: 1.5rem;
-  }
-  
-  .fx-subtitle {
-    font-size: 1.1rem;
-    color: var(--gris-grafito);
-    line-height: 1.6;
-    opacity: 0.85;
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+    margin-bottom: 1.25rem;
   }
 
-  /* --- CTA Button Premium --- */
-  .fx-cta-wrapper {
-    margin-top: 3.5rem;
-    display: flex;
-    justify-content: center; /* Centrar el botón */
+  .fx-title-accent {
+    color: var(--color-primary, #FF5A00);
+    font-weight: 800;
   }
-  
+
+  .fx-subtitle {
+    font-size: 1.05rem;
+    color: #94A3B8;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+  }
+
+  .fx-value-props {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .fx-prop-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: #E2E8F0;
+    font-weight: 500;
+  }
+
+  .fx-check-icon {
+    flex-shrink: 0;
+    color: var(--color-primary, #FF5A00);
+    background: rgba(255, 90, 0, 0.15);
+    border-radius: 50%;
+    padding: 2px;
+  }
+
+  .fx-cta-wrapper {
+    display: flex;
+  }
+
   .fx-cta-btn {
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 1rem 2.2rem;
-    background: linear-gradient(135deg, var(--ciruela-profunda), var(--terracota-suave));
-    color: white;
-    font-weight: 800;
-    font-size: 1.05rem;
-    border-radius: 100px;
-    text-decoration: none;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 10px 25px -5px rgba(230, 126, 34, 0.4);
+    gap: 0.65rem;
+    padding: 0.95rem 2rem;
+    background-color: var(--color-primary, #FF5A00);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.98rem;
+    font-family: var(--font-body, inherit);
+    border-radius: var(--radius-full, 100px);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(255, 90, 0, 0.35);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
-    z-index: 1;
   }
 
-  /* Efecto de brillo de destello al pasar el ratón */
-  .fx-cta-btn::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-    transition: all 0.6s ease;
-    z-index: -1;
-  }
-  
   .fx-cta-btn:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 15px 35px -5px rgba(142, 68, 173, 0.5);
+    background-color: var(--color-primary-hover, #E04E00);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 90, 0, 0.5);
   }
 
-  .fx-cta-btn:hover::before {
-    left: 100%;
+  .fx-cta-btn:active {
+    transform: scale(0.98);
   }
-  
-  .fx-cta-btn :global(svg) {
-    transition: transform 0.3s ease;
+
+  .fx-cta-btn svg {
+    transition: transform 0.25s ease;
   }
-  
-  .fx-cta-btn:hover :global(svg) {
+
+  .fx-cta-btn:hover svg {
     transform: translate(2px, -2px);
   }
 
-  /* --- Grid Derechos (Widget) --- */
-  .fx-services-grid {
+  /* --- Bento Box Grid (Columna Derecha) --- */
+  .fx-bento-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
-  @media (min-width: 768px) {
-    .fx-services-grid {
+
+  @media (min-width: 640px) {
+    .fx-bento-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
-  /* --- Cards Ultra Premium (Widget Style) --- */
-  .fx-service-card {
+  /* --- Bento Card Dark Glassmorphism Container --- */
+  .fx-bento-card {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.8) 0%, rgba(10, 16, 30, 0.95) 100%);
     border-radius: 20px;
-    padding: 1px;
-    background: transparent;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 2rem 1.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
     z-index: 1;
   }
 
-  .fx-service-card:hover {
-    transform: translateY(-4px);
-    z-index: 2;
+  .fx-bento-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 24px rgba(255, 90, 0, 0.15);
+    border-color: rgba(255, 90, 0, 0.4);
   }
 
-  .fx-card-inner {
-    position: relative;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 19px;
-    padding: 2rem 1.5rem;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    box-shadow: 
-      0 4px 6px -1px rgba(0, 0, 0, 0.02), 
-      0 10px 15px -3px rgba(0, 0, 0, 0.03),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.04);
-    transition: all 0.4s ease;
+  .fx-bento-card:focus-visible {
+    outline: 2px solid var(--color-primary, #FF5A00);
+    outline-offset: 3px;
   }
 
-  .fx-service-card:hover .fx-card-inner {
-    background: #ffffff;
-    box-shadow: 
-      0 15px 35px -10px rgba(44, 62, 80, 0.08),
-      0 10px 20px -5px rgba(230, 126, 34, 0.04),
-      inset 0 0 0 1px rgba(255, 255, 255, 1);
-  }
-
-  .fx-card-border {
+  .fx-bento-border {
     position: absolute;
     inset: 0;
     border-radius: 20px;
-    background: linear-gradient(135deg, rgba(230, 126, 34, 0.6), rgba(142, 68, 173, 0.4));
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 0.4s ease;
+    border: 1.5px solid transparent;
+    pointer-events: none;
+    transition: border-color 0.3s ease;
   }
-  .fx-service-card:hover .fx-card-border { opacity: 1; }
 
-  /* Nuevo Layout: Icono y Titulo en la misma linea */
-  .fx-card-header-inline {
+  .fx-bento-card:hover .fx-bento-border {
+    border-color: rgba(255, 90, 0, 0.35);
+  }
+
+  /* --- Card Header: Badge & Icon --- */
+  .fx-card-top {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.25rem;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.4rem;
   }
 
-  .fx-icon-container {
-    position: relative;
-    width: 48px;
-    height: 48px;
+  .fx-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-full, 100px);
+    background: rgba(255, 255, 255, 0.06);
+    color: #94A3B8;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.25s ease;
+  }
+
+  .fx-bento-card:hover .fx-badge {
+    background: rgba(255, 90, 0, 0.14);
+    color: #FF944D;
+    border-color: rgba(255, 90, 0, 0.3);
+  }
+
+  .fx-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FF7A1A;
+    transition: all 0.3s ease;
     flex-shrink: 0;
+  }
+
+  .fx-bento-card:hover .fx-icon-box {
+    background: var(--card-accent, #FF5A00);
+    color: #ffffff;
+    transform: rotate(3deg) scale(1.06);
+    box-shadow: 0 6px 16px rgba(255, 90, 0, 0.3);
+  }
+
+  .fx-icon-inner {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .fx-icon-gradient-bg {
-    position: absolute;
-    inset: 0;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--marfil-claro), #ffffff);
-    box-shadow: -2px -2px 5px rgba(255,255,255,1), 2px 2px 5px rgba(0,0,0,0.03), inset 1px 1px 1px rgba(255,255,255,0.8);
-    border: 1px solid rgba(0,0,0,0.02);
-    transition: all 0.4s ease;
-    transform: rotate(-5deg);
-  }
-
-  .fx-service-card:hover .fx-icon-gradient-bg {
-    transform: rotate(0deg) scale(1.05);
-    background: linear-gradient(135deg, var(--terracota-suave), #f39c12);
-    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.25);
-  }
-
-  .fx-icon-svg {
-    position: relative;
-    z-index: 1;
-    color: var(--terracota-suave);
-    transition: all 0.4s ease;
-  }
-
-  .fx-icon-svg :global(svg) {
-    width: 24px;
-    height: 24px;
+  .fx-icon-inner :global(svg) {
+    width: 22px;
+    height: 22px;
     stroke: currentColor;
-    stroke-width: 1.5;
   }
 
-  .fx-service-card:hover .fx-icon-svg {
-    color: #ffffff;
+  /* --- Card Body --- */
+  .fx-card-body {
+    flex-grow: 1;
+    margin-bottom: 1.25rem;
   }
 
   .fx-card-title {
-    font-family: var(--font-principal);
-    font-size: 1.15rem;
+    font-family: var(--font-display, inherit);
+    font-size: 1.25rem;
     font-weight: 700;
-    color: var(--azul-petroleo);
+    color: #FFFFFF;
     line-height: 1.3;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.65rem;
+    transition: color 0.2s ease;
+  }
+
+  .fx-bento-card:hover .fx-card-title {
+    color: #FF7A1A;
   }
 
   .fx-card-desc {
-    font-size: 0.9rem;
-    color: var(--gris-grafito);
-    line-height: 1.5;
-    margin-bottom: 1.5rem;
-    flex-grow: 1;
+    font-size: 0.92rem;
+    color: #94A3B8;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-  .fx-tags {
+  /* --- Tags / Capabilities --- */
+  .fx-card-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
-    width: 100%;
+    margin-bottom: 1.5rem;
   }
 
-  .fx-tag {
-    font-size: 0.7rem;
+  .fx-tag-pill {
+    font-size: 0.73rem;
     font-weight: 600;
-    color: #5c6c7d;
-    background: rgba(0, 0, 0, 0.03);
-    padding: 0.3rem 0.6rem;
-    border-radius: 4px;
+    color: #CBD5E1;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.28rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     transition: all 0.2s ease;
   }
 
-  .fx-service-card:hover .fx-tag {
-    background: rgba(230, 126, 34, 0.06);
-    color: var(--terracota-suave);
+  .fx-bento-card:hover .fx-tag-pill {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  /* --- Footer: Action Link with Arrow --- */
+  .fx-card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #E2E8F0;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin-top: auto;
+    transition: color 0.2s ease;
+  }
+
+  .fx-arrow-icon {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-primary, #FF5A00);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .fx-bento-card:hover .fx-card-footer {
+    color: var(--color-primary, #FF5A00);
+  }
+
+  .fx-bento-card:hover .fx-arrow-icon {
+    transform: translateX(5px);
   }
 
   /* --- Skeleton Loading --- */
-  .fx-skeleton-card { pointer-events: none; border-color: transparent !important; }
+  .fx-skeleton-card {
+    pointer-events: none;
+    border-color: rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
   .fx-skeleton-pulse {
-    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 75%);
     background-size: 200% 100%;
     animation: fx-pulse 1.5s infinite linear;
-    border-radius: 8px;
+    border-radius: 6px;
   }
+
   @keyframes fx-pulse {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
   }
-  .fx-icon-container.fx-skeleton-pulse { border-radius: 12px; background-color: #f1f5f9; box-shadow: none; border: none; }
-  .fx-skeleton-title { height: 24px; width: 60%; margin-left: 0; }
-  .fx-skeleton-desc { height: 14px; margin-bottom: 12px; }
 
+  .fx-sk-badge {
+    width: 80px;
+    height: 22px;
+    border-radius: 100px;
+  }
+
+  .fx-sk-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  .fx-sk-title {
+    width: 70%;
+    height: 24px;
+    margin-bottom: 0.75rem;
+  }
+
+  .fx-sk-desc {
+    width: 100%;
+    height: 14px;
+    margin-bottom: 0.5rem;
+  }
+
+  .fx-sk-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .fx-sk-tag {
+    width: 60px;
+    height: 20px;
+    border-radius: 6px;
+  }
 </style>

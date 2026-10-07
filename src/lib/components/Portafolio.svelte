@@ -412,7 +412,7 @@
     font-size: 0.86rem;
     font-weight: 600;
     color: var(--color-text-secondary, #475569);
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     border: 1px solid var(--color-border, #E2E8F0);
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -421,8 +421,8 @@
 
   .fx-chip:hover {
     color: var(--color-text-primary, #0F172A);
-    background: #FFFFFF;
-    border-color: #CBD5E1;
+    background: var(--color-surface, #FFFFFF);
+    border-color: var(--color-border-strong, #CBD5E1);
     transform: translateY(-1px);
   }
 
@@ -467,7 +467,7 @@
 
   .fx-project-card:hover {
     transform: translateY(-6px);
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     box-shadow: var(--shadow-lg), 0 0 24px var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
     border-color: rgba(255, 102, 0, 0.35);
   }
@@ -598,6 +598,12 @@
     color: var(--color-text-primary, #0F172A);
   }
 
+  :global([data-theme="dark"]) .fx-kpi-highlight {
+    background: rgba(255, 107, 26, 0.12);
+    border-color: rgba(255, 107, 26, 0.25);
+    color: var(--color-text-primary, #F8FAFC);
+  }
+
   .fx-kpi-val {
     color: var(--color-primary, #FF6600);
     font-weight: 800;
@@ -621,7 +627,7 @@
     font-size: 0.73rem;
     font-weight: 600;
     color: var(--color-text-secondary, #475569);
-    background: #F8FAFC;
+    background: var(--color-background, #F8FAFC);
     padding: 0.28rem 0.6rem;
     border-radius: 6px;
     border: 1px solid var(--color-border, #E2E8F0);
@@ -630,7 +636,7 @@
   /* --- Card Footer & Action Buttons --- */
   .fx-card-footer {
     padding-top: 1rem;
-    border-top: 1px solid #E2E8F0;
+    border-top: 1px solid var(--color-border, #E2E8F0);
     margin-top: auto;
   }
 
@@ -686,7 +692,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1rem 2.4rem;
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     color: var(--color-text-primary, #0F172A);
     font-weight: 700;
     font-size: 0.98rem;
@@ -703,7 +709,7 @@
   }
 
   .fx-explore-all-btn:hover {
-    background: #F8FAFC;
+    background: var(--color-background, #F8FAFC);
     border-color: var(--color-primary, #FF6600);
     color: var(--color-primary, #FF6600);
     transform: translateY(-2px);

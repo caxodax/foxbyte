@@ -391,13 +391,13 @@
 
   .fx-bento-card:hover {
     transform: translateY(-5px);
-    background: #FFFFFF;
+    background: var(--color-surface);
     box-shadow: var(--shadow-lg), 0 0 24px var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
     border-color: rgba(255, 102, 0, 0.35);
   }
 
   .fx-bento-card:focus-visible {
-    outline: 2px solid var(--color-primary, #FF6600);
+    outline: 2px solid var(--color-primary);
     outline-offset: 3px;
   }
 
@@ -430,15 +430,15 @@
     letter-spacing: 0.04em;
     padding: 0.35rem 0.75rem;
     border-radius: var(--radius-full, 100px);
-    background: #F1F5F9;
-    color: var(--color-text-muted, #64748B);
-    border: 1px solid #E2E8F0;
+    background: var(--color-background);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
     transition: all 0.25s ease;
   }
 
   .fx-bento-card:hover .fx-badge {
     background: var(--color-primary-subtle, rgba(255, 102, 0, 0.12));
-    color: #EA580C;
+    color: var(--color-primary);
     border-color: rgba(255, 102, 0, 0.3);
   }
 
@@ -451,9 +451,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-primary, #FF6600);
+    color: var(--color-primary);
     transition: all 0.3s ease;
     flex-shrink: 0;
+  }
+
+  :global([data-theme="dark"]) .fx-icon-box {
+    background: var(--color-primary-subtle);
+    border-color: rgba(255, 107, 26, 0.25);
   }
 
   .fx-bento-card:hover .fx-icon-box {
@@ -519,18 +524,18 @@
   .fx-tag-pill {
     font-size: 0.73rem;
     font-weight: 600;
-    color: var(--color-text-secondary, #475569);
-    background: #F8FAFC;
+    color: var(--color-text-secondary);
+    background: var(--color-background);
     padding: 0.28rem 0.6rem;
     border-radius: 6px;
-    border: 1px solid #E2E8F0;
+    border: 1px solid var(--color-border);
     transition: all 0.2s ease;
   }
 
   .fx-bento-card:hover .fx-tag-pill {
-    background: #FFF7ED;
-    color: var(--color-primary, #FF6600);
-    border-color: #FFEDD5;
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    border-color: rgba(255, 107, 26, 0.25);
   }
 
   /* --- Footer: Action Link with Arrow --- */
@@ -540,9 +545,9 @@
     gap: 0.45rem;
     font-size: 0.88rem;
     font-weight: 700;
-    color: var(--color-text-primary, #0F172A);
+    color: var(--color-text-primary);
     padding-top: 1rem;
-    border-top: 1px solid #E2E8F0;
+    border-top: 1px solid var(--color-border);
     margin-top: auto;
     transition: color 0.2s ease;
   }
@@ -550,12 +555,12 @@
   .fx-arrow-icon {
     display: inline-flex;
     align-items: center;
-    color: var(--color-primary, #FF6600);
+    color: var(--color-primary);
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .fx-bento-card:hover .fx-card-footer {
-    color: var(--color-primary, #FF6600);
+    color: var(--color-primary);
   }
 
   .fx-bento-card:hover .fx-arrow-icon {

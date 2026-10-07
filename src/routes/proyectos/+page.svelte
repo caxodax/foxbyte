@@ -167,8 +167,8 @@
   .status-msg {
     text-align: center;
     padding: 4rem 2rem;
-    background: #FFFFFF;
-    border: 1px dashed #CBD5E1;
+    background: var(--color-surface, #FFFFFF);
+    border: 1px dashed var(--color-border, #CBD5E1);
     border-radius: 20px;
     max-width: 600px;
     margin: 0 auto;
@@ -208,7 +208,7 @@
 
   .project-card {
     position: relative;
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 24px;
     overflow: hidden;
@@ -222,7 +222,7 @@
   .project-card:hover {
     transform: translateY(-8px);
     border-color: rgba(255, 102, 0, 0.35);
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     box-shadow: var(--shadow-lg), 0 0 24px rgba(255, 102, 0, 0.1);
   }
 
@@ -308,7 +308,7 @@
   .tech-tag {
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.8rem;
-    background: #F8FAFC;
+    background: var(--color-background, #F8FAFC);
     border: 1px solid var(--color-border, #E2E8F0);
     color: var(--color-text-secondary, #475569);
     padding: 0.25rem 0.75rem;

@@ -159,9 +159,9 @@
     gap: 0.45rem;
     font-size: 0.82rem;
     font-weight: 500;
-    color: var(--color-text-secondary, #475569);
-    background: #F8FAFC;
-    border: 1px solid var(--color-border, #E2E8F0);
+    color: var(--color-text-secondary);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
     padding: 0.4rem 0.95rem;
     border-radius: 9999px;
   }
@@ -169,14 +169,14 @@
   .badge-icon {
     width: 14px;
     height: 14px;
-    color: var(--color-primary, #FF6600);
+    color: var(--color-primary);
     flex-shrink: 0;
   }
 
   .cta-title {
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 800;
-    color: var(--color-text-primary, #0F172A);
+    color: var(--color-text-primary);
     line-height: 1.15;
     letter-spacing: -0.03em;
     max-width: 820px;
@@ -185,7 +185,7 @@
   }
 
   .cta-subtitle {
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary);
     font-size: clamp(1rem, 1.8vw, 1.15rem);
     line-height: 1.65;
     max-width: 680px;
@@ -205,7 +205,7 @@
   .scoper-label {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--color-text-muted, #64748B);
+    color: var(--color-text-muted);
   }
 
   .scoper-chips {
@@ -222,25 +222,25 @@
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
-    background: #FFFFFF;
-    border: 1px solid var(--color-border, #E2E8F0);
-    color: var(--color-text-secondary, #475569);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     font-family: inherit;
   }
 
   .scoper-chip:hover {
-    background: #F8FAFC;
-    color: var(--color-text-primary, #0F172A);
-    border-color: #CBD5E1;
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    border-color: var(--color-border-hover);
   }
 
   .scoper-chip.selected {
-    background: var(--color-primary, #FF6600);
-    border-color: var(--color-primary, #FF6600);
+    background: var(--color-primary);
+    border-color: var(--color-primary);
     color: #FFFFFF;
     font-weight: 600;
-    box-shadow: 0 0 16px rgba(255, 102, 0, 0.35);
+    box-shadow: 0 0 16px var(--color-primary-glow);
   }
 
   .cta-actions {
@@ -256,7 +256,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.65rem;
-    background: var(--color-primary, #FF6600);
+    background: var(--color-primary);
     color: #FFFFFF;
     border: none;
     padding: 1.05rem 2.25rem;
@@ -265,14 +265,14 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 4px 20px rgba(255, 102, 0, 0.35);
+    box-shadow: 0 4px 20px rgba(255, 107, 26, 0.35);
     font-family: inherit;
   }
 
   .btn-primary:hover {
     transform: translateY(-2px);
-    background: var(--color-primary-hover, #EA580C);
-    box-shadow: 0 8px 30px rgba(255, 102, 0, 0.5);
+    background: var(--color-primary-hover);
+    box-shadow: 0 8px 30px rgba(255, 107, 26, 0.5);
   }
 
   .btn-primary:active {
@@ -294,9 +294,9 @@
     align-items: center;
     justify-content: center;
     gap: 0.65rem;
-    background: #FFFFFF;
-    color: var(--color-text-primary, #0F172A);
-    border: 1px solid var(--color-border, #E2E8F0);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
     padding: 1.05rem 2rem;
     border-radius: 9999px;
     font-size: 1rem;
@@ -308,9 +308,9 @@
   }
 
   .btn-secondary:hover {
-    background: #F8FAFC;
-    border-color: #CBD5E1;
-    color: var(--color-text-primary, #0F172A);
+    background: var(--color-background);
+    border-color: #25D366;
+    color: var(--color-text-primary);
     transform: translateY(-2px);
   }
 

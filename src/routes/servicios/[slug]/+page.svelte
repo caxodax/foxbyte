@@ -241,7 +241,7 @@
     font-weight: 700;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     font-family: var(--font-secundaria, 'Open Sans', sans-serif);
     display: inline-flex;
     align-items: center;
@@ -250,7 +250,7 @@
   }
 
   .secondary-btn:hover {
-    background: #F8FAFC;
+    background: var(--color-background, #F8FAFC);
     border-color: var(--color-primary, #FF6600);
     color: var(--color-primary, #FF6600);
     transform: translateY(-2px);
@@ -348,7 +348,7 @@
     display: flex;
     gap: 1.5rem;
     align-items: flex-start;
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 14px;
     padding: 1.25rem 1.5rem;
@@ -405,7 +405,7 @@
 
   .project-card {
     position: relative;
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 16px;
     overflow: hidden;

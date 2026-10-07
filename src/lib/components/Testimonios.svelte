@@ -109,12 +109,12 @@
     align-items: center;
     padding: 0.35rem 0.95rem;
     border-radius: 9999px;
-    background: #FFFFFF;
-    border: 1px solid var(--color-border, #E2E8F0);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
     box-shadow: var(--shadow-sm);
     font-size: 0.78rem;
     font-weight: 600;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary);
     margin-bottom: 1.25rem;
   }
 
@@ -123,7 +123,7 @@
     font-size: clamp(2.1rem, 4.2vw, 3.25rem);
     font-weight: 800;
     line-height: 1.15;
-    color: var(--color-text-primary, #0F172A);
+    color: var(--color-text-primary);
     margin: 0 0 1.25rem 0;
     letter-spacing: -0.035em;
     text-wrap: balance;
@@ -132,7 +132,7 @@
   .intro-p {
     font-size: 1.05rem;
     line-height: 1.6;
-    color: var(--color-text-secondary, #475569);
+    color: var(--color-text-secondary);
     margin: 0;
     font-weight: 400;
     text-wrap: pretty;
@@ -153,8 +153,8 @@
 
   .testimonial-card {
     position: relative;
-    background: var(--color-surface, #FFFFFF);
-    border: 1px solid var(--color-border, #E2E8F0);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: 20px;
     padding: 2.25rem 2rem;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -167,8 +167,8 @@
 
   .testimonial-card:hover {
     transform: translateY(-4px);
-    border-color: var(--color-primary, #FF6600);
-    background: #FFFFFF;
+    border-color: var(--color-primary);
+    background: var(--color-surface);
     box-shadow: var(--shadow-md);
   }
 
@@ -190,13 +190,13 @@
   .category-name {
     font-size: 0.8rem;
     font-weight: 600;
-    color: var(--color-text-muted, #64748B);
+    color: var(--color-text-muted);
   }
 
   .metric-badge {
     font-size: 0.72rem;
     font-weight: 600;
-    color: var(--color-primary, #FF6600);
+    color: var(--color-primary);
     background: #FFF7ED;
     border: 1px solid #FFEDD5;
     padding: 0.25rem 0.65rem;
@@ -204,10 +204,15 @@
     white-space: nowrap;
   }
 
+  :global([data-theme="dark"]) .metric-badge {
+    background: var(--color-primary-subtle);
+    border-color: rgba(255, 107, 26, 0.25);
+  }
+
   .quote-text {
     font-size: 0.98rem;
     line-height: 1.65;
-    color: var(--color-text-primary, #0F172A);
+    color: var(--color-text-primary);
     margin: 0 0 2rem 0;
     flex-grow: 1;
   }
@@ -216,7 +221,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    border-top: 1px solid #E2E8F0;
+    border-top: 1px solid var(--color-border);
     padding-top: 1.25rem;
     margin-top: auto;
   }
@@ -229,7 +234,7 @@
 
   .author-info strong {
     font-size: 0.92rem;
-    color: var(--color-text-primary, #0F172A);
+    color: var(--color-text-primary);
     font-weight: 600;
   }
 

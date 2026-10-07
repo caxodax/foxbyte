@@ -234,7 +234,7 @@
   }
 
   .kpis-box, .tech-box, .action-box {
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 20px;
     padding: 2rem;
@@ -274,6 +274,11 @@
     text-align: center;
   }
 
+  :global([data-theme="dark"]) .kpi-card {
+    background: rgba(255, 107, 26, 0.12);
+    border-color: rgba(255, 107, 26, 0.25);
+  }
+
   .kpi-value {
     font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
     font-size: 2rem;
@@ -299,7 +304,7 @@
   .tech-tag {
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.85rem;
-    background: #F8FAFC;
+    background: var(--color-background, #F8FAFC);
     border: 1px solid var(--color-border, #E2E8F0);
     color: var(--color-text-secondary, #475569);
     padding: 0.35rem 0.85rem;

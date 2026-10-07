@@ -157,7 +157,7 @@
 
   .service-card {
     position: relative;
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 20px;
     padding: 3rem 2rem;

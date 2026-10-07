@@ -145,7 +145,7 @@
   }
 
   .direct-card {
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 14px;
     padding: 1.5rem;
@@ -161,7 +161,7 @@
   .direct-card .icon {
     width: 48px;
     height: 48px;
-    background: #F8FAFC;
+    background: var(--color-background, #F8FAFC);
     border: 1px solid var(--color-border, #E2E8F0);
     border-radius: 10px;
     display: flex;
@@ -173,7 +173,7 @@
 
   .direct-card.whatsapp:hover {
     border-color: #25D366;
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     box-shadow: var(--shadow-md);
   }
 
@@ -185,7 +185,7 @@
 
   .direct-card.email:hover {
     border-color: var(--color-primary, #FF6600);
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     box-shadow: var(--shadow-md);
   }
 
@@ -209,7 +209,7 @@
   }
 
   .form-card {
-    background: #FFFFFF;
+    background: var(--color-surface, #FFFFFF);
     border: 1px solid var(--color-border, #E2E8F0);
     padding: 2.5rem 2rem;
     border-radius: 20px;
